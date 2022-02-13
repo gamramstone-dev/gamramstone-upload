@@ -6,6 +6,7 @@ import { RecoilRoot } from 'recoil'
 
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
+import Head from 'next/head'
 
 const variants = {
   hidden: { opacity: 0 },
