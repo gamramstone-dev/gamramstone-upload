@@ -25,17 +25,15 @@ const fetchReadyViewByMember = async (member: AirtableViewNameTypes) => {
   return view
 }
 
-const channelKeys = Object.keys(Channels)
-
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query
 
-  if (typeof id !== 'string' || Number(id) in channelKeys === false) {
+  if (typeof id !== 'string' || id in Channels === false) {
     throw new Error('400: member is not supplied or invalid')
   }
 
   const data = extractVideoDataFields(
-    await fetchReadyViewByMember(Channels[channelKeys[Number(id)] as ChannelID].airtableViewName)
+    await fetchReadyViewByMember(Channels[id as ChannelID].airtableViewName)
   )
 
   return data

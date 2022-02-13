@@ -1,0 +1,21 @@
+.videoCard {
+  position: relative;
+  width: 100%;
+  display: flex;
+
+  .thumbnail {
+    position: relative;
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+    border-radius: 16px;
+
+    width: 250px;
+  }
+
+  .metadata {
+    margin: auto;
+    margin-left: 32px;
+    letter-spacing: -1px;
+  }
+}

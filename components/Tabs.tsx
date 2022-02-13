@@ -93,6 +93,10 @@ export const TabGroup = ({
     [activeIndex, cancel, children, run, setActiveIndex]
   )
 
+  useEffect(() => (() => {
+    cancel()
+  }), [cancel])
+
   const hoverLeft = useSpring(0, AnimationOption)
   const hoverWidth = useSpring(0, AnimationOption)
 

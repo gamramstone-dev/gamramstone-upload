@@ -51,7 +51,7 @@ const Main: NextPage = () => {
         </div>
         <div className={classes(pageStyles.contents, styles.channels)}>
           {(Object.keys(Channels) as ChannelID[]).map(channel => (
-            <Link key={channel} href={`/channel?id=${channel}`} passHref>
+            <Link key={channel} href={`/channel/${channel}`} passHref>
               <a>
                 <ChannelCard channel={Channels[channel]}></ChannelCard>
               </a>

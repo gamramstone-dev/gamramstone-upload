@@ -43,3 +43,9 @@
   max-width: 70%;
   margin-right: 0;
 }
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
