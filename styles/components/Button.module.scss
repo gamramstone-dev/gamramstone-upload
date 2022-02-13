@@ -1,0 +1,40 @@
+$primary: #22A7F2;
+
+.button {
+  position: relative;
+  display: inline-flex;
+
+  padding: 6px 12px;
+  border-radius: var(--round, 0);
+  cursor: pointer;
+  transition: 0.23s background cubic-bezier(0.19, 1, 0.22, 1);
+  user-select: none;
+
+  &.large {
+    padding: 12px 42px;
+  }
+
+  &.medium {
+    padding: 8px 32px;
+  }
+
+  &.small {
+    padding: 6px 12px;
+  }
+
+  &.primary {
+    background-color: $primary;
+    color: #fff;
+
+    &:hover {
+      background-color: darken($primary, 5%);
+    }
+
+    &:active {
+      background-color: darken($primary, 10%);
+    }
+  }
+
+  font-weight: bold;
+  letter-spacing: -1px;
+}

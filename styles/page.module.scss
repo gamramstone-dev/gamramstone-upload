@@ -1,0 +1,22 @@
+@import "./constants.scss";
+
+.page {
+  position: relative;
+  margin-top: 120px;
+}
+
+.contents {
+  max-width: $page;
+  width: 100%;
+
+  @media screen and (max-width: $page) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: $mobile) {
+    width: 95%;
+  }
+
+  margin-left: auto;
+  margin-right: auto;
+}

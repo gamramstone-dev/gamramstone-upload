@@ -1,0 +1,45 @@
+.channelCard {
+  position: relative;
+  width: 100%;
+
+  min-height: 30vh;
+  display: flex;
+
+  .member {
+    display: flex;
+  }
+
+  .name {
+    white-space: nowrap;
+    font-size: 1.75em;
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin: auto;
+  }
+
+  .image {
+    border-radius: 50%;
+    overflow: hidden;
+
+    width: 75px;
+    height: 75px;
+    margin-right: 16px;
+  }
+
+  .contents {
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 32px;
+  }
+}
+
+.progress {
+  margin: auto;
+  width: 100%;
+
+  max-width: 70%;
+  margin-right: 0;
+}

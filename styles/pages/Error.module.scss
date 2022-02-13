@@ -1,0 +1,54 @@
+.heading {
+  position: relative;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+
+  font-weight: bold;
+  letter-spacing: -1px;
+  font-size: 1.75em;
+
+  h1 {
+    margin: 0;
+  }
+
+  .logo {
+    display: flex;
+    color: #73A30E;
+
+    margin-top: 4px;
+
+    svg {
+      margin-right: 8px;
+    }
+
+    span {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+  }
+}
+
+.main {
+  position: relative;
+
+  height: 80vh;
+  display: flex;
+
+  .contents {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+.title {
+  font-weight: bold;
+  font-size: 2em;
+  letter-spacing: -1px;
+}
+
+.description {
+  font-weight: normal;
+  font-size: 1.25em;
+  letter-spacing: -1px;
+}

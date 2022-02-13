@@ -1,0 +1,65 @@
+@import '../constants.scss';
+
+.header {
+  left: 0;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  display: flex;
+  z-index: 1000;
+
+  background: linear-gradient(
+    to bottom,
+    hsl(0, 0%, 100%) 0%,
+    hsla(0, 0%, 100%, 0.95) 15.8%,
+    hsla(0, 0%, 100%, 0.89) 29.3%,
+    hsla(0, 0%, 100%, 0.821) 40.8%,
+    hsla(0, 0%, 100%, 0.746) 50.5%,
+    hsla(0, 0%, 100%, 0.665) 58.6%,
+    hsla(0, 0%, 100%, 0.582) 65.3%,
+    hsla(0, 0%, 100%, 0.497) 70.8%,
+    hsla(0, 0%, 100%, 0.413) 75.5%,
+    hsla(0, 0%, 100%, 0.332) 79.3%,
+    hsla(0, 0%, 100%, 0.255) 82.7%,
+    hsla(0, 0%, 100%, 0.184) 85.9%,
+    hsla(0, 0%, 100%, 0.121) 88.9%,
+    hsla(0, 0%, 100%, 0.068) 92.2%,
+    hsla(0, 0%, 100%, 0.027) 95.8%,
+    hsla(0, 0%, 100%, 0) 100%
+  );
+
+  .contents {
+    width: $page;
+
+    @media screen and (max-width: $page) {
+      width: 90%;
+    }
+
+    @media screen and (max-width: $mobile) {
+      width: 95%;
+    }
+
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  .logo {
+    position: relative;
+    display: flex;
+
+    a {
+      font-size: 1em;
+      font-weight: bold;
+      letter-spacing: -1px;
+      margin: auto;
+    }
+  }
+
+  .actions {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
