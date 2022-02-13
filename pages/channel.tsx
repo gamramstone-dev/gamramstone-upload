@@ -10,6 +10,7 @@ import { classes } from '../utils/string'
 import ProgressBar from '../components/ProgressBar'
 import Image from 'next/image'
 import { TabButton, TabGroup } from '../components/Tabs'
+import { useState } from 'react'
 
 interface ChannelCardProps {
   channel: Channel
@@ -40,6 +41,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
 
 const ChannelPage: NextPage = () => {
   const router = useRouter()
+  const [tabIndex, setTabIndex] = useState<number>(1)
 
   if (
     typeof router.query.id !== 'string' ||
@@ -60,7 +62,7 @@ const ChannelPage: NextPage = () => {
           <ChannelCard channel={channel}></ChannelCard>
         </div>
         <div className={classes(pageStyles.contents)}>
-          <TabGroup>
+          <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
             <TabButton>전체</TabButton>
             <TabButton>업로드 대기 중</TabButton>
             <TabButton>업로드 완료</TabButton>

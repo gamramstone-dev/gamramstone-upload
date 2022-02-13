@@ -1,26 +1,35 @@
 import {
   HoverHandlers,
   motion,
+  MotionValue,
   Spring,
   useMotionTemplate,
   useSpring,
 } from 'framer-motion'
-import { cloneElement, ReactElement, useEffect, useRef, useState } from 'react'
+import {
+  cloneElement,
+  CSSProperties,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import styles from '../styles/components/Tabs.module.scss'
 import { useDebouncer } from '../utils/run'
 
 interface TabButtonProps {
   children: string
-  index: number
+  index?: number
   active?: boolean
   onHoverStart?: (index: number) => void
   onHoverEnd?: (index: number) => void
-  onClick: (index: number) => void
+  onClick?: (index: number) => void
 }
 
 export const TabButton = ({
   children,
-  index,
+  index = 0,
   active,
   onHoverStart,
   onHoverEnd,
@@ -33,7 +42,7 @@ export const TabButton = ({
       data-active={active}
       onHoverStart={() => onHoverStart && onHoverStart(index)}
       onHoverEnd={() => onHoverEnd && onHoverEnd(index)}
-      onClick={() => onClick(index)}
+      onClick={() => onClick && onClick(index)}
     >
       {children}
     </motion.div>
@@ -46,31 +55,44 @@ const AnimationOption: Parameters<typeof useSpring>[1] = {
 }
 
 interface TabGroupProps {
-  children: ReactElement<Partial<TabButtonProps>>[]
-  defaultIndex?: number
+  children: ReactElement<TabButtonProps>[]
+  activeIndex: number
+  setActiveIndex: (index: number) => void
 }
 
-export const TabGroup = ({ children, defaultIndex = 0 }: TabGroupProps) => {
+interface GhostButtonStyles extends CSSProperties {
+  '--left'?: MotionValue<string>
+  '--width'?: MotionValue<string>
+}
+
+export const TabGroup = ({
+  children,
+  activeIndex,
+  setActiveIndex,
+}: TabGroupProps) => {
   const group = useRef<HTMLDivElement>(null!)
-  const [activeIndex, setActiveIndex] = useState<number>(defaultIndex)
-  const [hoverIndex, setHoverIndex] = useState<number>(0)
+  const [hoverIndex, setHoverIndex] = useState<number>(-1)
 
   const [run, cancel] = useDebouncer(() => {
     setHoverIndex(-1)
-  }, 60);
+  }, 60)
 
-  const childs = children.map((child, index) =>
-    cloneElement(child, {
-      ...child.props,
-      index: index,
-      active: index === activeIndex,
-      onHoverStart: (index: number) => {
-        cancel()
-        setHoverIndex(index)
-      },
-      onHoverEnd: (index: number) => run(),
-      onClick: (index: number) => setActiveIndex(index),
-    })
+  const childs = useMemo(
+    () =>
+      children.map((child, index) =>
+        cloneElement(child, {
+          ...child.props,
+          index: index,
+          active: index === activeIndex,
+          onHoverStart: (index: number) => {
+            cancel()
+            setHoverIndex(index)
+          },
+          onHoverEnd: () => run(),
+          onClick: (index: number) => setActiveIndex(index),
+        })
+      ),
+    [activeIndex, cancel, children, run, setActiveIndex]
   )
 
   const hoverLeft = useSpring(0, AnimationOption)
@@ -89,10 +111,6 @@ export const TabGroup = ({ children, defaultIndex = 0 }: TabGroupProps) => {
     hoverWidth.set(button.offsetWidth)
   }, [hoverIndex, hoverLeft, hoverWidth])
 
-  useEffect(() => {
-    setActiveIndex(defaultIndex)
-  }, [defaultIndex])
-
   const hoverLeftTemplate = useMotionTemplate`${hoverLeft}px`
   const hoverWidthTemplate = useMotionTemplate`${hoverWidth}px`
 
@@ -102,10 +120,12 @@ export const TabGroup = ({ children, defaultIndex = 0 }: TabGroupProps) => {
       <motion.div
         className={styles.ghostButton}
         data-visible={hoverIndex !== -1}
-        style={{
-          '--left': hoverLeftTemplate,
-          '--width': hoverWidthTemplate,
-        }}
+        style={
+          {
+            '--left': hoverLeftTemplate,
+            '--width': hoverWidthTemplate,
+          } as GhostButtonStyles
+        }
       ></motion.div>
     </div>
   )
