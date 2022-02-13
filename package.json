@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "airtable": "^0.11.1",
     "framer-motion": "^6.2.6",
     "next": "12.0.10",
     "normalize.css": "^8.0.1",

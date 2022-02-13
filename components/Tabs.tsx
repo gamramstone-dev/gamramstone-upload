@@ -1,8 +1,6 @@
 import {
-  HoverHandlers,
   motion,
   MotionValue,
-  Spring,
   useMotionTemplate,
   useSpring,
 } from 'framer-motion'

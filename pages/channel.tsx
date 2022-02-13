@@ -69,6 +69,8 @@ const ChannelPage: NextPage = () => {
             <TabButton>번역 진행 중</TabButton>
           </TabGroup>
         </div>
+        <div className={classes(pageStyles.contents)}>
+        </div>
       </div>
     </div>
   )
