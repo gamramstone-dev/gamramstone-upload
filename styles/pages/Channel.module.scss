@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
 
-  min-height: 30vh;
+  min-height: 18vh;
   display: flex;
 
   .member {
@@ -28,7 +28,7 @@
 
   .contents {
     margin-top: auto;
-    margin-bottom: auto;
+    margin-bottom: 32px;
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -48,4 +48,5 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-top: 64px;
 }
