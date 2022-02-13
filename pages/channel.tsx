@@ -9,6 +9,7 @@ import Error404 from './404'
 import { classes } from '../utils/string'
 import ProgressBar from '../components/ProgressBar'
 import Image from 'next/image'
+import { TabButton, TabGroup } from '../components/Tabs'
 
 interface ChannelCardProps {
   channel: Channel
@@ -57,6 +58,14 @@ const ChannelPage: NextPage = () => {
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
           <ChannelCard channel={channel}></ChannelCard>
+        </div>
+        <div className={classes(pageStyles.contents)}>
+          <TabGroup>
+            <TabButton>전체</TabButton>
+            <TabButton>업로드 대기 중</TabButton>
+            <TabButton>업로드 완료</TabButton>
+            <TabButton>번역 진행 중</TabButton>
+          </TabGroup>
         </div>
       </div>
     </div>
