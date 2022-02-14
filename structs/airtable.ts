@@ -79,12 +79,14 @@ export const extractNationalValue = (
     ) {
       files = (data.fields[
         '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[]).map(v => ({
-        filename: v.filename,
-        size: v.size,
-        url: v.url,
-        type: v.type,
-      }))
+      ] as Attachment[])
+        .map(v => ({
+          filename: v.filename,
+          size: v.size,
+          url: v.url,
+          type: v.type,
+        }))
+        .filter(v => !v.filename.endsWith('.ass'))
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -111,12 +113,14 @@ export const extractNationalValue = (
     ) {
       files = (data.fields[
         '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[]).map(v => ({
-        filename: v.filename,
-        size: v.size,
-        url: v.url,
-        type: v.type,
-      }))
+      ] as Attachment[])
+        .map(v => ({
+          filename: v.filename,
+          size: v.size,
+          url: v.url,
+          type: v.type,
+        }))
+        .filter(v => !v.filename.endsWith('.ass'))
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -350,7 +354,11 @@ export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   ja: '일본어',
 }
 
-export type WorkStatusNameTypes = '업로드 완료' | '자막 작업 안함' | '업로드 대기' | '자막 작업 중'
+export type WorkStatusNameTypes =
+  | '업로드 완료'
+  | '자막 작업 안함'
+  | '업로드 대기'
+  | '자막 작업 중'
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
 
 export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
