@@ -66,6 +66,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     <div className={styles.container}>
       <Head>
         <title>{Channels[id].name} - 감람스톤</title>
+        <meta name="description" content={`이세돌, 왁타버스 번역 프로젝트 - ${Channels[id].name} 채널의 번역 페이지입니다.`} />
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
