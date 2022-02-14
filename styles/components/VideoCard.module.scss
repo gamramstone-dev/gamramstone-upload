@@ -9,7 +9,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(0,0,0,0.03);
+    background-color: rgba(0, 0, 0, 0.03);
   }
 
   .thumbnail {
@@ -29,15 +29,58 @@
     margin-left: 32px;
     letter-spacing: -1px;
   }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+
+    .tags {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    h3,
+    p {
+      margin: 0;
+    }
+  }
+
+  .status {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background-color: #ececec;
+    letter-spacing: -1px;
+
+    &[data-status='waiting'] {
+      background-color: rgb(25, 168, 80);
+      color: white;
+    }
+
+    &[data-status='done'] {
+      background-color: rgb(18, 106, 207);
+      color: white;
+      opacity: 0.3;
+    }
+
+    .name {
+      font-weight: bold;
+    }
+
+    .value {
+      margin-left: 8px;
+    }
+  }
 }
 
 .captionCard {
   position: relative;
   border-radius: 16px;
   background: #f5f5f5;
+  overflow: hidden;
 
   transition: 0.23s height cubic-bezier(0.19, 1, 0.22, 1);
-  
+
   .contents {
     margin: 26px 64px;
   }
@@ -76,6 +119,11 @@
   margin-top: 32px;
 
   letter-spacing: -1px;
+
+  .value {
+    display: flex;
+    gap: 16px;
+  }
 }
 
 $link-color: #0a84e9;

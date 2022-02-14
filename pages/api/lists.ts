@@ -6,7 +6,12 @@ import {
   ChannelID,
   Channels,
 } from '../../structs/channels'
-import { extractVideoDataFields } from '../../structs/airtable'
+import {
+  extractVideoDataFields,
+  WorkStatus,
+  WorkStatusNames,
+  WorkStatusNameTypes,
+} from '../../structs/airtable'
 import { apify } from '../../structs/api'
 
 const base = new Airtable({
@@ -15,10 +20,13 @@ const base = new Airtable({
 
 const uploadBase = base('업로드 준비')
 
-const fetchReadyViewByMember = async (member: AirtableViewNameTypes) => {
+const fetchViewByMember = async (
+  member: AirtableViewNameTypes,
+  viewName: WorkStatusNameTypes
+) => {
   const view = uploadBase
     .select({
-      view: `${member} - 업로드 대기`,
+      view: `${member} - ${viewName}`,
     })
     .all()
 
@@ -26,14 +34,21 @@ const fetchReadyViewByMember = async (member: AirtableViewNameTypes) => {
 }
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query
+  const { id, tabs } = req.query
 
   if (typeof id !== 'string' || id in Channels === false) {
     throw new Error('400: member is not supplied or invalid')
   }
 
+  if (typeof tabs !== 'string' || tabs in WorkStatusNames === false) {
+    throw new Error('400: tabs is not supplied or invalid')
+  }
+
   const data = extractVideoDataFields(
-    await fetchReadyViewByMember(Channels[id as ChannelID].airtableViewName)
+    await fetchViewByMember(
+      Channels[id as ChannelID].airtableViewName,
+      WorkStatusNames[tabs as WorkStatus]
+    )
   )
 
   return data

@@ -1,16 +1,23 @@
-import { Attachment, FieldSet, Record as AirtableRecord, Records } from 'airtable'
+import {
+  Attachment,
+  FieldSet,
+  Record as AirtableRecord,
+  Records,
+} from 'airtable'
+
+interface CaptionFile {
+  filename: string
+  size: number
+  url: string
+  type: string
+}
 
 export interface TranslatedVideoMetadata {
   language: OnWorkingLanguageCode
   status: WorkStatus
   title: string
   description: string
-  caption?: {
-    filename: string
-    size: number
-    url: string
-    type: string
-  }
+  captions: CaptionFile[]
 }
 
 export interface VideoWithCaption {
@@ -64,26 +71,20 @@ export const extractNationalValue = (
     const description = (data.fields['세부 정보 (영어)'] as string[])[0]
     const status = extractStatus(data.fields, '영어')
 
-    let file = undefined
+    let files: CaptionFile[] = []
 
     if (
       '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
       data.fields
     ) {
-      file = {
-        filename: (data.fields[
-          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].filename,
-        size: (data.fields[
-          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].size,
-        url: (data.fields[
-          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].url,
-        type: (data.fields[
-          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].type,
-      }
+      files = (data.fields[
+        '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+      ] as Attachment[]).map(v => ({
+        filename: v.filename,
+        size: v.size,
+        url: v.url,
+        type: v.type,
+      }))
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -91,7 +92,7 @@ export const extractNationalValue = (
       title,
       description,
       status,
-      caption: file,
+      captions: files,
     }
 
     captions.push(caption)
@@ -102,26 +103,20 @@ export const extractNationalValue = (
     const description = (data.fields['세부 정보 (일본어)'] as string[])[0]
     const status = extractStatus(data.fields, '일본어')
 
-    let file = undefined
+    let files = undefined
 
     if (
       '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
       data.fields
     ) {
-      file = {
-        filename: (data.fields[
-          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].filename,
-        size: (data.fields[
-          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].size,
-        url: (data.fields[
-          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].url,
-        type: (data.fields[
-          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[])[0].type,
-      }
+      files = (data.fields[
+        '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+      ] as Attachment[]).map(v => ({
+        filename: v.filename,
+        size: v.size,
+        url: v.url,
+        type: v.type,
+      }))
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -129,7 +124,7 @@ export const extractNationalValue = (
       title,
       description,
       status,
-      caption: file,
+      captions: files,
     }
 
     captions.push(caption)
@@ -346,20 +341,21 @@ export type OnWorkingLanguageCode = LanguageCode &
   ('en' | 'ko' | 'zh' | 'fr' | 'es' | 'ar' | 'ja')
 
 export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
-  'en': '영어',
-  'ko': '한국어',
-  'zh': '중국어',
-  'fr': '프랑스어',
-  'es': '스페인어',
-  'ar': '아랍어',
-  'ja': '일본어',
+  en: '영어',
+  ko: '한국어',
+  zh: '중국어',
+  fr: '프랑스어',
+  es: '스페인어',
+  ar: '아랍어',
+  ja: '일본어',
 }
 
+export type WorkStatusNameTypes = '업로드 완료' | '자막 작업 안함' | '업로드 대기' | '자막 작업 중'
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
 
-export const WorkStatusNames: Record<WorkStatus, string> = {
-  'done': '업로드 완료',
-  'none': '자막 작업 안함',
-  'waiting': '업로드 대기',
-  'wip': '자막 작업 중'
+export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
+  done: '업로드 완료',
+  none: '자막 작업 안함',
+  waiting: '업로드 대기',
+  wip: '자막 작업 중',
 }

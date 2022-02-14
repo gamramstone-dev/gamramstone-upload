@@ -1,6 +1,6 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 import Image from 'next/image'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
   LanguageNames,
@@ -13,25 +13,62 @@ import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
 import { TabButton, TabGroup } from './Tabs'
 
+interface YouTubeThumbnailProps {
+  id: string
+}
+
+export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
+  const [url, setURL] = useState<string>(
+    `https://i.ytimg.com/vi/${id}/mqdefault.jpg`
+  )
+  const [error, setError] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!error) {
+      return
+    }
+
+    setURL(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`)
+  }, [id, error])
+
+  return (
+    <Image
+      src={url}
+      alt='YouTube 썸네일'
+      onError={() => !error && setError(true)}
+      layout='fill'
+    />
+  )
+}
+
 interface VideoCardProps {
-  title: string
-  youtubeId: string
+  video: VideoWithCaption
   onClick?: () => void
 }
 
-export const VideoCard = ({ title, youtubeId, onClick }: VideoCardProps) => {
+export const VideoCard = ({ video, onClick }: VideoCardProps) => {
   return (
     <div className={styles.videoCard} onClick={() => onClick && onClick()}>
       <div className={styles.thumbnail}>
-        <Image
-          src={`https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`}
-          alt='YouTube 썸네일'
-          layout='fill'
-        />
+        <YouTubeThumbnail id={getYouTubeId(video.url)}></YouTubeThumbnail>
       </div>
       <div className={styles.metadata}>
         <div className={styles.title}>
-          <h3>{title}</h3>
+          <h3>{video.title}</h3>
+          <div className={styles.tags}>
+            {video.captions.map(v => (
+              <p
+                className={styles.status}
+                key={`${video.id}-${v.language}`}
+                data-status={v.status}
+              >
+                <span className={styles.name}>{LanguageNames[v.language]}</span>
+                <span className={styles.value}>
+                  {WorkStatusNames[v.status]}
+                </span>
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -40,6 +77,7 @@ export const VideoCard = ({ title, youtubeId, onClick }: VideoCardProps) => {
 
 interface CaptionCardProps {
   languages: TranslatedVideoMetadata[]
+  video: VideoWithCaption
   open?: boolean
 }
 
@@ -49,7 +87,7 @@ const ToastOption = {
   },
 }
 
-export const CaptionCard = ({ languages, open }: CaptionCardProps) => {
+export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
   const copy = useCallback((text: string, label: string) => {
@@ -110,6 +148,27 @@ export const CaptionCard = ({ languages, open }: CaptionCardProps) => {
               </TabGroup>
               <div className={styles.details}>
                 <div className={styles.row}>
+                  <h3 className={styles.title}>유튜브 링크</h3>
+                  <div className={styles.value}>
+                    <a href={video.url} target='_blank' rel='noreferrer'>
+                      <Button roundness={16}>열기</Button>
+                    </a>
+                    <a
+                      href={`https://studio.youtube.com/video/${getYouTubeId(
+                        video.url
+                      )}/translations`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <Button roundness={16}>관리 페이지 열기</Button>
+                    </a>
+                  </div>
+                </div>
+                <div className={styles.row}>
+                  <h3 className={styles.title}>상태</h3>
+                  <p>{WorkStatusNames[languages[tabIndex].status]}</p>
+                </div>
+                <div className={styles.row}>
                   <h3 className={styles.title}>제목</h3>
                   <p
                     className={styles.copyable}
@@ -131,27 +190,24 @@ export const CaptionCard = ({ languages, open }: CaptionCardProps) => {
                     ))}
                   </div>
                 </div>
-                <div className={styles.row}>
-                  <h3 className={styles.title}>상태</h3>
-                  <p>{WorkStatusNames[languages[tabIndex].status]}</p>
-                </div>
-                {languages[tabIndex].caption && (
+                {languages[tabIndex].captions &&
+                languages[tabIndex].captions.length ? (
                   <div className={styles.row}>
                     <h3 className={styles.title}>자막</h3>
                     <div className={styles.value}>
-                      <Button
-                        roundness={16}
-                        onClick={() =>
-                          download(
-                            languages[tabIndex].caption!.url,
-                            languages[tabIndex].caption!.filename
-                          )
-                        }
-                      >
-                        {languages[tabIndex].caption!.filename} 다운로드
-                      </Button>
+                      {languages[tabIndex].captions.map(v => (
+                        <Button
+                          key={`file-${v.filename}`}
+                          roundness={16}
+                          onClick={() => download(v.url, v.filename)}
+                        >
+                          {v.filename} 다운로드
+                        </Button>
+                      ))}
                     </div>
                   </div>
+                ) : (
+                  undefined
                 )}
               </div>
             </motion.div>
@@ -171,12 +227,14 @@ export const VideoProjectCard = ({ video }: VideoProjectCardProps) => {
 
   return (
     <>
-      <VideoCard
-        title={video.title}
-        youtubeId={getYouTubeId(video.url)}
-        onClick={() => setOpen(!open)}
-      ></VideoCard>
-      {<CaptionCard open={open} languages={video.captions}></CaptionCard>}
+      <VideoCard video={video} onClick={() => setOpen(!open)}></VideoCard>
+      {
+        <CaptionCard
+          open={open}
+          video={video}
+          languages={video.captions}
+        ></CaptionCard>
+      }
     </>
   )
 }
