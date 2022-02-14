@@ -48,6 +48,8 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   if (
     typeof fields[syncName] !== 'undefined' &&
     ((fields[syncName] as string[])[0] === '번역' ||
+      (fields[syncName] as string[])[0] === '받아쓰기' ||
+      (fields[syncName] as string[])[0] === '자막 싱크' ||
       (fields[syncName] as string[])[0] === '검수' ||
       (fields[syncName] as string[])[0] === '최종 확인 대기')
   ) {
@@ -395,12 +397,12 @@ export type WorkStatusNameTypes =
   | '업로드 완료'
   | '자막 작업 안함'
   | '업로드 대기'
-  | '자막 작업 중'
+  | '번역 진행 중'
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
 
 export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
   done: '업로드 완료',
   none: '자막 작업 안함',
   waiting: '업로드 대기',
-  wip: '자막 작업 중',
+  wip: '번역 진행 중',
 }

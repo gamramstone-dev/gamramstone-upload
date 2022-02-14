@@ -53,10 +53,10 @@ interface ChannelPageProps {
   id: ChannelID
 }
 
-const Tabs: (WorkStatus | 'all')[] = ['all', 'waiting', 'done', 'wip']
+const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
-  const [tabIndex, setTabIndex] = useState<number>(1)
+  const [tabIndex, setTabIndex] = useState<number>(0)
   const { data, error } = useSWR(
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchList
@@ -77,14 +77,9 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents)}>
           <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
-            <TabButton key='all' disabled>
-              전체
-            </TabButton>
             <TabButton key='waiting'>업로드 대기 중</TabButton>
             <TabButton key='done'>업로드 완료</TabButton>
-            <TabButton key='ongoing' disabled>
-              번역 진행 중
-            </TabButton>
+            <TabButton key='ongoing'>번역 진행 중</TabButton>
           </TabGroup>
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
