@@ -20,6 +20,7 @@ interface TabButtonProps {
   children: string
   index?: number
   active?: boolean
+  disabled?: boolean
   onHoverStart?: (index: number) => void
   onHoverEnd?: (index: number) => void
   onClick?: (index: number) => void
@@ -29,6 +30,7 @@ export const TabButton = ({
   children,
   index = 0,
   active,
+  disabled = false,
   onHoverStart,
   onHoverEnd,
   onClick,
@@ -38,9 +40,10 @@ export const TabButton = ({
       className={styles.tabButton}
       data-index={index}
       data-active={active}
+      data-disabled={disabled}
       onHoverStart={() => onHoverStart && onHoverStart(index)}
       onHoverEnd={() => onHoverEnd && onHoverEnd(index)}
-      onClick={() => onClick && onClick(index)}
+      onClick={() => onClick && !disabled && onClick(index)}
     >
       {children}
     </motion.div>

@@ -2,6 +2,15 @@
   position: relative;
   width: 100%;
   display: flex;
+  padding: 24px 36px;
+  border-radius: 16px;
+
+  transition: 0.23s background cubic-bezier(0.19, 1, 0.22, 1);
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0,0,0,0.03);
+  }
 
   .thumbnail {
     position: relative;
@@ -11,11 +20,75 @@
     border-radius: 16px;
 
     width: 250px;
+
+    background-color: #cfcfcf;
   }
 
   .metadata {
     margin: auto;
     margin-left: 32px;
     letter-spacing: -1px;
+  }
+}
+
+.captionCard {
+  position: relative;
+  border-radius: 16px;
+  background: #f5f5f5;
+
+  transition: 0.23s height cubic-bezier(0.19, 1, 0.22, 1);
+  
+  .contents {
+    margin: 26px 64px;
+  }
+
+  .row {
+    display: flex;
+    min-width: 500px;
+    justify-content: space-between;
+
+    .title {
+      max-width: 150px;
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    & > * {
+      flex: 1;
+    }
+  }
+}
+
+.originText {
+  p {
+    margin: 0;
+    min-height: 1em;
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 32px;
+
+  letter-spacing: -1px;
+}
+
+$link-color: #0a84e9;
+
+.copyable {
+  color: $link-color;
+  cursor: pointer;
+
+  &:hover {
+    color: darken($link-color, 10%);
+  }
+
+  &:active {
+    color: darken($link-color, 20%);
   }
 }

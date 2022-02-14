@@ -1,6 +1,6 @@
-import { Attachment, FieldSet, Record, Records } from 'airtable'
+import { Attachment, FieldSet, Record as AirtableRecord, Records } from 'airtable'
 
-interface TranslatedVideoMetadata {
+export interface TranslatedVideoMetadata {
   language: OnWorkingLanguageCode
   status: WorkStatus
   title: string
@@ -55,7 +55,7 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
 }
 
 export const extractNationalValue = (
-  data: Record<FieldSet>
+  data: AirtableRecord<FieldSet>
 ): TranslatedVideoMetadata[] => {
   const captions: TranslatedVideoMetadata[] = []
 
@@ -345,4 +345,21 @@ export type LanguageCode = typeof ISO639[number]
 export type OnWorkingLanguageCode = LanguageCode &
   ('en' | 'ko' | 'zh' | 'fr' | 'es' | 'ar' | 'ja')
 
+export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
+  'en': '영어',
+  'ko': '한국어',
+  'zh': '중국어',
+  'fr': '프랑스어',
+  'es': '스페인어',
+  'ar': '아랍어',
+  'ja': '일본어',
+}
+
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
+
+export const WorkStatusNames: Record<WorkStatus, string> = {
+  'done': '업로드 완료',
+  'none': '자막 작업 안함',
+  'waiting': '업로드 대기',
+  'wip': '자막 작업 중'
+}

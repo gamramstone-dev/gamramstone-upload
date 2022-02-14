@@ -13,8 +13,8 @@ import { TabButton, TabGroup } from '../../components/Tabs'
 import { useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption } from '../../structs/airtable'
-import VideoCard from '../../components/VideoCard'
 import { LoadSpinner } from '../../components/Loading'
+import VideoProjectCard, { VideoCard } from '../../components/VideoCard'
 
 interface ChannelCardProps {
   channel: Channel
@@ -76,26 +76,27 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents)}>
           <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
-            <TabButton key='all'>전체</TabButton>
+            <TabButton key='all' disabled>전체</TabButton>
             <TabButton key='waiting'>업로드 대기 중</TabButton>
-            <TabButton key='done'>업로드 완료</TabButton>
-            <TabButton key='ongoing'>번역 진행 중</TabButton>
+            <TabButton key='done' disabled>업로드 완료</TabButton>
+            <TabButton key='ongoing' disabled>번역 진행 중</TabButton>
           </TabGroup>
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
-          {!data ? (
-            <LoadSpinner></LoadSpinner>
-          ) : data.length ? (
-            data.map(video => (
-              <VideoCard
-                key={video.id}
-                title={video.title}
-                youtubeId={getYouTubeId(video.url)}
-              ></VideoCard>
-            ))
-          ) : (
-            <div className={styles.empty}>아무런 영상이 없어요.</div>
-          )}
+            {error instanceof Error ? (
+              <div className={styles.error}>{error.message}</div>
+            ) : !data ? (
+              <LoadSpinner></LoadSpinner>
+            ) : data.length ? (
+              data.map((video, index) => (
+                <VideoProjectCard
+                  key={video.id}
+                  video={video}
+                ></VideoProjectCard>
+              ))
+            ) : (
+              <div className={styles.empty}>아무런 영상이 없어요.</div>
+            )}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@
   border-radius: 4px;
   cursor: pointer;
 
-  color: #666;
+  color: #999;
 
   &::before {
     content: " ";
@@ -28,6 +28,11 @@
     &::before {
       opacity: 1;
     }
+  }
+
+  &[data-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.32;
   }
 }
 
