@@ -36,11 +36,6 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
     (fields[syncName] as string[])[0] === '자막 제작 완료'
   ) {
     return 'waiting'
-  } else if (
-    typeof fields[syncName] !== 'undefined' &&
-    (fields[syncName] as string[])[0] === '최종 확인 대기'
-  ) {
-    return 'waiting'
   }
 
   if (
@@ -53,7 +48,8 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   if (
     typeof fields[syncName] !== 'undefined' &&
     ((fields[syncName] as string[])[0] === '번역' ||
-      (fields[syncName] as string[])[0] === '검수')
+      (fields[syncName] as string[])[0] === '검수' ||
+      (fields[syncName] as string[])[0] === '최종 확인 대기')
   ) {
     return 'wip'
   }
