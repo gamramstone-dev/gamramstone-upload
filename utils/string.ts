@@ -19,7 +19,13 @@ export const getYouTubeId = (url: string): string => {
   const match = url.match(regExp);
 
   if (match && match[0].length > 11) {
-    return url.split('v=')[1];
+    const id = url.split('v=')[1];
+
+    if (id.indexOf('&list=') > -1) {
+      return id.replace(/\&list\=.+/g, '');
+    }
+
+    return id;
   }
 
   return '';

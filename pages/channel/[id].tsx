@@ -6,15 +6,15 @@ import useSWR from 'swr'
 
 import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
-import { classes, getYouTubeId } from '../../utils/string'
+import { classes } from '../../utils/string'
 import ProgressBar from '../../components/ProgressBar'
 import Image from 'next/image'
 import { TabButton, TabGroup } from '../../components/Tabs'
 import { useState } from 'react'
 import { APIResponse } from '../../structs/api'
-import { VideoWithCaption, WorkStatus, WorkStatusNames } from '../../structs/airtable'
+import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
-import VideoProjectCard, { VideoCard } from '../../components/VideoCard'
+import VideoProjectCard from '../../components/VideoCard'
 
 interface ChannelCardProps {
   channel: Channel
