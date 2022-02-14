@@ -26,11 +26,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
       <div className={styles.contents}>
         <div className={styles.member}>
           <div className={styles.image}>
-            <FadeInImage
-              src={channel.image}
-              width={75}
-              height={75}
-            />
+            <FadeInImage src={channel.image} width={75} height={75} />
           </div>
           <h1 className={styles.name}>{channel.name}</h1>
         </div>
@@ -60,7 +56,6 @@ interface ChannelPageProps {
 const Tabs: (WorkStatus | 'all')[] = ['all', 'waiting', 'done', 'wip']
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
-  const router = useRouter()
   const [tabIndex, setTabIndex] = useState<number>(1)
   const { data, error } = useSWR(
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
@@ -70,13 +65,11 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>감람스톤</title>
+        <title>{Channels[id].name} - 감람스톤</title>
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
-          <ChannelCard
-            channel={Channels[router.query.id as ChannelID]}
-          ></ChannelCard>
+          <ChannelCard channel={Channels[id]}></ChannelCard>
         </div>
         <div className={classes(pageStyles.contents)}>
           <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
