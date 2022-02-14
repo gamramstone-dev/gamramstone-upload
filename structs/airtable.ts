@@ -57,6 +57,28 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   return 'none'
 }
 
+const filterCaptionFiles = (response: Attachment[]): CaptionFile[] => {
+  const files = response.map(v => ({
+    filename: v.filename,
+    size: v.size,
+    url: v.url,
+    type: v.type,
+  }))
+
+  let yttFiles = files.filter(file => file.filename.endsWith('.ytt'))
+  let srtFiles = files.filter(file => file.filename.endsWith('.srt'))
+
+  if (yttFiles.length) {
+    return yttFiles
+  }
+
+  if (srtFiles.length) {
+    return srtFiles
+  }
+
+  return []
+}
+
 export const extractNationalValue = (
   data: AirtableRecord<FieldSet>
 ): TranslatedVideoMetadata[] => {
@@ -73,16 +95,11 @@ export const extractNationalValue = (
       '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
       data.fields
     ) {
-      files = (data.fields[
-        '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+      files = filterCaptionFiles(
+        data.fields[
+          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+        ] as Attachment[]
+      )
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -107,16 +124,11 @@ export const extractNationalValue = (
       '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
       data.fields
     ) {
-      files = (data.fields[
-        '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+      files = filterCaptionFiles(
+        data.fields[
+          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+        ] as Attachment[]
+      )
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -141,16 +153,11 @@ export const extractNationalValue = (
       '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
       data.fields
     ) {
-      files = (data.fields[
-        '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+      files = filterCaptionFiles(
+        data.fields[
+          '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+        ] as Attachment[]
+      )
     }
 
     const caption: TranslatedVideoMetadata = {
