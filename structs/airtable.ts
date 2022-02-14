@@ -103,7 +103,7 @@ export const extractNationalValue = (
     const description = (data.fields['세부 정보 (일본어)'] as string[])[0]
     const status = extractStatus(data.fields, '일본어')
 
-    let files = undefined
+    let files: CaptionFile[] = []
 
     if (
       '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
