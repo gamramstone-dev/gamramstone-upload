@@ -22,7 +22,7 @@ export const cachify = async (
 
   const result = await func()
 
-  await setCache(scope, JSON.stringify(result), 120)
+  setCache(scope, JSON.stringify(result), 120)
 
   return result
 }
