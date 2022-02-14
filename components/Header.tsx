@@ -4,12 +4,11 @@ import styles from '../styles/components/Header.module.scss'
 import { Button } from './Button'
 
 import { useSession, signIn, signOut } from 'next-auth/react'
+import Image from 'next/image'
 
 export const Header = () => {
   const router = useRouter()
   const { data: session } = useSession()
-
-  console.log(session)
 
   return (
     <header className={styles.header}>
@@ -19,15 +18,24 @@ export const Header = () => {
         </div>
         <div className={styles.actions}>
           {session ? (
-            session.user?.name
+            <div className={styles.user} onClick={() => signOut()}>
+              <div className={styles.image}>
+                {session.user?.image && (
+                  <Image
+                    src={session.user?.image}
+                    width={48}
+                    height={48}
+                    alt='Item'
+                  />
+                )}
+              </div>
+            </div>
           ) : (
             <Button
               size='medium'
               roundness={16}
               onClick={() =>
-                signIn('google', {
-                  scope: 'auth/youtube.force-ssl',
-                })
+                signIn('google')
               }
             >
               로그인
