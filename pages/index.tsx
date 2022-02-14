@@ -6,8 +6,8 @@ import styles from '../styles/pages/Main.module.scss'
 import { classes } from '../utils/string'
 import Logo from '../components/Logo'
 import { Channel, ChannelID, Channels } from '../structs/channels'
-import Image from 'next/image'
 import Link from 'next/link'
+import FadeInImage from '../components/FadeInImage'
 
 interface ChannelCardProps {
   channel: Channel
@@ -18,7 +18,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
     <div className={styles.card} data-id={channel.id}>
       <div className={styles.cardContents}>
         <div className={styles.image}>
-          <Image
+          <FadeInImage
             src={channel.image}
             alt={channel.name}
             width={150}

@@ -14,6 +14,7 @@ import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
 import VideoProjectCard from '../../components/VideoCard'
+import FadeInImage from '../../components/FadeInImage'
 
 interface ChannelCardProps {
   channel: Channel
@@ -25,9 +26,8 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
       <div className={styles.contents}>
         <div className={styles.member}>
           <div className={styles.image}>
-            <Image
+            <FadeInImage
               src={channel.image}
-              alt={channel.name}
               width={75}
               height={75}
             />
@@ -105,12 +105,12 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
             <div className={styles.empty}>
               <div className={styles.contents}>
                 <div className={styles.image}>
-                  <Image
+                  <FadeInImage
                     src={'/empty.png'}
                     width={150}
                     height={150}
                     alt='no image'
-                  ></Image>
+                  ></FadeInImage>
                 </div>
                 <h3>아무런 영상이 없어요.</h3>
               </div>
