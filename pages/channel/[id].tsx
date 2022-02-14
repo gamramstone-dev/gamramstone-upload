@@ -66,7 +66,10 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     <div className={styles.container}>
       <Head>
         <title>{Channels[id].name} - 감람스톤</title>
-        <meta name="description" content={`이세돌, 왁타버스 번역 프로젝트 - ${Channels[id].name} 채널의 번역 페이지입니다.`} />
+        <meta
+          name='description'
+          content={`이세돌, 왁타버스 번역 프로젝트 - ${Channels[id].name} 채널의 번역 페이지입니다.`}
+        />
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
@@ -78,9 +81,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               전체
             </TabButton>
             <TabButton key='waiting'>업로드 대기 중</TabButton>
-            <TabButton key='done' disabled>
-              업로드 완료
-            </TabButton>
+            <TabButton key='done'>업로드 완료</TabButton>
             <TabButton key='ongoing' disabled>
               번역 진행 중
             </TabButton>
