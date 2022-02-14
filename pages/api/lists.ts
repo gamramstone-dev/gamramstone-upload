@@ -13,6 +13,7 @@ import {
   WorkStatusNameTypes,
 } from '../../structs/airtable'
 import { apify } from '../../structs/api'
+import { cachify, getCache } from '../../utils/cache'
 
 const base = new Airtable({
   apiKey: process.env.AIRTABLE_API_KEY,
@@ -44,14 +45,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('400: tabs is not supplied or invalid')
   }
 
-  const data = extractVideoDataFields(
-    await fetchViewByMember(
-      Channels[id as ChannelID].airtableViewName,
-      WorkStatusNames[tabs as WorkStatus]
+  return cachify(`${id}-${tabs}`, res, async () =>
+    extractVideoDataFields(
+      await fetchViewByMember(
+        Channels[id as ChannelID].airtableViewName,
+        WorkStatusNames[tabs as WorkStatus]
+      )
     )
   )
-
-  return data
 }
 
-export default apify(func)
+export default apify(func, 120)
