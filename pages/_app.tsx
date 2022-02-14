@@ -37,6 +37,11 @@ function MyApp ({ Component, pageProps, router }: AppProps) {
           href='/favicon-16x16.png'
         />
         <link rel='manifest' href='/site.webmanifest' />
+        <link
+          rel='stylesheet'
+          type='text/css'
+          href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'
+        />
       </Head>
       <Header></Header>
       <Toaster position='top-center'></Toaster>
