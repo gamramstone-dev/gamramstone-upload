@@ -86,7 +86,7 @@ export const extractNationalValue = (
           url: v.url,
           type: v.type,
         }))
-        .filter(v => !v.filename.endsWith('.ass'))
+        .filter(v => v.filename.endsWith('.ytt'))
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -120,11 +120,45 @@ export const extractNationalValue = (
           url: v.url,
           type: v.type,
         }))
-        .filter(v => !v.filename.endsWith('.ass'))
+        .filter(v => v.filename.endsWith('.ytt'))
     }
 
     const caption: TranslatedVideoMetadata = {
       language: 'ja',
+      title,
+      description,
+      status,
+      captions: files,
+    }
+
+    captions.push(caption)
+  }
+
+  if ('제목 (중국어)' in data.fields && '세부 정보 (중국어)' in data.fields) {
+    const title = (data.fields['제목 (중국어)'] as string[])[0]
+    const description = (data.fields['세부 정보 (중국어)'] as string[])[0]
+    const status = extractStatus(data.fields, '중국어')
+
+    let files: CaptionFile[] = []
+
+    if (
+      '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
+      data.fields
+    ) {
+      files = (data.fields[
+        '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)'
+      ] as Attachment[])
+        .map(v => ({
+          filename: v.filename,
+          size: v.size,
+          url: v.url,
+          type: v.type,
+        }))
+        .filter(v => v.filename.endsWith('.ytt'))
+    }
+
+    const caption: TranslatedVideoMetadata = {
+      language: 'zh',
       title,
       description,
       status,

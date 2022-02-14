@@ -140,3 +140,23 @@ $link-color: #0a84e9;
     color: darken($link-color, 20%);
   }
 }
+
+.muted {
+  opacity: 0.5;
+}
+
+.help {
+  position: relative;
+  display: flex;
+
+  padding: 16px 32px;
+
+  background-color: #dbeefd;
+  border-radius: 16px;
+
+  svg {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 8px;
+  }
+}

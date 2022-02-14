@@ -19,6 +19,7 @@ export const Header = () => {
             size='medium'
             roundness={16}
             onClick={() => router.push('/api/login')}
+            disabled={true}
           >
             로그인
           </Button>

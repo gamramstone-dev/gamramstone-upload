@@ -1,4 +1,4 @@
-$primary: #22A7F2;
+$primary: #22a7f2;
 
 .button {
   position: relative;
@@ -22,16 +22,23 @@ $primary: #22A7F2;
     padding: 6px 12px;
   }
 
+  &.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
   &.primary {
     background-color: $primary;
     color: #fff;
 
-    &:hover {
-      background-color: darken($primary, 5%);
-    }
+    &:not(.disabled) {
+      &:hover {
+        background-color: darken($primary, 5%);
+      }
 
-    &:active {
-      background-color: darken($primary, 10%);
+      &:active {
+        background-color: darken($primary, 10%);
+      }
     }
   }
 

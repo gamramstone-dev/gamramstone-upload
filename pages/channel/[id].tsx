@@ -94,7 +94,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
           {error instanceof Error ? (
-            <div className={styles.error}>{error.message}</div>
+            <div className={styles.error}>오류 : {error.message}</div>
           ) : !data ? (
             <LoadSpinner></LoadSpinner>
           ) : data.length ? (

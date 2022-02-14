@@ -6,7 +6,6 @@ import { RecoilRoot } from 'recoil'
 
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
-import Head from 'next/head'
 import { Toaster } from 'react-hot-toast'
 
 const variants = {
@@ -19,7 +18,7 @@ function MyApp ({ Component, pageProps, router }: AppProps) {
   return (
     <RecoilRoot>
       <Header></Header>
-      <Toaster position='bottom-right'></Toaster>
+      <Toaster position='top-center'></Toaster>
       <motion.div
         key={router.route}
         variants={variants}

@@ -10,6 +10,7 @@ interface ButtonBaseProps {
   className?: string
   theme?: ButtonTheme
   size?: ButtonSize
+  disabled?: boolean
   children?: ReactNode
   roundness?: number,
   onClick?: () => void
@@ -22,6 +23,7 @@ interface ButtonStyles extends CSSProperties {
 export const Button = ({
   children,
   className,
+  disabled = false,
   roundness = 0,
   size = 'medium',
   theme = 'primary',
@@ -32,10 +34,11 @@ export const Button = ({
       className={classes(
         styles.button,
         className,
+        disabled && styles.disabled,
         size && styles[size],
         theme && styles[theme]
       )}
-      onClick={onClick}
+      onClick={() => onClick && !disabled && onClick()}
       style={
         {
           '--round': `${roundness}px`,
