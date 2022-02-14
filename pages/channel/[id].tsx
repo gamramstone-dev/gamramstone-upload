@@ -35,9 +35,9 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
           </div>
           <h1 className={styles.name}>{channel.name}</h1>
         </div>
-        <div className={styles.progress}>
+        {/* <div className={styles.progress}>
           <ProgressBar barStyle='primary' progress={0.46}></ProgressBar>
-        </div>
+        </div> */}
       </div>
     </div>
   )
