@@ -3,7 +3,7 @@ on:
   schedule:
     - cron: '0 * * * *'
 jobs:
-  cron-english:
+  cron:
     runs-on: ubuntu-latest
     steps:
       - name: Refresh English
