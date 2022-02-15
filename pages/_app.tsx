@@ -9,6 +9,7 @@ import Header from '../components/Header'
 import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
 import Head from 'next/head'
+import ConsoleWarning from '../components/ConsoleWarning'
 
 const variants = {
   hidden: { opacity: 0 },
@@ -49,6 +50,7 @@ function MyApp ({
             href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'
           />
         </Head>
+        <ConsoleWarning></ConsoleWarning>
         <Header></Header>
         <Toaster position='top-center'></Toaster>
         <motion.div

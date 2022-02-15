@@ -2,25 +2,23 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 
 import pageStyles from '../styles/page.module.scss'
-import styles from '../styles/pages/Main.module.scss'
+import styles from '../styles/pages/Account.module.scss'
 import { classes } from '../utils/string'
-import Logo from '../components/Logo'
+import { useSession } from 'next-auth/react'
 
-const Privacy: NextPage = () => {
+const Account: NextPage = () => {
+  const { data: session } = useSession()
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>감람스톤</title>
+        <title>계정 관리 - 감람스톤</title>
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents, styles.heading)}>
           <div className={styles.inner}>
-            <span>이세돌 - 왁타버스 번역 프로젝트</span>
-            <div className={styles.logo}>
-              <Logo size={32} stroke={3}></Logo>
-              <span>감람스톤</span>
-            </div>
-            <span>개인정보처리방침</span>
+            <span>{session?.user?.name}님,</span>
+            <span>안녕하세요!</span>
           </div>
         </div>
         <div className={classes(pageStyles.contents)}>
@@ -31,4 +29,4 @@ const Privacy: NextPage = () => {
   )
 }
 
-export default Privacy
+export default Account
