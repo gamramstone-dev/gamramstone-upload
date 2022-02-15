@@ -1,4 +1,4 @@
-name: cron
+name: CronJob
 on:
   schedule:
     - cron: '10 * * * *'
