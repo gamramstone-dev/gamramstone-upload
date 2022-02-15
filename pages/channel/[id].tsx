@@ -1,13 +1,11 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { Channel, ChannelID, Channels } from '../../structs/channels'
 import useSWR from 'swr'
 
 import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
-import Image from 'next/image'
 import { TabButton, TabGroup } from '../../components/Tabs'
 import { useState } from 'react'
 import { APIResponse } from '../../structs/api'

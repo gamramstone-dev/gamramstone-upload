@@ -13,7 +13,7 @@ import {
   WorkStatusNameTypes,
 } from '../../structs/airtable'
 import { apify } from '../../structs/api'
-import { cachify, getCache } from '../../utils/cache'
+import { cachify } from '../../utils/cache'
 
 const base = new Airtable({
   apiKey: process.env.AIRTABLE_API_KEY,

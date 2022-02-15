@@ -29,6 +29,18 @@ export interface VideoWithCaption {
   captions: TranslatedVideoMetadata[]
 }
 
+export interface AirtableLanguageField {
+  id: string
+  url: string
+  noCC?: boolean
+  channel: string
+  originalTitle: string
+  title: string
+  description: string
+  uploadDate: string
+  files: CaptionFile[]
+}
+
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   const syncName = `진행 상황 확인용 - ${name} 카피 (from 받아쓰기 + 자막 싱크)`
   if (
@@ -59,7 +71,9 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   return 'none'
 }
 
-const filterCaptionFiles = (response: Attachment[]): CaptionFile[] => {
+export const filterCaptionFiles = (
+  response: (Attachment | CaptionFile)[]
+): CaptionFile[] => {
   const files = response.map(v => ({
     filename: v.filename,
     size: v.size,
@@ -93,15 +107,8 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
-      files = filterCaptionFiles(
-        data.fields[
-          '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[]
-      )
+    if ('영어 자막 파일' in data.fields) {
+      files = filterCaptionFiles(data.fields['영어 자막 파일'] as Attachment[])
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -122,14 +129,9 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
+    if ('일본어 자막 파일' in data.fields) {
       files = filterCaptionFiles(
-        data.fields[
-          '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[]
+        data.fields['일본어 자막 파일'] as Attachment[]
       )
     }
 
@@ -151,14 +153,9 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
+    if ('중국어 자막 파일' in data.fields) {
       files = filterCaptionFiles(
-        data.fields[
-          '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-        ] as Attachment[]
+        data.fields['중국어 자막 파일'] as Attachment[]
       )
     }
 
@@ -192,7 +189,34 @@ export const extractVideoDataFields = (
   }))
 }
 
-const ISO639 = [
+export const extractLanguageSpecificData = (
+  language: OnWorkingLanguageCode,
+  data: Records<FieldSet>
+): AirtableLanguageField[] => {
+  return data.map(v => ({
+    id: v.id,
+    url: (v.fields['URL'] as string[])[0],
+    channel: v.fields['채널'] as string,
+    noCC:
+      (v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'] as string[])[0] ===
+      '해당 없음 (자막 필요 없는 영상)',
+    originalTitle: v.fields['제목'] as string,
+    title: v.fields[`제목 (${LanguageNames[language]} 번역)`] as string,
+    description: v.fields[
+      `세부 정보 (${LanguageNames[language]} 번역)`
+    ] as string,
+    uploadDate: (v.fields['업로드 날짜'] as string[])[0],
+    editDate: v.fields['Last Modified'] as string,
+    files:
+      typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
+        ? []
+        : filterCaptionFiles(
+            v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
+          ),
+  }))
+}
+
+export const ISO639 = [
   'aa',
   'ab',
   'ae',
@@ -391,6 +415,12 @@ export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   es: '스페인어',
   ar: '아랍어',
   ja: '일본어',
+}
+
+export const isValidLanguageName = (
+  name: string
+): name is OnWorkingLanguageCode => {
+  return Object.keys(LanguageNames).includes(name)
 }
 
 export type WorkStatusNameTypes =

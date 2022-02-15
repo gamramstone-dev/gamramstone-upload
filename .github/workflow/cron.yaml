@@ -1,0 +1,31 @@
+name: one-hour-cron
+on:
+  schedule:
+    - cron-english: '0 * * * *'
+    - cron-japanese: '1 * * * *'
+    - cron-chinese: '2 * * * *'
+jobs:
+  cron-english:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh English
+        run: |
+          curl --request GET \
+          --url 'https://yoursite.com/api/airtable/updateState?lang=en' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+  cron-japanese:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh Japanese
+        run: |
+          curl --request GET \
+          --url 'https://yoursite.com/api/airtable/updateState?lang=ja' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+  cron-chinese:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh Chinese
+        run: |
+          curl --request GET \
+          --url 'https://yoursite.com/api/airtable/updateState?lang=zh' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
