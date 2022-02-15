@@ -37,6 +37,8 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('invalid language code')
   }
 
+  console.log(`[updateState] started for ${lang}.`)
+
   const uploadBase = base(`${LanguageNames[lang]} 번역`)
   const airtableVideos = await uploadBase
     .select({
@@ -99,7 +101,13 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
+  if (!results.length) {
+    console.log(`[updateState] nothing to update.`)
+  }
+
   for (let i = 0; i < results.length; i++) {
+    console.log(`[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`)
+
     if (typeof process.env[`DISCORD_${lang.toUpperCase()}_HOOK`] === 'string') {
       sendMessage(
         process.env[`DISCORD_${lang.toUpperCase()}_HOOK`]!,
