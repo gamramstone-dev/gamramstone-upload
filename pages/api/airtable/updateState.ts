@@ -19,10 +19,12 @@ const base = new Airtable({
 }).base(process.env.AIRTABLE_BASE_ID!)
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { authorization } = req.headers;
+  const { authorization } = req.headers
 
   if (authorization !== `Bearer ${process.env.CRON_SECRET_KEY}`) {
-    throw new Error('401: Unauthorized. Only local member could access to this endpoint.')
+    throw new Error(
+      '401: Unauthorized. Only local member could access to this endpoint.'
+    )
   }
 
   const lang = req.query.lang
@@ -66,6 +68,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   for (let i = 0; i < localizedVideos.length; i++) {
     const video = localizedVideos[i]
+
+    if (
+      video.metadatas[lang].title !== airtableVideos[indexes[i]].title ||
+      video.metadatas[lang].description !==
+        airtableVideos[indexes[i]].description
+    ) {
+      continue
+    }
 
     if (airtableVideos[indexes[i]].noCC) {
       results.push(airtableVideos[indexes[i]])
