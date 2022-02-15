@@ -34,11 +34,17 @@ const parseError = (error: unknown): [number, string] => {
 }
 
 export const apify = (
-  callback: (req: NextApiRequest, res: NextApiResponse) => Promise<unknown>
+  callback: (req: NextApiRequest, res: NextApiResponse) => Promise<unknown>,
+  cache?: number
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const result = await callback(req, res)
+
+      if (cache) {
+        res.setHeader('Cache-Control', `public, max-age=${cache}`)
+      }
+
       res.status(200).json({
         status: 'success',
         data: result,

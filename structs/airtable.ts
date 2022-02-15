@@ -29,6 +29,18 @@ export interface VideoWithCaption {
   captions: TranslatedVideoMetadata[]
 }
 
+export interface AirtableLanguageField {
+  id: string
+  url: string
+  noCC?: boolean
+  channel: string
+  originalTitle: string
+  title: string
+  description: string
+  uploadDate: string
+  files: CaptionFile[]
+}
+
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   const syncName = `진행 상황 확인용 - ${name} 카피 (from 받아쓰기 + 자막 싱크)`
   if (
@@ -48,6 +60,8 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   if (
     typeof fields[syncName] !== 'undefined' &&
     ((fields[syncName] as string[])[0] === '번역' ||
+      (fields[syncName] as string[])[0] === '받아쓰기' ||
+      (fields[syncName] as string[])[0] === '자막 싱크' ||
       (fields[syncName] as string[])[0] === '검수' ||
       (fields[syncName] as string[])[0] === '최종 확인 대기')
   ) {
@@ -55,6 +69,30 @@ export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   }
 
   return 'none'
+}
+
+export const filterCaptionFiles = (
+  response: (Attachment | CaptionFile)[]
+): CaptionFile[] => {
+  const files = response.map(v => ({
+    filename: v.filename,
+    size: v.size,
+    url: v.url,
+    type: v.type,
+  }))
+
+  let yttFiles = files.filter(file => file.filename.endsWith('.ytt'))
+  let srtFiles = files.filter(file => file.filename.endsWith('.srt'))
+
+  if (yttFiles.length) {
+    return yttFiles
+  }
+
+  if (srtFiles.length) {
+    return srtFiles
+  }
+
+  return []
 }
 
 export const extractNationalValue = (
@@ -69,20 +107,8 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
-      files = (data.fields[
-        '영어 자막 파일 (from 영어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+    if ('영어 자막 파일' in data.fields) {
+      files = filterCaptionFiles(data.fields['영어 자막 파일'] as Attachment[])
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -103,20 +129,10 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
-      files = (data.fields[
-        '일본어 자막 파일 (from 일본어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+    if ('일본어 자막 파일' in data.fields) {
+      files = filterCaptionFiles(
+        data.fields['일본어 자막 파일'] as Attachment[]
+      )
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -137,20 +153,10 @@ export const extractNationalValue = (
 
     let files: CaptionFile[] = []
 
-    if (
-      '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)' in
-      data.fields
-    ) {
-      files = (data.fields[
-        '중국어 자막 파일 (from 중국어 번역) 2 (from 받아쓰기 + 자막 싱크)'
-      ] as Attachment[])
-        .map(v => ({
-          filename: v.filename,
-          size: v.size,
-          url: v.url,
-          type: v.type,
-        }))
-        .filter(v => v.filename.endsWith('.ytt'))
+    if ('중국어 자막 파일' in data.fields) {
+      files = filterCaptionFiles(
+        data.fields['중국어 자막 파일'] as Attachment[]
+      )
     }
 
     const caption: TranslatedVideoMetadata = {
@@ -183,7 +189,34 @@ export const extractVideoDataFields = (
   }))
 }
 
-const ISO639 = [
+export const extractLanguageSpecificData = (
+  language: OnWorkingLanguageCode,
+  data: Records<FieldSet>
+): AirtableLanguageField[] => {
+  return data.map(v => ({
+    id: v.id,
+    url: (v.fields['URL'] as string[])[0],
+    channel: v.fields['채널'] as string,
+    noCC:
+      (v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'] as string[])[0] ===
+      '해당 없음 (자막 필요 없는 영상)',
+    originalTitle: v.fields['제목'] as string,
+    title: v.fields[`제목 (${LanguageNames[language]} 번역)`] as string,
+    description: v.fields[
+      `세부 정보 (${LanguageNames[language]} 번역)`
+    ] as string,
+    uploadDate: (v.fields['업로드 날짜'] as string[])[0],
+    editDate: v.fields['Last Modified'] as string,
+    files:
+      typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
+        ? []
+        : filterCaptionFiles(
+            v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
+          ),
+  }))
+}
+
+export const ISO639 = [
   'aa',
   'ab',
   'ae',
@@ -384,16 +417,22 @@ export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   ja: '일본어',
 }
 
+export const isValidLanguageName = (
+  name: string
+): name is OnWorkingLanguageCode => {
+  return Object.keys(LanguageNames).includes(name)
+}
+
 export type WorkStatusNameTypes =
   | '업로드 완료'
   | '자막 작업 안함'
   | '업로드 대기'
-  | '자막 작업 중'
+  | '번역 진행 중'
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
 
 export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
   done: '업로드 완료',
   none: '자막 작업 안함',
   waiting: '업로드 대기',
-  wip: '자막 작업 중',
+  wip: '번역 진행 중',
 }

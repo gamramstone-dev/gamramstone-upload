@@ -1,19 +1,18 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { Channel, ChannelID, Channels } from '../../structs/channels'
 import useSWR from 'swr'
 
 import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
-import Image from 'next/image'
 import { TabButton, TabGroup } from '../../components/Tabs'
 import { useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
 import VideoProjectCard from '../../components/VideoCard'
+import FadeInImage from '../../components/FadeInImage'
 
 interface ChannelCardProps {
   channel: Channel
@@ -25,12 +24,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
       <div className={styles.contents}>
         <div className={styles.member}>
           <div className={styles.image}>
-            <Image
-              src={channel.image}
-              alt={channel.name}
-              width={75}
-              height={75}
-            />
+            <FadeInImage src={channel.image} width={75} height={75} />
           </div>
           <h1 className={styles.name}>{channel.name}</h1>
         </div>
@@ -57,11 +51,10 @@ interface ChannelPageProps {
   id: ChannelID
 }
 
-const Tabs: (WorkStatus | 'all')[] = ['all', 'waiting', 'done', 'wip']
+const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
-  const router = useRouter()
-  const [tabIndex, setTabIndex] = useState<number>(1)
+  const [tabIndex, setTabIndex] = useState<number>(0)
   const { data, error } = useSWR(
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchList
@@ -70,26 +63,21 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>감람스톤</title>
+        <title>{Channels[id].name} - 감람스톤</title>
+        <meta
+          name='description'
+          content={`이세돌, 왁타버스 번역 프로젝트 - ${Channels[id].name} 채널의 번역 페이지입니다.`}
+        />
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
-          <ChannelCard
-            channel={Channels[router.query.id as ChannelID]}
-          ></ChannelCard>
+          <ChannelCard channel={Channels[id]}></ChannelCard>
         </div>
         <div className={classes(pageStyles.contents)}>
           <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
-            <TabButton key='all' disabled>
-              전체
-            </TabButton>
             <TabButton key='waiting'>업로드 대기 중</TabButton>
-            <TabButton key='done' disabled>
-              업로드 완료
-            </TabButton>
-            <TabButton key='ongoing' disabled>
-              번역 진행 중
-            </TabButton>
+            <TabButton key='done'>업로드 완료</TabButton>
+            <TabButton key='ongoing'>번역 진행 중</TabButton>
           </TabGroup>
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
@@ -105,12 +93,12 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
             <div className={styles.empty}>
               <div className={styles.contents}>
                 <div className={styles.image}>
-                  <Image
+                  <FadeInImage
                     src={'/empty.png'}
                     width={150}
                     height={150}
                     alt='no image'
-                  ></Image>
+                  ></FadeInImage>
                 </div>
                 <h3>아무런 영상이 없어요.</h3>
               </div>
