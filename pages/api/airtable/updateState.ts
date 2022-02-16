@@ -19,10 +19,12 @@ const base = new Airtable({
 }).base(process.env.AIRTABLE_BASE_ID!)
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { authorization } = req.headers;
+  const { authorization } = req.headers
 
   if (authorization !== `Bearer ${process.env.CRON_SECRET_KEY}`) {
-    throw new Error('401: Unauthorized. Only local member could access to this endpoint.')
+    throw new Error(
+      '401: Unauthorized. Only local member could access to this endpoint.'
+    )
   }
 
   const lang = req.query.lang
@@ -47,7 +49,10 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const youtubeIds = airtableVideos.map(v => getYouTubeId(v.url))
 
-  const videos = await getYouTubeLocalizedVideos(youtubeIds)
+  const videos = await getYouTubeLocalizedVideos(
+    youtubeIds,
+    process.env.YOUTUBE_API_KEY!
+  )
 
   const localizedVideos = videos.filter(
     v =>
@@ -75,9 +80,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       continue
     }
 
-    const caption = (await getYouTubeSubtitleList(video.id)).filter(
-      v => v.trackKind !== 'asr' && v.language === lang
-    )
+    const caption = (
+      await getYouTubeSubtitleList(video.id, process.env.YOUTUBE_API_KEY!)
+    ).filter(v => v.trackKind !== 'asr' && v.language === lang)
 
     // CC를 작업하지 않도록 마킹이 되어 있는 경우 -> 업로드
     // Airtable에 업로드된 자막 파일이 있고, YouTube에 자막이 있는 경우 -> 업로드
@@ -96,7 +101,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   for (let i = 0; i < results.length; i++) {
-    console.log(`[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`)
+    console.log(
+      `[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
+    )
 
     if (typeof process.env[`DISCORD_${lang.toUpperCase()}_HOOK`] === 'string') {
       sendMessage(

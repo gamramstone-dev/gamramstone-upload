@@ -15,7 +15,10 @@ export default NextAuth({
       },
     }),
   ],
-  session: { strategy: 'jwt' },
+  session: {
+    strategy: 'jwt',
+    maxAge: 3600
+  },
   pages: {
     error: '/noauth',
   },
@@ -31,14 +34,18 @@ export default NextAuth({
 
       return true
     },
-    async jwt ({ token, account }) {
+    async jwt({ token, account }) {
       if (account) {
         token.accessToken = account.access_token
+        token.id = account.providerAccountId
       }
+
       return token
     },
     async session ({ session, token, user }) {
       session.accessToken = token.accessToken
+      session.id = token.id
+
       return session
     },
   },

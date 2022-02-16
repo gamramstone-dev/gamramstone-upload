@@ -56,11 +56,26 @@ export const globalSettings = selector<GamramSettings>({
   },
 })
 
+export const validateSettings = (value: unknown): value is SettingTypes => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+
+  if (
+    'darkMode' in value &&
+    typeof (value as Record<'darkMode', unknown>).darkMode === 'boolean'
+  ) {
+    return true
+  }
+
+  return false
+}
+
 export interface SettingBase<T> {
   id: SettingID
   title: string
   description: string
-  type: 'checkbox'
+  type: 'checkbox' | 'button'
   default: T
 }
 

@@ -2,7 +2,7 @@ import '../styles/globals.scss'
 import 'normalize.css'
 
 import { AppProps } from 'next/app'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
 
 import { motion } from 'framer-motion'
 import Header from '../components/Header'
@@ -10,7 +10,7 @@ import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
 import Head from 'next/head'
 import ConsoleWarning from '../components/ConsoleWarning'
-import { darkModeAtom } from '../structs/setting'
+import { darkModeAtom, globalSettings } from '../structs/setting'
 import { ReactNode, useEffect } from 'react'
 
 const variants = {
@@ -19,14 +19,37 @@ const variants = {
   exit: { opacity: 0 },
 }
 
-const DarkModeWrapper = ({ children }: { children: ReactNode }) => {
+const useDarkMode = () => {
   const darkMode = useRecoilValue(darkModeAtom)
 
   useEffect(() => {
     document.documentElement.dataset.darkMode = darkMode ? 'true' : 'false'
   }, [darkMode])
+}
 
-  return <>{children}</>
+const useSettingSync = () => {
+  const [settings, setSettings] = useRecoilState(globalSettings)
+
+  useEffect(() => {
+    const getSettings = async () => {
+      const result = await fetch('/api/settings').then(v => v.json())
+
+      if (result.status === 'success') {
+        const data = JSON.parse(result.data)
+
+        setSettings(data)
+      }
+    }
+
+    getSettings()
+  }, [setSettings])
+}
+
+const ContextUser = () => {
+  useDarkMode()
+  useSettingSync()
+
+  return <></>
 }
 
 function MyApp ({
@@ -65,19 +88,18 @@ function MyApp ({
         <ConsoleWarning></ConsoleWarning>
         <Header></Header>
         <Toaster position='top-center'></Toaster>
-        <DarkModeWrapper>
-          <motion.div
-            key={router.route}
-            variants={variants}
-            className={'page-wrapper'}
-            initial='hidden'
-            animate='enter'
-            exit='exit'
-            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-          >
-            <Component {...pageProps} />
-          </motion.div>
-        </DarkModeWrapper>
+        <ContextUser></ContextUser>
+        <motion.div
+          key={router.route}
+          variants={variants}
+          className={'page-wrapper'}
+          initial='hidden'
+          animate='enter'
+          exit='exit'
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
       </RecoilRoot>
     </SessionProvider>
   )

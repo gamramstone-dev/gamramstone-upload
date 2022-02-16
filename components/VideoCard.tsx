@@ -1,8 +1,10 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
+  LanguageCode,
   LanguageNames,
   TranslatedVideoMetadata,
   VideoWithCaption,
@@ -10,6 +12,10 @@ import {
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
 import { classes, getYouTubeId } from '../utils/string'
+import {
+  updateYouTubeTitleMetadata,
+  validateAccessToken,
+} from '../utils/youtube'
 import { Button } from './Button'
 import { TabButton, TabGroup } from './Tabs'
 
@@ -90,6 +96,8 @@ const ToastOption = {
 export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
+  const { data: session } = useSession()
+
   const copy = useCallback((text: string, label: string) => {
     if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
       navigator.clipboard.writeText(text)
@@ -124,6 +132,67 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
       })
   }, [])
 
+  const applyTitleDescription = useCallback(
+    async (
+      language: LanguageCode,
+      id: string,
+      title: string,
+      description: string
+    ) => {
+      if (!session || typeof session.accessToken !== 'string') {
+        toast.error('로그인 해주세요.', ToastOption)
+        return
+      }
+
+      const loadingToast = toast.loading('업로드 중...', ToastOption)
+
+      try {
+        const result = await validateAccessToken(session.accessToken)
+
+        if (!result) {
+          throw new Error()
+        }
+      } catch (e) {
+        toast.remove(loadingToast)
+        toast.error(
+          '토큰이 올바르지 않아요. 로그아웃 했다가 다시 로그인 한 후 시도하세요.',
+          ToastOption
+        )
+
+        return
+      }
+
+      try {
+        const result = await updateYouTubeTitleMetadata(
+          id,
+          session.accessToken,
+          {
+            [language]: {
+              title,
+              description,
+            },
+          }
+        )
+
+        if (!result) {
+          throw new Error('결과가 없어요.')
+        }
+
+        toast.remove(loadingToast)
+        toast.success('업로드 완료!', ToastOption)
+      } catch (e) {
+        toast.remove(loadingToast)
+        toast.error(
+          `영상 제목 / 세부 정보를 업데이트 하는 도중에 오류가 발생하였습니다: ${
+            (e as Error).message
+          }`,
+          ToastOption
+        )
+      }
+    },
+    [session]
+  )
+
   return (
     <AnimateSharedLayout>
       <div className={styles.captionCard}>
@@ -147,84 +216,107 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                 ))}
               </TabGroup>
               {typeof languages[tabIndex] !== 'undefined' ? (
-                <div className={styles.details}>
-                  <div className={styles.row}>
-                    <h3 className={styles.title}>작업</h3>
-                    <div className={styles.value}>
-                      <a
-                        href={`https://studio.youtube.com/video/${getYouTubeId(
-                          video.url
-                        )}/translations`}
-                        target='_blank'
-                        rel='noreferrer'
-                      >
-                        <Button roundness={16}>자막 적용하러 가기</Button>
-                      </a>
-                    </div>
+                languages[tabIndex].status === 'wip' ? (
+                  <div className={styles.details}>
+                    현재 자막 제작 중입니다...
                   </div>
-                  <div className={styles.row}>
-                    <h3 className={styles.title}>상태</h3>
-                    <p>{WorkStatusNames[languages[tabIndex].status]}</p>
-                  </div>
-                  <div className={styles.row}>
-                    <h3 className={styles.title}>제목</h3>
-                    <p
-                      className={styles.copyable}
-                      onClick={() => copy(languages[tabIndex].title, '제목')}
-                    >
-                      {languages[tabIndex].title}
-                    </p>
-                  </div>
-                  <div className={styles.row}>
-                    <h3 className={styles.title}>세부 정보</h3>
-                    <div
-                      className={classes(styles.originText, styles.copyable)}
-                      onClick={() =>
-                        copy(languages[tabIndex].description, '설명')
-                      }
-                    >
-                      {languages[tabIndex].description
-                        .split('\n')
-                        .map((v, i) => (
-                          <p key={`text-description-${i}`}>{v}</p>
-                        ))}
-                    </div>
-                  </div>
-                  {
+                ) : (
+                  <div className={styles.details}>
                     <div className={styles.row}>
-                      <h3 className={styles.title}>자막</h3>
+                      <h3 className={styles.title}>작업</h3>
                       <div className={styles.value}>
-                        {languages[tabIndex].captions &&
-                        languages[tabIndex].captions.length ? (
-                          languages[tabIndex].captions.map(v => (
-                            <Button
-                              key={`file-${v.filename}`}
-                              roundness={16}
-                              onClick={() => download(v.url, v.filename)}
-                            >
-                              {v.filename} 다운로드
-                            </Button>
-                          ))
-                        ) : (
-                          <span className={styles.muted}>자막 파일 없음</span>
-                        )}
+                        <a
+                          href={`https://studio.youtube.com/video/${getYouTubeId(
+                            video.url
+                          )}/translations`}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          <Button roundness={16}>
+                            자막 적용하러 가기 (수동)
+                          </Button>
+                        </a>
+                        <Button
+                          roundness={16}
+                          disabled={session === null}
+                          onClick={() =>
+                            applyTitleDescription(
+                              languages[tabIndex].language,
+                              getYouTubeId(video.url),
+                              languages[tabIndex].title,
+                              languages[tabIndex].description
+                            )
+                          }
+                        >
+                          자막 자동 적용{' '}
+                          {session === null ? '(로그인 필요)' : ''}
+                        </Button>
                       </div>
                     </div>
-                  }
+                    <div className={styles.row}>
+                      <h3 className={styles.title}>상태</h3>
+                      <p>{WorkStatusNames[languages[tabIndex].status]}</p>
+                    </div>
+                    <div className={styles.row}>
+                      <h3 className={styles.title}>제목</h3>
+                      <p
+                        className={styles.copyable}
+                        onClick={() => copy(languages[tabIndex].title, '제목')}
+                      >
+                        {languages[tabIndex].title}
+                      </p>
+                    </div>
+                    <div className={styles.row}>
+                      <h3 className={styles.title}>세부 정보</h3>
+                      <div
+                        className={classes(styles.originText, styles.copyable)}
+                        onClick={() =>
+                          copy(languages[tabIndex].description, '설명')
+                        }
+                      >
+                        {languages[tabIndex].description
+                          .split('\n')
+                          .map((v, i) => (
+                            <p key={`text-description-${i}`}>{v}</p>
+                          ))}
+                      </div>
+                    </div>
+                    {
+                      <div className={styles.row}>
+                        <h3 className={styles.title}>자막</h3>
+                        <div className={styles.value}>
+                          {languages[tabIndex].captions &&
+                          languages[tabIndex].captions.length ? (
+                            languages[tabIndex].captions.map(v => (
+                              <Button
+                                key={`file-${v.filename}`}
+                                roundness={16}
+                                onClick={() => download(v.url, v.filename)}
+                              >
+                                {v.filename} 다운로드
+                              </Button>
+                            ))
+                          ) : (
+                            <span className={styles.muted}>자막 파일 없음</span>
+                          )}
+                        </div>
+                      </div>
+                    }
 
-                  <div className={styles.help}>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      viewBox='0 0 24 24'
-                      width='20'
-                      height='20'
-                    >
-                      <path fill='none' d='M0 0h24v24H0z' />
-                      <path d='M7 6V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3v3c0 .552-.45 1-1.007 1H4.007A1.001 1.001 0 0 1 3 21l.003-14c0-.552.45-1 1.007-1H7zM5.003 8L5 20h10V8H5.003zM9 6h8v10h2V4H9v2z' />
-                    </svg>
-                    <p>제목과 세부 정보는 클릭하여 복사할 수 있어요.</p>
+                    <div className={styles.help}>
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        viewBox='0 0 24 24'
+                        width='20'
+                        height='20'
+                      >
+                        <path fill='none' d='M0 0h24v24H0z' />
+                        <path d='M7 6V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3v3c0 .552-.45 1-1.007 1H4.007A1.001 1.001 0 0 1 3 21l.003-14c0-.552.45-1 1.007-1H7zM5.003 8L5 20h10V8H5.003zM9 6h8v10h2V4H9v2z' />
+                      </svg>
+                      <p>제목과 세부 정보는 클릭하여 복사할 수 있어요.</p>
+                    </div>
                   </div>
-                </div>
+                )
               ) : (
                 <div className={styles.details}>
                   무슨 일인지 데이터가 없네요...
