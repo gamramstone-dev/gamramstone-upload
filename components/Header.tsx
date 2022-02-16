@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import styles from '../styles/components/Header.module.scss'
 import { Button } from './Button'
 
 import { useSession, signIn, signOut } from 'next-auth/react'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 export const Header = () => {
   const router = useRouter()
@@ -18,14 +18,14 @@ export const Header = () => {
         </div>
         <div className={styles.actions}>
           {session ? (
-            <div className={styles.user} onClick={() => signOut()}>
+            <div className={styles.user} onClick={() => router.push('/account')}>
               <div className={styles.image}>
                 {session.user?.image && (
                   <Image
                     src={session.user?.image}
                     width={48}
                     height={48}
-                    alt='Item'
+                    alt='프로필 이미지'
                   />
                 )}
               </div>
@@ -34,9 +34,7 @@ export const Header = () => {
             <Button
               size='medium'
               roundness={16}
-              onClick={() =>
-                signIn('google')
-              }
+              onClick={() => signIn('google')}
             >
               로그인
             </Button>

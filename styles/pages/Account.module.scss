@@ -7,29 +7,20 @@
   font-weight: bold;
   letter-spacing: -1px;
   font-size: 1.75em;
-
-  h1 {
-    margin: 0;
-  }
-
-  .logo {
-    display: flex;
-    color: #73A30E;
-
-    margin-top: 4px;
-
-    svg {
-      margin-right: 8px;
-    }
-
-    span {
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-  }
 }
 
 .inner {
   margin-top: auto;
   margin-bottom: auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  position: relative;
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
 }

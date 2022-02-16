@@ -2,6 +2,15 @@
  * https://projects.lukehaas.me/css-loaders/
  */
 
+html[data-dark-mode='true'] {
+  .spinner {
+    border-top: 4px solid rgba(255, 255, 255, 0.2);
+    border-right: 4px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 4px solid rgba(255, 255, 255, 0.2);
+    border-left: 4px solid rgb(255, 255, 255);
+  }
+}
+
 .spinner,
 .spinner:after {
   border-radius: 50%;

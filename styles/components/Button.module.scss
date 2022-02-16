@@ -1,4 +1,24 @@
 $primary: #22a7f2;
+$dark-primary: #0a3b56;
+
+html[data-dark-mode='true'] {
+  .button {
+    &.primary {
+      background-color: $dark-primary;
+      color: white;
+
+      &:not(.disabled) {
+        &:hover {
+          background-color: darken($dark-primary, 5%);
+        }
+
+        &:active {
+          background-color: darken($dark-primary, 10%);
+        }
+      }
+    }
+  }
+}
 
 .button {
   position: relative;

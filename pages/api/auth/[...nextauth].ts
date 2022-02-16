@@ -21,7 +21,9 @@ export default NextAuth({
   },
   callbacks: {
     async signIn ({ user }) {
-      const savedUser = getUser(user.id)
+      console.log(`${user.name} (${user.id}) tried to sign in!`)
+
+      const savedUser = await getUser(user.id)
 
       if (savedUser === null) {
         return false
