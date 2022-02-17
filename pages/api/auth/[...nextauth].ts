@@ -26,6 +26,10 @@ export default NextAuth({
     async signIn ({ user }) {
       console.log(`${user.name} (${user.id}) tried to sign in!`)
 
+      if (process.env.GOOGLE_NOT_READY === 'true') {
+        return false
+      }
+
       const savedUser = await getUser(user.id)
 
       if (savedUser === null) {

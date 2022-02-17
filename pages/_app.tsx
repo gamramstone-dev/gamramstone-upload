@@ -11,7 +11,7 @@ import { SessionProvider } from 'next-auth/react'
 import Head from 'next/head'
 import ConsoleWarning from '../components/ConsoleWarning'
 import { darkModeAtom, globalSettings } from '../structs/setting'
-import { ReactNode, useEffect } from 'react'
+import { useEffect } from 'react'
 
 const variants = {
   hidden: { opacity: 0 },
