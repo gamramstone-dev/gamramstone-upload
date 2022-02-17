@@ -74,6 +74,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   for (let i = 0; i < localizedVideos.length; i++) {
     const video = localizedVideos[i]
 
+    if (
+      video.metadatas[lang].title !== airtableVideos[indexes[i]].title ||
+      video.metadatas[lang].description !==
+        airtableVideos[indexes[i]].description
+    ) {
+      continue
+    }
+
     if (airtableVideos[indexes[i]].noCC) {
       results.push(airtableVideos[indexes[i]])
 
