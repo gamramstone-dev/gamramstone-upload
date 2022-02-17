@@ -34,7 +34,7 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['yt3.ggpht.com', 'img.youtube.com', 'i.ytimg.com']
+    domains: ['yt3.ggpht.com', 'img.youtube.com', 'i.ytimg.com', 'lh3.googleusercontent.com']
   },
   async headers() {
     return [

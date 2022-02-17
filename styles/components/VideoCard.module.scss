@@ -1,3 +1,38 @@
+html[data-dark-mode="true"] {
+  .videoCard {
+    .thumbnail {
+      background-color: #282a2b;
+    }
+  }
+
+  .captionCard {
+    background-color: #1B242C;
+  }
+
+  .status {
+    background-color: #353c47;
+
+    &[data-status='waiting'] {
+      background-color: rgb(8, 97, 42);
+      color: white;
+    }
+
+    &[data-status='done'] {
+      background-color: rgb(8, 55, 109);
+      color: white;
+      opacity: 0.3;
+    }
+  }
+
+  .help {
+    svg {
+      fill: white;
+    }
+
+    background-color: #2d4658;
+  }
+} 
+
 .videoCard {
   position: relative;
   width: 100%;
@@ -20,6 +55,7 @@
     border-radius: 16px;
 
     width: 250px;
+    color: transparent;
 
     background-color: #cfcfcf;
   }

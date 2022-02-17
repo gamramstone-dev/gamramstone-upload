@@ -1,5 +1,30 @@
 @import '../constants.scss';
 
+html[data-dark-mode="true"] {
+  .header {
+    background: linear-gradient(
+      to bottom,
+      hsl(210, 21%, 9%) 0%,
+      hsla(210, 21%, 9%, 0.95) 15.8%,
+      hsla(210, 21%, 9%, 0.89) 29.3%,
+      hsla(210, 21%, 9%, 0.821) 40.8%,
+      hsla(210, 21%, 9%, 0.746) 50.5%,
+      hsla(210, 21%, 9%, 0.665) 58.6%,
+      hsla(210, 21%, 9%, 0.582) 65.3%,
+      hsla(210, 21%, 9%, 0.497) 70.8%,
+      hsla(210, 21%, 9%, 0.413) 75.5%,
+      hsla(210, 21%, 9%, 0.332) 79.3%,
+      hsla(210, 21%, 9%, 0.255) 82.7%,
+      hsla(210, 21%, 9%, 0.184) 85.9%,
+      hsla(210, 21%, 9%, 0.121) 88.9%,
+      hsla(210, 21%, 9%, 0.068) 92.2%,
+      hsla(210, 21%, 9%, 0.027) 95.8%,
+      hsla(210, 21%, 9%, 0) 100%
+    );
+  }
+}
+
+
 .header {
   left: 0;
   top: 0;
@@ -7,6 +32,44 @@
   width: 100%;
   display: flex;
   z-index: 1000;
+
+  .user {
+    position: relative;
+    display: flex;
+
+    & > * {
+      margin: auto;
+    }
+  }
+
+  .image {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 48px;
+    height: 48px;
+
+    transition: 0.23s opacity cubic-bezier(0.19, 1, 0.22, 1),
+      0.23s transform cubic-bezier(0.19, 1, 0.22, 1);
+
+    user-select: none;
+
+    cursor: pointer;
+
+    img {
+      user-select: none;
+    }
+
+    &:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      opacity: 0.8;
+      transform: scale(0.9);
+    }
+  }
 
   background: linear-gradient(
     to bottom,
