@@ -84,6 +84,11 @@ function MyApp ({
             type='text/css'
             href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'
           />
+          <script
+            defer
+            src='https://static.cloudflareinsights.com/beacon.min.js'
+            data-cf-beacon='{"token": "f924609c5236459d85d8d025c8abb7b3"}'
+          ></script>
         </Head>
         <ConsoleWarning></ConsoleWarning>
         <Header></Header>

@@ -7,7 +7,10 @@ import { classes } from '../../utils/string'
 import Logo from '../../components/Logo'
 import { Button } from '../../components/Button'
 import { getSession, useSession } from 'next-auth/react'
-import { updateYouTubeTitleMetadata } from '../../utils/youtube'
+import {
+  updateYouTubeTitleMetadata,
+  uploadYouTubeCaption,
+} from '../../utils/youtube'
 import VideoProjectCard from '../../components/VideoCard'
 import { useState } from 'react'
 import { LanguageCode, OnWorkingLanguageCode } from '../../structs/airtable'
@@ -41,6 +44,12 @@ const Main: NextPage = () => {
         </div>
       </div>
     )
+  }
+
+  const getExampleCaptionFile = () => {
+    return fetch(
+      'https://dl.airtable.com/.attachments/569855d0f3c8f60da63f2b55a2914a65/e62a26d7/--Shorts.srt'
+    ).then(v => v.blob())
   }
 
   return (
@@ -98,7 +107,7 @@ const Main: NextPage = () => {
                 youtubeId,
                 session.accessToken as string,
                 {
-                  en: {
+                  [lang]: {
                     title: 'LILPA',
                     description: 'LILPA',
                   },
@@ -106,7 +115,7 @@ const Main: NextPage = () => {
               )
             }
           >
-            유튜브 제목, 설명 업데이트 (영어)
+            유튜브 제목, 설명 업데이트 ({lang})
           </Button>
           <h1>Test 2</h1>
           <VideoProjectCard
@@ -122,11 +131,33 @@ const Main: NextPage = () => {
                   status: 'waiting',
                   title: customTitle,
                   description: customDescription,
-                  captions: [],
+                  captions: [
+                    {
+                      filename: '영어-But_You_Want_More_-_Original_Song.ytt',
+                      size: 376064,
+                      url:
+                        'https://dl.airtable.com/.attachments/8838dde1539bbcf74c6abb838e0e97d1/563c5a20/-But_You_Want_More_-_Original_Song.ytt',
+                      type: 'text/plain',
+                    },
+                  ],
                 },
               ],
             }}
           ></VideoProjectCard>
+          <h1>Test 3</h1>
+          <Button
+            onClick={async () =>
+              uploadYouTubeCaption(
+                youtubeId,
+                session.accessToken as string,
+                lang as LanguageCode,
+                await getExampleCaptionFile()
+              )
+            }
+          >
+            유튜브 캡션 업데이트 ({lang})
+          </Button>
+          <h1>Test 2</h1>
         </div>
       </div>
     </div>

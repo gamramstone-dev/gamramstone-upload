@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/uuid": "^8.3.4",
     "@upstash/redis": "^0.2.1",
     "airtable": "^0.11.1",
     "framer-motion": "^6.2.6",
@@ -19,7 +20,8 @@
     "react-hot-toast": "^2.2.0",
     "recoil": "^0.6.1",
     "sass": "^1.49.7",
-    "swr": "^1.2.1"
+    "swr": "^1.2.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "17.0.17",

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
+  CaptionFile,
   LanguageCode,
   LanguageNames,
   TranslatedVideoMetadata,
@@ -11,9 +12,15 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
-import { classes, getYouTubeId } from '../utils/string'
+import {
+  classes,
+  extractCaptionTrackName,
+  filterCaptionFilesByLanguage,
+  getYouTubeId,
+} from '../utils/string'
 import {
   updateYouTubeTitleMetadata,
+  uploadYouTubeCaption,
   validateAccessToken,
 } from '../utils/youtube'
 import { Button } from './Button'
@@ -137,7 +144,8 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
       language: LanguageCode,
       id: string,
       title: string,
-      description: string
+      description: string,
+      captions?: CaptionFile[] | null
     ) => {
       if (!session || typeof session.accessToken !== 'string') {
         toast.error('로그인 해주세요.', ToastOption)
@@ -177,9 +185,6 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
         if (!result) {
           throw new Error('결과가 없어요.')
         }
-
-        toast.remove(loadingToast)
-        toast.success('업로드 완료!', ToastOption)
       } catch (e) {
         toast.remove(loadingToast)
         toast.error(
@@ -188,7 +193,56 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
           }`,
           ToastOption
         )
+
+        return
       }
+
+      if (!captions) {
+        toast.remove(loadingToast)
+        toast.success('업로드 완료!', ToastOption)
+
+        return
+      }
+
+      try {
+        for (let i = 0; i < captions.length; i++) {
+          // TODO : 여러 파일이 있을 경우 업로드할 파일 선택할 수 있도록 만들기
+          // 현재는 첫 번째 캡션만 업로드할 수 있도록 지정했습니다.
+          if (captions.length > 1 && i >= 1) {
+            break
+          }
+
+          const caption = captions[i]
+
+          const file = await fetch(caption.url).then(v => v.blob())
+
+          const result = await uploadYouTubeCaption(
+            id,
+            session.accessToken,
+            language,
+            file
+            // extractCaptionTrackName(caption.filename)
+            // TODO : 자막 이름들이 좀 정렬되면 extractCaptionTrackName 사용
+          )
+
+          if (!result) {
+            throw new Error('결과가 없어요.')
+          }
+        }
+      } catch (e) {
+        toast.remove(loadingToast)
+        toast.error(
+          `영상 자막 파일을 업로드 하는 도중에 오류가 발생하였습니다: ${
+            (e as Error).message
+          }`,
+          ToastOption
+        )
+
+        return
+      }
+
+      toast.remove(loadingToast)
+      toast.success('업로드 완료!', ToastOption)
     },
     [session]
   )
@@ -244,7 +298,10 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                               languages[tabIndex].language,
                               getYouTubeId(video.url),
                               languages[tabIndex].title,
-                              languages[tabIndex].description
+                              languages[tabIndex].description,
+                              video.captions.find(
+                                v => v.language === languages[tabIndex].language
+                              )?.captions
                             )
                           }
                         >

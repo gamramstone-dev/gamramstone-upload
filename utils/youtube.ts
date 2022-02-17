@@ -1,5 +1,7 @@
 import { LanguageCode } from '../structs/airtable'
 
+import { v4 as uuid } from 'uuid'
+
 const fields = ['localizations']
 
 interface YouTubeAPIResponse {
@@ -123,8 +125,12 @@ const getYouTubeVideoSnippetLocalizations = async (
   ).then(v => v.json())
 
   if (result.error) {
-    if (result.error.message === 'Request had insufficient authentication scopes.') {
-      throw new Error('로그인할 때 권한이 부여되지 않았습니다. 화면 오른쪽 위 계정 아이콘을 클릭해 로그아웃 한 후 다시 로그인해주세요.')
+    if (
+      result.error.message === 'Request had insufficient authentication scopes.'
+    ) {
+      throw new Error(
+        '로그인할 때 권한이 부여되지 않았습니다. 화면 오른쪽 위 계정 아이콘을 클릭해 로그아웃 한 후 다시 로그인해주세요.'
+      )
     }
 
     throw new Error('영상 snippet을 가져올 수 없습니다.')
@@ -184,6 +190,97 @@ export const updateYouTubeTitleMetadata = async (
   if (result.error) {
     if (result.error.message === 'Forbidden') {
       throw new Error('접근 권한이 없습니다. 본인 영상이 맞나요?')
+    }
+
+    throw new Error(result.error.message)
+  }
+
+  return result
+}
+
+/**
+ * Multipart 요청을 만듭니다.
+ *
+ * 반환 되는 데이터의 `boundary`를 요청의 헤더에
+ * Content-Type: multipart/form-data; boundary=${boundary} 형식으로 넣으세요.
+ *
+ * @param multipart
+ */
+const multipartUpload = (
+  multipart: {
+    'content-type': string
+    body: string
+  }[]
+) => {
+  const boundary = uuid()
+  const finale = `--${boundary}--`
+
+  let content = ''
+
+  for (const part of multipart) {
+    content += `--${boundary}\r\ncontent-type: ${part['content-type']}\r\n\r\n`
+
+    if (typeof part.body === 'string') {
+      content += part.body
+      content += '\r\n'
+    }
+  }
+
+  content += finale
+
+  return {
+    boundary,
+    content,
+  }
+}
+
+export const uploadYouTubeCaption = async (
+  id: string,
+  token: string,
+  language: LanguageCode,
+  data: Blob,
+  name?: string
+) => {
+  if (typeof data === 'undefined') {
+    throw new Error('캡션 데이터가 없습니다.')
+  }
+
+  const { boundary, content } = multipartUpload([
+    {
+      'content-type': 'application/json',
+      body: JSON.stringify({
+        snippet: {
+          language,
+          name: name || '',
+          videoId: id,
+        },
+      }),
+    },
+    {
+      'content-type': data.type,
+      body: await data.text(),
+    },
+  ])
+
+  const result = await fetch(
+    `https://youtube.googleapis.com/upload/youtube/v3/captions?part=snippet&uploadType=multipart`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': `multipart/related; boundary=${boundary}`,
+        'Content-Length': `${content.length}`,
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: content,
+    }
+  ).then(v => v.json())
+
+  if (result.error) {
+    if (result.error.code === 409) {
+      throw new Error(
+        '이미 해당 영상에 같은 언어의 자막 파일이 존재합니다. 수동으로 자막 파일을 삭제한 후 다시 시도해주세요.'
+      )
     }
 
     throw new Error(result.error.message)

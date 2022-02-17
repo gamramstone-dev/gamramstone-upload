@@ -19,6 +19,7 @@
     color: #73a30e;
 
     margin-top: 4px;
+    margin-bottom: 4px;
 
     svg {
       margin-right: 8px;
@@ -60,11 +61,11 @@ a .card {
 html[data-dark-mode='true'] {
   .card {
     &[data-id='wakgood'] {
-      background: #352E24;
+      background: #3f321f;
     }
 
     &[data-id='waktaverse'] {
-      background: #263431;
+      background: #1c3832;
     }
 
     &[data-id='ine'] {
@@ -72,15 +73,15 @@ html[data-dark-mode='true'] {
     }
 
     &[data-id='jingburger'] {
-      background: #27251A;
+      background: #3b371e;
     }
 
     &[data-id='lilpa'] {
-      background: #261C32;
+      background: #28233a;
     }
 
     &[data-id='jururu'] {
-      background: #2B2020;
+      background: #3f2525;
     }
 
     &[data-id='gosegu'] {
@@ -88,7 +89,7 @@ html[data-dark-mode='true'] {
     }
 
     &[data-id='viichan'] {
-      background: #1F2818;
+      background: #293a1c;
     }
   }
 }
@@ -201,4 +202,9 @@ html[data-dark-mode='true'] {
       margin: auto;
     }
   }
+}
+
+.privacy {
+  letter-spacing: -1px;
+  padding-bottom: 20vh;
 }

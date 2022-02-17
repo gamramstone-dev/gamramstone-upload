@@ -5,7 +5,7 @@ import {
   Records,
 } from 'airtable'
 
-interface CaptionFile {
+export interface CaptionFile {
   filename: string
   size: number
   url: string
