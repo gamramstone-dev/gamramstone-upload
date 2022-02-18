@@ -12,7 +12,7 @@ interface ButtonBaseProps {
   size?: ButtonSize
   disabled?: boolean
   children?: ReactNode
-  roundness?: number,
+  roundness?: number
   onClick?: () => void
 }
 
@@ -27,7 +27,7 @@ export const Button = ({
   roundness = 0,
   size = 'medium',
   theme = 'primary',
-  onClick
+  onClick,
 }: ButtonBaseProps) => {
   return (
     <div

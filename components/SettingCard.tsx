@@ -17,7 +17,9 @@ export const SettingCard = ({ setting, onChange }: SettingCardProps) => {
             <Checkbox checked={setting.value as boolean} onChange={onChange} />
           ) : (
             setting.type === 'button' && (
-              <Button onClick={() => onChange(true)} roundness={16}>{setting.title}</Button>
+              <Button onClick={() => onChange(true)} roundness={16}>
+                {setting.title}
+              </Button>
             )
           )}
         </div>

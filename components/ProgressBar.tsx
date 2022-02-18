@@ -13,7 +13,10 @@ interface BarStyles extends CSSProperties {
   '--progress'?: number
 }
 
-export const ProgressBar = ({ progress, barStyle = 'primary' }: ProgressBarProps) => {
+export const ProgressBar = ({
+  progress,
+  barStyle = 'primary',
+}: ProgressBarProps) => {
   return (
     <div className={styles.progress}>
       <div
