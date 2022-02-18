@@ -5,13 +5,21 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier-standard --format",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier-standard --lint"
+    ]
   },
   "dependencies": {
     "@types/uuid": "^8.3.4",
     "@upstash/redis": "^0.2.1",
     "airtable": "^0.11.1",
     "framer-motion": "^6.2.6",
+    "lint-staged": "^12.3.4",
     "next": "12.1.0",
     "next-auth": "^4.2.1",
     "normalize.css": "^8.0.1",
@@ -28,6 +36,7 @@
     "@types/react": "17.0.39",
     "eslint": "8.9.0",
     "eslint-config-next": "12.0.10",
+    "prettier-standard": "^16.4.1",
     "typescript": "4.5.5"
   }
 }
