@@ -285,7 +285,7 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 적용하러 가기 (수동)
                           </Button>
                         </a>
-                        {true && (
+                        {false && (
                           <Button
                             roundness={16}
                             disabled={session === null}

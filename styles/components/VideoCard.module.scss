@@ -167,6 +167,7 @@ $link-color: #0a84e9;
 .copyable {
   color: $link-color;
   cursor: pointer;
+  user-select: none;
 
   &:hover {
     color: darken($link-color, 10%);
