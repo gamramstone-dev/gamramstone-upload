@@ -1,7 +1,6 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
-import Image from 'next/image'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import {
   CaptionFile,
@@ -12,18 +11,14 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
-import {
-  classes,
-  extractCaptionTrackName,
-  filterCaptionFilesByLanguage,
-  getYouTubeId,
-} from '../utils/string'
+import { classes, getYouTubeId } from '../utils/string'
 import {
   updateYouTubeTitleMetadata,
   uploadYouTubeCaption,
   validateAccessToken,
 } from '../utils/youtube'
 import { Button } from './Button'
+import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
 
 interface YouTubeThumbnailProps {
@@ -45,7 +40,7 @@ export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
   }, [id, error])
 
   return (
-    <Image
+    <FadeInImage
       src={url}
       alt='YouTube 썸네일'
       onError={() => !error && setError(true)}
@@ -290,24 +285,27 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 적용하러 가기 (수동)
                           </Button>
                         </a>
-                        <Button
-                          roundness={16}
-                          disabled={session === null}
-                          onClick={() =>
-                            applyTitleDescription(
-                              languages[tabIndex].language,
-                              getYouTubeId(video.url),
-                              languages[tabIndex].title,
-                              languages[tabIndex].description,
-                              video.captions.find(
-                                v => v.language === languages[tabIndex].language
-                              )?.captions
-                            )
-                          }
-                        >
-                          자막 자동 적용{' '}
-                          {session === null ? '(로그인 필요)' : ''}
-                        </Button>
+                        {false && (
+                          <Button
+                            roundness={16}
+                            disabled={session === null}
+                            onClick={() =>
+                              applyTitleDescription(
+                                languages[tabIndex].language,
+                                getYouTubeId(video.url),
+                                languages[tabIndex].title,
+                                languages[tabIndex].description,
+                                video.captions.find(
+                                  v =>
+                                    v.language === languages[tabIndex].language
+                                )?.captions
+                              )
+                            }
+                          >
+                            자막 자동 적용{' '}
+                            {session === null ? '(로그인 필요)' : ''}
+                          </Button>
+                        )}
                       </div>
                     </div>
                     <div className={styles.row}>
