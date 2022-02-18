@@ -74,13 +74,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   for (let i = 0; i < localizedVideos.length; i++) {
     const video = localizedVideos[i]
 
-    if (
-      video.metadatas[lang].title !== airtableVideos[indexes[i]].title ||
-      video.metadatas[lang].description !==
-        airtableVideos[indexes[i]].description
-    ) {
-      continue
-    }
+    // 검증 과정은 내용이 적용한 내용이 업로더에 의해 바뀔 수 있기 때문에 보류합니다.
+    // if (
+    //   video.metadatas[lang].title !== airtableVideos[indexes[i]].title ||
+    //   video.metadatas[lang].description !==
+    //     airtableVideos[indexes[i]].description
+    // ) {
+    //   continue
+    // }
 
     if (airtableVideos[indexes[i]].noCC) {
       results.push(airtableVideos[indexes[i]])
