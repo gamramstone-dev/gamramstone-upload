@@ -8,7 +8,7 @@ import { classes } from '../utils/string'
 
 const ErrorMessages: Record<string, string> = {
   AccessDenied:
-    '등록되지 않은 멤버입니다. 만약 처음 사용하신다면 지금 관리자에게 문의 해주시면 등록해드리겠습니다!',
+    '등록되지 않은 멤버입니다. 만약 처음 신청하신다면 잠시만 기다려주세요...',
 }
 
 const Error404: NextPage = () => {

@@ -10,6 +10,10 @@ html[data-dark-mode="true"] {
   border-radius: 16px;
   padding: 32px 16px;
 
+  a {
+    color: rgb(0, 110, 255);
+  }
+
   background-color: #f5f5f5;
   display: flex;
 

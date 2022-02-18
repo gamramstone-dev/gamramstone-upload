@@ -15,6 +15,7 @@ import {
 import { useCallback, useEffect, useRef } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
 
 const isWakgoodHyeong = (name?: unknown) => {
   return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
@@ -57,6 +58,31 @@ const Account: NextPage = () => {
     })
   }, [settings])
 
+  const removeAccount = useCallback(async () => {
+    if (!session || !session.accessToken) {
+      return
+    }
+
+    const data = await fetch(
+      `https://accounts.google.com/o/oauth2/revoke?token=${session.accessToken}`
+    ).then(v => v.json())
+
+    if (data.error) {
+      toast.error('세션이 만료되었습니다. 로그아웃 했다가 다시 탈퇴하세요.')
+      return
+    }
+
+    const result = await fetch('/api/auth/unregister', {
+      method: 'POST',
+    }).then(v => v.json())
+
+    if (result.status === 'success') {
+      signOut()
+    } else {
+      toast.error('계정 삭제 실패, gamramstone @ wesub.io로 문의하세요.')
+    }
+  }, [])
+
   return (
     <div className={styles.container}>
       <Head>
@@ -97,6 +123,22 @@ const Account: NextPage = () => {
               type: 'button',
             }}
             onChange={() => signOut()}
+          />
+          <SettingCard
+            setting={{
+              title: '계정 삭제',
+              description: (
+                <>
+                  사이트에서 계정을 삭제합니다. 삭제 후 다시 가입하려면 관리자
+                  승인이 다시 필요합니다.
+                </>
+              ),
+              type: 'button',
+              elementParams: {
+                theme: 'danger',
+              },
+            }}
+            onChange={() => removeAccount()}
           />
         </div>
       </div>

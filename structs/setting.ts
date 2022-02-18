@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { atom, DefaultValue, RecoilState, selector } from 'recoil'
 
 interface GamramSettings {
@@ -74,9 +75,10 @@ export const validateSettings = (value: unknown): value is SettingTypes => {
 export interface SettingBase<T> {
   id: SettingID
   title: string
-  description: string
+  description: ReactNode
   type: 'checkbox' | 'button'
   default: T
+  elementParams?: Record<string, unknown>
 }
 
 export interface Setting<T> extends SettingBase<T> {

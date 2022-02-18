@@ -1,4 +1,4 @@
-import { auth, hgetall, hmset } from '@upstash/redis'
+import { auth, del, hgetall, hmset } from '@upstash/redis'
 import { DatabaseUser } from '../structs/user'
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
@@ -27,6 +27,16 @@ export const getUser = async (id: string) => {
   }
 
   return hashesToObject<DatabaseUser>(user.data)
+}
+
+export const deleteUser = async (id: string) => {
+  const user = await del(`user:${id}`)
+
+  if (user.error) {
+    throw new Error(user.error)
+  }
+
+  return user.data
 }
 
 export const updateUserSettings = async (id: string, settings: string) => {
