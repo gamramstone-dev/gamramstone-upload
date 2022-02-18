@@ -1,34 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[<img src="/public/android-chrome-192x192.png" width="64px"></img>]()
 
-## Getting Started
+# 감람스톤
 
-First, run the development server:
+이세계 아이돌 - 우왁굳 채널 번역 프로젝트, 감람스톤의 공식 홈페이지 리포지터리입니다.
 
-```bash
-npm run dev
-# or
-yarn dev
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
+## Introduction
+
+패키지 매니저로 yarn을 사용하고 있습니다. yarn이 없으신 경우 아래 명령어를 사용하여 yarn을 받아주세요.
+
+```
+npm install -g yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+그리고 yarn을 사용하여 dependencies를 받아주세요.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```
+yarn install
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+다운로드가 끝나면 다음 명령어를 통해 각종 작업들을 실행할 수 있습니다.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
+yarn dev # 개발 서버 실행 (http://localhost:3000)
+yarn build # 프로젝트 빌드
+yarn format # 코드 스타일 포매팅
+```
 
-## Learn More
+## Contributions
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+오탈자 수정, 기타 수정 모두 환영합니다! 단, 보안에 관련된 수정인 경우에는 gamramstone@wesub.io으로 알려주시길 바랍니다.
