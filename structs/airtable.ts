@@ -42,7 +42,7 @@ export interface AirtableLanguageField {
 }
 
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
-  const syncName = `진행 상황 확인용 - ${name} 카피 (from 받아쓰기 + 자막 싱크)`
+  const syncName = `진행 상황 확인용 - ${name} 카피`
   if (
     typeof fields[syncName] !== 'undefined' &&
     (fields[syncName] as string[])[0] === '자막 제작 완료'
@@ -146,11 +146,11 @@ export const extractVideoDataFields = (
 ): VideoWithCaption[] => {
   return data.map(v => ({
     id: v.id,
-    url: (v.fields['URL (from 받아쓰기 + 자막 싱크)'] as string[])[0],
+    url: (v.fields['URL'] as string[])[0],
     title: (v.fields['제목'] as string[])[0],
     description: (v.fields['세부 정보'] as string[])[0],
     uploadDate: (v.fields[
-      '업로드 날짜 (from 받아쓰기 + 자막 싱크)'
+      '업로드 날짜'
     ] as string[])[0],
     editDate: (v.fields['최근 수정'] as string[])[0],
     captions: extractNationalValue(v),
@@ -166,7 +166,7 @@ export const extractLanguageSpecificData = (
     url: (v.fields['URL'] as string[])[0],
     channel: v.fields['채널'] as string,
     noCC:
-      (v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'] as string[])[0] ===
+      (v.fields['진행 상황'] as string[])[0] ===
       '해당 없음 (자막 필요 없는 영상)',
     originalTitle: v.fields['제목'] as string,
     title: v.fields[`제목 (${LanguageNames[language]} 번역)`] as string,
