@@ -100,74 +100,42 @@ export const extractNationalValue = (
 ): TranslatedVideoMetadata[] => {
   const captions: TranslatedVideoMetadata[] = []
 
-  if ('제목 (영어)' in data.fields && '세부 정보 (영어)' in data.fields) {
-    const title = (data.fields['제목 (영어)'] as string[])[0]
-    const description = (data.fields['세부 정보 (영어)'] as string[])[0]
-    const status = extractStatus(data.fields, '영어')
+  const fetchLanguages = (lang: OnWorkingLanguageCode) => {
+    if (
+      `제목 (${LanguageNames[lang]})` in data.fields &&
+      `세부 정보 (${LanguageNames[lang]})` in data.fields
+    ) {
+      const title = (data.fields[
+        `제목 (${LanguageNames[lang]})`
+      ] as string[])[0]
+      const description = (data.fields[
+        `세부 정보 (${LanguageNames[lang]})`
+      ] as string[])[0]
+      const status = extractStatus(data.fields, LanguageNames[lang])
 
-    let files: CaptionFile[] = []
+      let files: CaptionFile[] = []
 
-    if ('영어 자막 파일' in data.fields) {
-      files = filterCaptionFiles(data.fields['영어 자막 파일'] as Attachment[])
+      if (`${LanguageNames[lang]} 자막 파일` in data.fields) {
+        files = filterCaptionFiles(
+          data.fields[`${LanguageNames[lang]} 자막 파일`] as Attachment[]
+        )
+      }
+
+      const caption: TranslatedVideoMetadata = {
+        language: lang,
+        title,
+        description,
+        status,
+        captions: files,
+      }
+
+      captions.push(caption)
     }
-
-    const caption: TranslatedVideoMetadata = {
-      language: 'en',
-      title,
-      description,
-      status,
-      captions: files,
-    }
-
-    captions.push(caption)
   }
 
-  if ('제목 (일본어)' in data.fields && '세부 정보 (일본어)' in data.fields) {
-    const title = (data.fields['제목 (일본어)'] as string[])[0]
-    const description = (data.fields['세부 정보 (일본어)'] as string[])[0]
-    const status = extractStatus(data.fields, '일본어')
-
-    let files: CaptionFile[] = []
-
-    if ('일본어 자막 파일' in data.fields) {
-      files = filterCaptionFiles(
-        data.fields['일본어 자막 파일'] as Attachment[]
-      )
-    }
-
-    const caption: TranslatedVideoMetadata = {
-      language: 'ja',
-      title,
-      description,
-      status,
-      captions: files,
-    }
-
-    captions.push(caption)
-  }
-
-  if ('제목 (중국어)' in data.fields && '세부 정보 (중국어)' in data.fields) {
-    const title = (data.fields['제목 (중국어)'] as string[])[0]
-    const description = (data.fields['세부 정보 (중국어)'] as string[])[0]
-    const status = extractStatus(data.fields, '중국어')
-
-    let files: CaptionFile[] = []
-
-    if ('중국어 자막 파일' in data.fields) {
-      files = filterCaptionFiles(
-        data.fields['중국어 자막 파일'] as Attachment[]
-      )
-    }
-
-    const caption: TranslatedVideoMetadata = {
-      language: 'zh',
-      title,
-      description,
-      status,
-      captions: files,
-    }
-
-    captions.push(caption)
+  const langs = Object.keys(LanguageNames)
+  for (let i = 0; i < langs.length; i++) {
+    fetchLanguages(langs[i] as OnWorkingLanguageCode)
   }
 
   return captions
