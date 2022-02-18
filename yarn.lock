@@ -186,12 +186,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:12.0.10":
-  version: 12.0.10
-  resolution: "@next/eslint-plugin-next@npm:12.0.10"
+"@next/eslint-plugin-next@npm:12.1.0":
+  version: 12.1.0
+  resolution: "@next/eslint-plugin-next@npm:12.1.0"
   dependencies:
     glob: 7.1.7
-  checksum: ceb95880458ab6fc67fb58350e9f87ca8ac0adf0b50bf099e03bb84b4d7d48888d29518e09cf281a1181d9c240d3babdfb5b8649e7dad79332f77f0f7d01293c
+  checksum: d6875f65e102f62fe90495229862f838fed00508980edff376c8c0e8ddf6c47a1a030fc2f8906890e08e34740cd174e5d70ecefa9ace81edda9949fa7ad06763
   languageName: node
   linkType: hard
 
@@ -378,17 +378,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:17.0.18":
   version: 17.0.18
   resolution: "@types/node@npm:17.0.18"
   checksum: 6c4edfc2b3ba2342a9c3d56e934c5245948ab752f4dc04bd6790b9603e6ebc53bc4f5befc3662e207f7dba2ddd17ccf657f915e319ea7cdd4f77b851079d1611
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:17.0.17":
-  version: 17.0.17
-  resolution: "@types/node@npm:17.0.17"
-  checksum: 8ddba2829acdf1684fbd8fd248ec13f033efb70ecd1085677b547c40ef8e936a006b95eac3bdc28c47939c62526f3f027afeb4a930e30e4394923bbae4626476
   languageName: node
   linkType: hard
 
@@ -606,7 +599,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"airtable@npm:^0.11.1":
+"airtable@npm:^0.11.2":
   version: 0.11.2
   resolution: "airtable@npm:0.11.2"
   dependencies:
@@ -1650,11 +1643,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:12.0.10":
-  version: 12.0.10
-  resolution: "eslint-config-next@npm:12.0.10"
+"eslint-config-next@npm:12.1.0":
+  version: 12.1.0
+  resolution: "eslint-config-next@npm:12.1.0"
   dependencies:
-    "@next/eslint-plugin-next": 12.0.10
+    "@next/eslint-plugin-next": 12.1.0
     "@rushstack/eslint-patch": ^1.0.8
     "@typescript-eslint/parser": ^5.0.0
     eslint-import-resolver-node: ^0.3.4
@@ -1670,7 +1663,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 37f84056f8c957fc4341e4c32e14ab227ebfc56526612ea0b775812602215311b98e062506732dc43ceca1ef98e259dedd2de776c2e584a0819d6abfca15f1cf
+  checksum: 38664b2fdc6643c5c35f40612606f208350d0472ff12f177e6dc8a2065f59f0c092f494d568c681212eda60a74660c2ffe329132d74938739ae5c668ffe989c8
   languageName: node
   linkType: hard
 
@@ -2286,13 +2279,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "front@workspace:."
   dependencies:
-    "@types/node": 17.0.17
+    "@types/node": 17.0.18
     "@types/react": 17.0.39
     "@types/uuid": ^8.3.4
     "@upstash/redis": ^0.2.1
-    airtable: ^0.11.1
+    airtable: ^0.11.2
     eslint: 8.9.0
-    eslint-config-next: 12.0.10
+    eslint-config-next: 12.1.0
     framer-motion: ^6.2.6
     lint-staged: ^12.3.4
     next: 12.1.0
@@ -2303,7 +2296,7 @@ __metadata:
     react-dom: 17.0.2
     react-hot-toast: ^2.2.0
     recoil: ^0.6.1
-    sass: ^1.49.7
+    sass: ^1.49.8
     swr: ^1.2.1
     typescript: 4.5.5
     uuid: ^8.3.2
@@ -5183,7 +5176,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.49.7":
+"sass@npm:^1.49.8":
   version: 1.49.8
   resolution: "sass@npm:1.49.8"
   dependencies:
