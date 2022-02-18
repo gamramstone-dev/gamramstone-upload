@@ -38,5 +38,6 @@
     "eslint-config-next": "12.0.10",
     "prettier-standard": "^16.4.1",
     "typescript": "4.5.5"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }
