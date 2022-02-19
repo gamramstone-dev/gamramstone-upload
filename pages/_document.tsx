@@ -10,12 +10,12 @@ const cspHashOf = (text: string) => {
 
 class MyDocument extends Document {
   render () {
-    let csp = `default-src 'self' data:image/; image-src *; font-src *; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+    let csp = `default-src 'self' https://cloudflareinsights.com/cdn-cgi/rum; img-src * data:; font-src *; object-src 'none'; require-trusted-types-for 'script'; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
       NextScript.getInlineScriptSource(this.props)
     )}`
 
     if (process.env.NODE_ENV !== 'production') {
-      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; default-src 'self' https://static.cloudflareinsights.com/beacon.min.js data: https://cloudflareinsights.com/cdn-cgi/rum; image-src *; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; default-src 'self'; img-src * data:; object-src 'none'; require-trusted-types-for 'script'; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
         NextScript.getInlineScriptSource(this.props)
       )}`
     }
