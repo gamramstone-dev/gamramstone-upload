@@ -1,13 +1,4 @@
-// const CSP = `
-//   default-src 'self' https://gamramstone.wesub.io;
-//   script-src 'self';
-//   img-src *;
-//   child-src none;
-//   style-src 'self';
-//   font-src 'self';
-// `
-
-const securityHeaders = [
+const baseHeaders = [
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=31536000; includeSubDomains; preload',
@@ -45,7 +36,7 @@ const nextConfig = {
     return [
       {
         source: '/:path*',
-        headers: securityHeaders,
+        headers: baseHeaders,
       },
       {
         source: '/api/:path*',
