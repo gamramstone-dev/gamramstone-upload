@@ -1,6 +1,9 @@
 $primary: #22a7f2;
 $dark-primary: #0a3b56;
 
+$secondary: #f1f5f7;
+$dark-secondary: #353b3f;
+
 html[data-dark-mode='true'] {
   .button {
     &.primary {
@@ -14,6 +17,21 @@ html[data-dark-mode='true'] {
 
         &:active {
           background-color: darken($dark-primary, 10%);
+        }
+      }
+    }
+
+    &.secondary {
+      background-color: $dark-secondary;
+      color: white;
+
+      &:not(.disabled) {
+        &:hover {
+          background-color: darken($dark-secondary, 5%);
+        }
+
+        &:active {
+          background-color: darken($dark-secondary, 10%);
         }
       }
     }
@@ -58,6 +76,21 @@ html[data-dark-mode='true'] {
 
       &:active {
         background-color: darken($primary, 10%);
+      }
+    }
+  }
+
+  &.secondary {
+    background-color: $secondary;
+    color: black;
+
+    &:not(.disabled) {
+      &:hover {
+        background-color: darken($secondary, 5%);
+      }
+
+      &:active {
+        background-color: darken($secondary, 10%);
       }
     }
   }
