@@ -1,4 +1,6 @@
-html[data-dark-mode="true"] {
+@import '../constants.scss';
+
+html[data-dark-mode='true'] {
   .videoCard {
     .thumbnail {
       background-color: #282a2b;
@@ -6,7 +8,7 @@ html[data-dark-mode="true"] {
   }
 
   .captionCard {
-    background-color: #1B242C;
+    background-color: #1b242c;
   }
 
   .status {
@@ -31,7 +33,7 @@ html[data-dark-mode="true"] {
 
     background-color: #2d4658;
   }
-} 
+}
 
 .videoCard {
   position: relative;
@@ -74,6 +76,11 @@ html[data-dark-mode="true"] {
       margin-top: 10px;
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
+
+      @media screen and (max-width: $mobile) {
+        font-size: 0.9em;
+      }
     }
 
     h3,
@@ -107,6 +114,21 @@ html[data-dark-mode="true"] {
       margin-left: 8px;
     }
   }
+
+  @media screen and (max-width: $mobile) {
+    flex-direction: column;
+    padding: 24px 0px;
+
+    .thumbnail {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .metadata {
+      font-size: 0.9em;
+      margin-left: unset;
+    }
+  }
 }
 
 .captionCard {
@@ -119,12 +141,25 @@ html[data-dark-mode="true"] {
 
   .contents {
     margin: 26px 64px;
+
+    @media screen and (max-width: $mobile) {
+      font-size: 0.9em;
+    }
   }
 
   .row {
     display: flex;
     min-width: 500px;
     justify-content: space-between;
+    font-size: 0.95em;
+
+    @media screen and (max-width: $mobile) {
+      flex-direction: column;
+      min-width: unset;
+      gap: 16px;
+
+      overflow-xs: auto;
+    }
 
     .title {
       max-width: 150px;

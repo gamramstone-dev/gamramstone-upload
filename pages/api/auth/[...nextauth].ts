@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { v4 } from 'uuid'
 import { getUser } from '../../../utils/database'
 
 export default NextAuth({
@@ -24,7 +23,7 @@ export default NextAuth({
     error: '/noauth',
   },
   callbacks: {
-    async signIn({ user, credentials }) {
+    async signIn({ user }) {
       console.log(`${user.name} (${user.id}) tried to sign in!`)
 
       if (process.env.GOOGLE_NOT_READY === 'true') {

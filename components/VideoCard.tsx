@@ -11,6 +11,7 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
+import { useDeviceWidthLimiter } from '../utils/react'
 import { classes, getYouTubeId } from '../utils/string'
 import {
   updateYouTubeTitleMetadata,
@@ -242,6 +243,8 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
     [session]
   )
 
+  const narrow = useDeviceWidthLimiter(768)
+
   return (
     <AnimateSharedLayout>
       <div className={styles.captionCard}>
@@ -250,9 +253,9 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
             <motion.div
               className={styles.contents}
               layout
-              initial={{ opacity: 0, height: 0, margin: '0px 64px' }}
-              animate={{ opacity: 1, height: 'auto', margin: '48px 64px' }}
-              exit={{ opacity: 0, height: 0, margin: '0px 64px' }}
+              initial={{ opacity: 0, height: 0, margin: narrow ? '0px 32px' : '0px 64px' }}
+              animate={{ opacity: 1, height: 'auto', margin: narrow ? '32px 32px' : '48px 64px' }}
+              exit={{ opacity: 0, height: 0, margin: narrow ? '0px 32px' : '0px 64px' }}
             >
               <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
                 {languages.map(v => (

@@ -1,3 +1,5 @@
+@import "../constants.scss";
+
 html[data-dark-mode='true'] {
   .tabButton {
     &::before {
@@ -22,6 +24,12 @@ html[data-dark-mode='true'] {
   letter-spacing: -1px;
   border-radius: 4px;
   cursor: pointer;
+  white-space: nowrap;
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.95em;
+    padding: 8px 24px;
+  }
 
   color: #999;
 

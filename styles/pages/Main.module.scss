@@ -10,6 +10,10 @@
   letter-spacing: -1px;
   font-size: 1.75em;
 
+  @media screen and (max-width: $tablet) {
+    font-size: 1.5em;
+  }
+
   h1 {
     margin: 0;
   }
@@ -197,6 +201,10 @@ html[data-dark-mode='true'] {
     letter-spacing: -1px;
     text-align: center;
     margin-top: 16px;
+
+    @media screen and (max-width: $tablet) {
+      font-size: 0.9em;
+    }
 
     p {
       margin: auto;

@@ -73,7 +73,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         <div className={classes(pageStyles.contents)}>
           <ChannelCard channel={Channels[id]}></ChannelCard>
         </div>
-        <div className={classes(pageStyles.contents)}>
+        <div className={classes(pageStyles.contents, pageStyles.overflowX)}>
           <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
             <TabButton key='waiting'>업로드 대기 중</TabButton>
             <TabButton key='done'>업로드 완료</TabButton>

@@ -1,3 +1,5 @@
+@import '../constants.scss';
+
 .channelCard {
   position: relative;
   width: 100%;
@@ -15,6 +17,14 @@
     font-weight: bold;
     letter-spacing: -1px;
     margin: auto;
+
+    @media screen and (max-width: $tablet) {
+      font-size: 1.5em;
+    }
+
+    @media screen and (max-width: $mobile) {
+      font-size: 1.25em;
+    }
   }
 
   .image {
@@ -24,6 +34,12 @@
     width: 75px;
     height: 75px;
     margin-right: 16px;
+
+
+    @media screen and (max-width: $mobile) {
+      width: 55px;
+      height: 55px;
+    }
   }
 
   .contents {

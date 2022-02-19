@@ -14,7 +14,17 @@
   }
 
   @media screen and (max-width: $mobile) {
-    width: 95%;
+    width: 90%;
+  }
+
+  &.overflowX {
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  
+    scrollbar-width: none;
   }
 
   margin-left: auto;

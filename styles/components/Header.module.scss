@@ -98,15 +98,15 @@ html[data-dark-mode="true"] {
       width: 90%;
     }
 
-    @media screen and (max-width: $mobile) {
-      width: 95%;
-    }
-
     display: flex;
     margin: auto;
     justify-content: space-between;
     padding-top: 40px;
     padding-bottom: 20px;
+  }
+
+  @media screen and (max-width: $tablet) {
+    font-size: 0.9em;
   }
 
   .logo {
