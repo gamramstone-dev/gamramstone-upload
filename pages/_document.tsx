@@ -10,7 +10,7 @@ const cspHashOf = (text: string) => {
 
 class MyDocument extends Document {
   render () {
-    let csp = `default-src 'self' https://cloudflareinsights.com/cdn-cgi/rum; img-src * data:; font-src *; object-src 'none'; require-trusted-types-for 'script'; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+    let csp = `default-src 'self' https://cloudflareinsights.com/cdn-cgi/rum https://vitals.vercel-insights.com/v1/vitals; img-src * data:; font-src *; object-src 'none'; require-trusted-types-for 'script'; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
       NextScript.getInlineScriptSource(this.props)
     )}`
 
