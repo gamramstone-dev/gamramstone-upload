@@ -81,7 +81,7 @@ const Account: NextPage = () => {
     } else {
       toast.error('계정 삭제 실패, gamramstone @ wesub.io로 문의하세요.')
     }
-  }, [])
+  }, [session])
 
   return (
     <div className={styles.container}>

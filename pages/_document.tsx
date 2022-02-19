@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import Script from 'next/script'
 
 const Document = () => {
   return (
@@ -29,10 +28,6 @@ const Document = () => {
           href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'
         />
       </Head>
-      <Script
-        src='https://static.cloudflareinsights.com/beacon.min.js'
-        data-cf-beacon='{"token": "f924609c5236459d85d8d025c8abb7b3"}'
-      ></Script>
       <body>
         <Main />
         <NextScript />
