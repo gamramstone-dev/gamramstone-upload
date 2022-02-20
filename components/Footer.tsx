@@ -10,8 +10,8 @@ export const Footer = () => {
         <Link href='/privacy'>Privacy Policy - 개인정보 처리방침</Link>
         <br></br>
         <div className={classes(pageStyles.mute, pageStyles.description)}>
-          Brought you here by GamramStone team.<br></br>Site source codes are available on{' '}
-          <Link href='https://github.com/So-chiru/gamramstone'>here</Link>
+          Brought you here by GamramStone with ♥.<br></br>Site source codes are available on{' '}
+          <Link href='https://github.com/So-chiru/gamramstone'>here</Link>.
           <br></br>
           <br></br>
           Email: gamramstone<span className={pageStyles.hidden}>no_spam</span>@wesub.io

@@ -19,8 +19,8 @@ const Error404: NextPage = () => {
             <p className={styles.description}>페이지를 찾을 수 없어요.</p>
           </div>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   )
 }

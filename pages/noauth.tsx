@@ -31,8 +31,8 @@ const Error404: NextPage = () => {
             </p>
           </div>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   )
 }

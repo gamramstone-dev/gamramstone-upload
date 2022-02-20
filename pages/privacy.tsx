@@ -27,7 +27,7 @@ const Privacy: NextPage = () => {
         </div>
         <div className={classes(pageStyles.contents, styles.privacy)}>
           <p>
-            <b> 발효일: 2021년 2월 20일</b>
+            <b> 발효일: 2021년 2월 21일 (KST)</b>
           </p>
           <br></br>
           <p>
@@ -73,10 +73,10 @@ const Privacy: NextPage = () => {
           <br></br>
           <h2>개인정보 국외이전</h2>
           <p>
-            본 서비스는 전 세계 각지에 서버를 두고 있으며 Vercel (홈페이지
-            호스팅 제공) 및 Upstash (데이터베이스 서비스 제공), Better Stack
-            (로그 서비스 제공) 에 데이터가 이관될 수 있음을 알리며, 본 서비스
-            이용 시 이에 동의하는 것으로 간주합니다.
+            본 서비스는 전 세계 각지에 서버를 두고 있어 Vercel (홈페이지 호스팅
+            제공) 및 Upstash (데이터베이스 서비스 제공), Better Stack (로그
+            서비스 제공) 에 데이터가 이관될 수 있음을 알리며, 본 서비스 이용 시
+            이에 동의하는 것으로 간주합니다.
           </p>
           <br></br>
           <h2>개인정보 삭제</h2>
@@ -93,8 +93,9 @@ const Privacy: NextPage = () => {
           <br></br>
           <h2>Google 계정 데이터 (토큰) 의 사용</h2>
           <p>
-            본 사이트에서는 YouTube 페이지에 접속하여 일일이 클릭하여 자막을
-            클릭할 필요가 없도록 자동으로 자막을 올려드리는 서비스를 제공하고
+            본 서비스는 크리에이터가 YouTube 페이지에서 일일이 버튼을 클릭하며
+            자막을 추가할 필요가 없도록 본 서비스에서 하나의 버튼을 클릭하면
+            자동으로 커뮤니티에서 제작한 자막을 올려드리는 서비스를 제공하고
             있습니다.
           </p>
           <p>
@@ -128,8 +129,8 @@ const Privacy: NextPage = () => {
             을 준수합니다.
           </p>
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   )
 }

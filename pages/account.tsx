@@ -157,8 +157,8 @@ const Account: NextPage = () => {
             onChange={() => removeAccount()}
           />
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   )
 }

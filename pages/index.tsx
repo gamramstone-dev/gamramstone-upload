@@ -59,8 +59,8 @@ const Main: NextPage = () => {
             </Link>
           ))}
         </div>
-        <Footer></Footer>
       </div>
+      <Footer></Footer>
     </div>
   )
 }
