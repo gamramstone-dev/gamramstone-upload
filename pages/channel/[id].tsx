@@ -62,10 +62,10 @@ const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 const EmptyImages: Record<ChannelID, string[]> = {
   wakgood: ['/clear/wakgood-001.gif'],
   waktaverse: ['/clear/waktaverse-001.webp'],
-  ine: ['/clear/ine-001.webp'],
+  ine: ['/clear/ine-001.webp', '/clear/ine-002.webp'],
   jingburger: ['/clear/jingburger-001.webp'],
   lilpa: ['/clear/lilpa-001.jpg'],
-  jururu: ['/clear/jururu-001.webp'],
+  jururu: ['/clear/jururu-001.webp', '/clear/jururu-002.webp'],
   gosegu: ['/clear/gosegu-001.webp'],
   viichan: ['/clear/viichan-001.webp'],
 }
