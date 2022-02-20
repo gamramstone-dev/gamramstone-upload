@@ -21,8 +21,8 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
           <FadeInImage
             src={channel.image}
             alt={channel.name}
-            width={150}
-            height={150}
+            width={200}
+            height={200}
           />
         </div>
         <div className={styles.name}>

@@ -89,13 +89,15 @@
   }
 
   .image {
-    width: 150px;
-    height: 150px;
+    position: relative;
+    min-width: 150px;
+    min-height: 150px;
     margin: auto;
   }
 
   h3 {
     margin: auto;
+    margin-top: 16px;
     font-weight: bold;
     letter-spacing: -1px;
     font-size: 1.25em;

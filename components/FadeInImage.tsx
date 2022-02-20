@@ -10,6 +10,7 @@ export const FadeInImage = (props: Omit<ImageProps, 'onLoad'>) => {
   return (
     <Image
       {...props}
+      src={props.src}
       className={classes(
         props.className,
         styles.imageFadeIn,
