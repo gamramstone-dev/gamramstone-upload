@@ -215,4 +215,9 @@ html[data-dark-mode='true'] {
 .privacy {
   letter-spacing: -1px;
   padding-bottom: 20vh;
+  font-size: 1.2em;
+
+  a {
+    color: rgb(15, 116, 218);
+  }
 }

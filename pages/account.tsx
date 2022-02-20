@@ -17,6 +17,7 @@ import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import Footer from '../components/Footer'
+import Link from 'next/link'
 
 const isWakgoodHyeong = (name?: unknown) => {
   return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
@@ -124,6 +125,20 @@ const Account: NextPage = () => {
               type: 'button',
             }}
             onChange={() => signOut()}
+          />
+          <SettingCard
+            setting={{
+              title: '추가 권한 요청',
+              description: (
+                <>
+                  사이트에 YouTube 계정에 접근할 수 있는 권한을 요청합니다.
+                  자세한 사항은 <Link href='/privacy'>개인정보 처리방침</Link>을
+                  확인하세요.
+                </>
+              ),
+              type: 'button',
+            }}
+            onChange={() => signIn('google')}
           />
           <SettingCard
             setting={{

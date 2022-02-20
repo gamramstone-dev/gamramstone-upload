@@ -41,7 +41,7 @@ html[data-dark-mode='true'] {
   bottom: 0;
   width: 100%;
   background: #f5f5f5;
-  min-height: 300px;
+  min-height: 350px;
   display: flex;
 
   .contents {
@@ -80,4 +80,8 @@ html[data-dark-mode='true'] {
   .description {
     margin-top: 2em;
   }
+}
+
+.hidden {
+  display: none;
 }

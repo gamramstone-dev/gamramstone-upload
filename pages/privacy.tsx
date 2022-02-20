@@ -6,6 +6,7 @@ import styles from '../styles/pages/Main.module.scss'
 import { classes } from '../utils/string'
 import Logo from '../components/Logo'
 import Footer from '../components/Footer'
+import Link from 'next/link'
 
 const Privacy: NextPage = () => {
   return (
@@ -26,7 +27,7 @@ const Privacy: NextPage = () => {
         </div>
         <div className={classes(pageStyles.contents, styles.privacy)}>
           <p>
-            <b> 발효일: 2021년 2월 17일</b>
+            <b> 발효일: 2021년 2월 20일</b>
           </p>
           <br></br>
           <p>
@@ -91,12 +92,41 @@ const Privacy: NextPage = () => {
             후 최대 7일 이내에 계정 및 정보를 삭제합니다.
           </p>
           <br></br>
-          <h2>Google 계정 데이터의 사용</h2>
-          <br></br>
+          <h2>Google 계정 데이터 (토큰) 의 사용</h2>
           <p>
             본 사이트에서는 YouTube 페이지에 접속하여 일일히 클릭하여 자막을
             클릭할 필요가 없도록 자동으로 자막을 업로드 해드리는 서비스를
             제공하고 있습니다.
+          </p>
+          <p>
+            이를 위해서 로그인시 Google 계정에서 <b>토큰 정보</b>를 취득하게
+            됩니다. 토큰 정보란 Google 계정의 비밀번호 대신 계정에서 한정된
+            정보에만 접근할 수 있도록 서비스 제공자가 제공하는 문자를
+            의미합니다.
+            <br></br>
+            <br></br>
+            토큰의 사용 : 토큰 정보는 YouTube API에 접근하기 위해 사용되며 아주
+            기본적인 영상 정보 읽기 및 쓰기 이외에는 절대 사용되지 않습니다.
+            <br></br>
+            토큰의 저장 : 토큰 정보는 데이터베이스에 저장되지 않으며, 사용자가
+            사용하는 세션 데이터에 암호화된 상태로 존재하게 됩니다. 이 데이터는
+            오직 사용자, 그리고 암호화 키를 가지고 있는 서버만 읽을 수 있습니다.
+          </p>
+          <br></br>
+          <br></br>
+          <h2>Google API 서비스 사용자 데이터 정책 준수</h2>
+          <p>
+            감람스톤은 Google API에서 제공받은 데이터를 사용, 다른
+            어플리케이션에 전송하는 모든 행위에 대해서{' '}
+            <Link href='https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes'>
+              제한 사용 요구사항 (Limited Use requirements)
+            </Link>
+            을 포함한{' '}
+            <Link href='https://developers.google.com/terms/api-services-user-data-policy'>
+              Google API 서비스 사용자 데이터 정책 (Google API Services User
+              Data Policy)
+            </Link>
+            을 준수합니다.
           </p>
         </div>
         <Footer></Footer>
