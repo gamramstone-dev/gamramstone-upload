@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Footer from '../components/Footer'
 
 import pageStyles from '../styles/page.module.scss'
 import styles from '../styles/pages/Error.module.scss'
@@ -30,6 +31,7 @@ const Error404: NextPage = () => {
             </p>
           </div>
         </div>
+        <Footer></Footer>
       </div>
     </div>
   )

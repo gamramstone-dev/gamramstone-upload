@@ -8,6 +8,7 @@ import Logo from '../components/Logo'
 import { Channel, ChannelID, Channels } from '../structs/channels'
 import Link from 'next/link'
 import FadeInImage from '../components/FadeInImage'
+import Footer from '../components/Footer'
 
 interface ChannelCardProps {
   channel: Channel
@@ -58,6 +59,7 @@ const Main: NextPage = () => {
             </Link>
           ))}
         </div>
+        <Footer></Footer>
       </div>
     </div>
   )

@@ -16,6 +16,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+import Footer from '../components/Footer'
 
 const isWakgoodHyeong = (name?: unknown) => {
   return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
@@ -141,6 +142,7 @@ const Account: NextPage = () => {
             onChange={() => removeAccount()}
           />
         </div>
+        <Footer></Footer>
       </div>
     </div>
   )

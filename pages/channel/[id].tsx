@@ -18,6 +18,7 @@ import ProcessPopup from '../../components/ProcessPopup'
 import toast from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
+import Footer from '../../components/Footer'
 
 interface ChannelCardProps {
   channel: Channel
@@ -129,7 +130,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
             <div className={styles.actions}>
               {
               // TODO: 적용 업데이트 완료시 false 삭제
-              tabIndex === 0 && false && (
+              tabIndex === 0 && (
                 <Button
                   roundness={16}
                   disabled={!session}
@@ -178,6 +179,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
           )}
         </div>
       </div>
+      <Footer></Footer>
     </div>
   )
 }

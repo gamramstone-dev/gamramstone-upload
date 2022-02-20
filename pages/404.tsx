@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
+import Footer from '../components/Footer'
 
 import pageStyles from '../styles/page.module.scss'
 import styles from '../styles/pages/Error.module.scss'
@@ -18,6 +19,7 @@ const Error404: NextPage = () => {
             <p className={styles.description}>페이지를 찾을 수 없어요.</p>
           </div>
         </div>
+        <Footer></Footer>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import pageStyles from '../styles/page.module.scss'
 import styles from '../styles/pages/Main.module.scss'
 import { classes } from '../utils/string'
 import Logo from '../components/Logo'
+import Footer from '../components/Footer'
 
 const Privacy: NextPage = () => {
   return (
@@ -89,7 +90,16 @@ const Privacy: NextPage = () => {
             있는 정보를 포함하여 gamramstone (@) wesub.io 로 메일을 보내면 수신
             후 최대 7일 이내에 계정 및 정보를 삭제합니다.
           </p>
+          <br></br>
+          <h2>Google 계정 데이터의 사용</h2>
+          <br></br>
+          <p>
+            본 사이트에서는 YouTube 페이지에 접속하여 일일히 클릭하여 자막을
+            클릭할 필요가 없도록 자동으로 자막을 업로드 해드리는 서비스를
+            제공하고 있습니다.
+          </p>
         </div>
+        <Footer></Footer>
       </div>
     </div>
   )
