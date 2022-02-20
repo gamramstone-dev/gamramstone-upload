@@ -10,12 +10,12 @@ const cspHashOf = (text: string) => {
 
 class MyDocument extends Document {
   render () {
-    let csp = `default-src 'self' https://cloudflareinsights.com/cdn-cgi/rum https://vitals.vercel-insights.com/v1/vitals https://*.googleapis.com; form-action 'none'; img-src * data:; font-src *; object-src 'none'; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+    let csp = `default-src 'self' https://dl.airtable.com/ https://cloudflareinsights.com/cdn-cgi/rum https://vitals.vercel-insights.com/v1/vitals https://*.googleapis.com; form-action 'none'; img-src * data:; font-src *; object-src 'none'; style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
       NextScript.getInlineScriptSource(this.props)
     )}`
 
     if (process.env.NODE_ENV !== 'production') {
-      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/ https://dl.airtable.com/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
         NextScript.getInlineScriptSource(this.props)
       )}`
     }

@@ -70,10 +70,7 @@ const EmptyImages: Record<ChannelID, string[]> = {
 }
 
 const EmptyTexts: Record<ChannelID, string[]> = {
-  wakgood: [
-    '업로드 완료 킹아~',
-    '이야야야야야야 넥슬라이스',
-  ],
+  wakgood: ['업로드 완료 킹아~', '이야야야야야야 넥슬라이스'],
   waktaverse: ['자막 업로드 감사띠~'],
   ine: ['전부 업로드 완료~ 고막따네'],
   jingburger: ['전부 왕업로드 사건...! 감사합니다~'],
@@ -81,7 +78,7 @@ const EmptyTexts: Record<ChannelID, string[]> = {
   jururu: [
     '업로드 완료... 감사 하달까나...?',
     '자막이 안올라오는건... 상하차 알바라던지...... ㄱ..그런건 아니니까 걱정말구..!!!!',
-    '오늘 자막 휴식'
+    '오늘 자막 휴식',
   ],
   gosegu: ['전부 업로드 완료! 감사합니다~ 킹아~~~ ^ㅁ^'],
   viichan: ['탸니탸니 전부 업로드 완료~ 감사합니다~'],
@@ -107,12 +104,16 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         />
       </Head>
       <AnimatePresence>
-        {openProcessPopup && data && (
-          <ProcessPopup
-            data={data}
-            close={() => setOpenProcessPopup(false)}
-          ></ProcessPopup>
-        )}
+        {openProcessPopup &&
+          data &&
+          session &&
+          typeof session.accessToken === 'string' && (
+            <ProcessPopup
+              token={session.accessToken}
+              data={data}
+              close={() => setOpenProcessPopup(false)}
+            ></ProcessPopup>
+          )}
       </AnimatePresence>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
@@ -126,7 +127,9 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               <TabButton key='ongoing'>번역 진행 중</TabButton>
             </TabGroup>
             <div className={styles.actions}>
-              {tabIndex === 0 && (
+              {
+              // TODO: 적용 업데이트 완료시 false 삭제
+              tabIndex === 0 && false && (
                 <Button
                   roundness={16}
                   disabled={!session}

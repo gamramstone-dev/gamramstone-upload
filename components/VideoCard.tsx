@@ -11,13 +11,9 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
+import { applyCaptions } from '../utils/clientAPI'
 import { useDeviceWidthLimiter } from '../utils/react'
 import { classes, getYouTubeId } from '../utils/string'
-import {
-  updateYouTubeTitleMetadata,
-  uploadYouTubeCaption,
-  validateAccessToken,
-} from '../utils/youtube'
 import { Button } from './Button'
 import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
@@ -27,22 +23,13 @@ interface YouTubeThumbnailProps {
 }
 
 export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
-  const [url, setURL] = useState<string>(
-    `https://i.ytimg.com/vi/${id}/mqdefault.jpg`
-  )
   const [error, setError] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (!error) {
-      return
-    }
-
-    setURL(`https://i.ytimg.com/vi/${id}/hqdefault.jpg`)
-  }, [id, error])
 
   return (
     <FadeInImage
-      src={url}
+      src={`https://i.ytimg.com/vi/${id}/${
+        error ? 'hqdefault' : 'mqdefault'
+      }.jpg`}
       alt='YouTube 썸네일'
       onError={() => !error && setError(true)}
       layout='fill'
@@ -151,94 +138,21 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
       const loadingToast = toast.loading('업로드 중...', ToastOption)
 
       try {
-        const result = await validateAccessToken(session.accessToken)
-
-        if (!result) {
-          throw new Error()
-        }
-      } catch (e) {
-        toast.remove(loadingToast)
-        toast.error(
-          '토큰이 올바르지 않아요. 로그아웃 했다가 다시 로그인 한 후 시도하세요.',
-          ToastOption
-        )
-
-        return
-      }
-
-      try {
-        const result = await updateYouTubeTitleMetadata(
-          id,
+        await applyCaptions(
           session.accessToken,
-          {
-            [language]: {
-              title,
-              description,
-            },
-          }
+          language,
+          id,
+          title,
+          description,
+          captions
         )
 
-        if (!result) {
-          throw new Error('결과가 없어요.')
-        }
+        toast.success('성공적으로 적용했어요!')
       } catch (e) {
-        toast.remove(loadingToast)
-        toast.error(
-          `영상 제목 / 세부 정보를 업데이트 하는 도중에 오류가 발생하였습니다: ${
-            (e as Error).message
-          }`,
-          ToastOption
-        )
-
-        return
-      }
-
-      if (!captions) {
-        toast.remove(loadingToast)
-        toast.success('업로드 완료!', ToastOption)
-
-        return
-      }
-
-      try {
-        for (let i = 0; i < captions.length; i++) {
-          // TODO : 여러 파일이 있을 경우 업로드할 파일 선택할 수 있도록 만들기
-          // 현재는 첫 번째 캡션만 업로드할 수 있도록 지정했습니다.
-          if (captions.length > 1 && i >= 1) {
-            break
-          }
-
-          const caption = captions[i]
-
-          const file = await fetch(caption.url).then(v => v.blob())
-
-          const result = await uploadYouTubeCaption(
-            id,
-            session.accessToken,
-            language,
-            file
-            // extractCaptionTrackName(caption.filename)
-            // TODO : 자막 이름들이 좀 정렬되면 extractCaptionTrackName 사용
-          )
-
-          if (!result) {
-            throw new Error('결과가 없어요.')
-          }
-        }
-      } catch (e) {
-        toast.remove(loadingToast)
-        toast.error(
-          `영상 자막 파일을 업로드 하는 도중에 오류가 발생하였습니다: ${
-            (e as Error).message
-          }`,
-          ToastOption
-        )
-
-        return
+        toast.error((e as Error).message, ToastOption)
       }
 
       toast.remove(loadingToast)
-      toast.success('업로드 완료!', ToastOption)
     },
     [session]
   )
@@ -253,9 +167,21 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
             <motion.div
               className={styles.contents}
               layout
-              initial={{ opacity: 0, height: 0, margin: narrow ? '0px 32px' : '0px 64px' }}
-              animate={{ opacity: 1, height: 'auto', margin: narrow ? '32px 32px' : '48px 64px' }}
-              exit={{ opacity: 0, height: 0, margin: narrow ? '0px 32px' : '0px 64px' }}
+              initial={{
+                opacity: 0,
+                height: 0,
+                margin: narrow ? '0px 32px' : '0px 64px',
+              }}
+              animate={{
+                opacity: 1,
+                height: 'auto',
+                margin: narrow ? '32px 32px' : '48px 64px',
+              }}
+              exit={{
+                opacity: 0,
+                height: 0,
+                margin: narrow ? '0px 32px' : '0px 64px',
+              }}
             >
               <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
                 {languages.map(v => (
@@ -288,8 +214,9 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 적용하러 가기 (수동)
                           </Button>
                         </a>
-                        {false && (
-                          <Button
+                        {
+                          // TODO: 적용 업데이트 완료시 false 삭제
+                          false && <Button
                             roundness={16}
                             disabled={session === null}
                             onClick={() =>
@@ -308,7 +235,7 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 자동 적용{' '}
                             {session === null ? '(로그인 필요)' : ''}
                           </Button>
-                        )}
+                        }
                       </div>
                     </div>
                     <div className={styles.row}>
