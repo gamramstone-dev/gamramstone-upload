@@ -20,6 +20,10 @@ import { AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 import Footer from '../../components/Footer'
 
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+
 interface ChannelCardProps {
   channel: Channel
 }
@@ -128,11 +132,11 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               <TabButton key='ongoing'>번역 진행 중</TabButton>
             </TabGroup>
             <div className={styles.actions}>
-              {
-              // TODO: 적용 업데이트 완료시 false 삭제
-              tabIndex === 0 && (
+              {// TODO: 적용 업데이트 완료시 false 삭제
+              tabIndex === 0 && !publicRuntimeConfig.hideApplyButton && (
                 <Button
                   roundness={16}
+                  size='large'
                   disabled={!session}
                   onClick={() =>
                     data && data.length

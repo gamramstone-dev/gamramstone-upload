@@ -18,6 +18,10 @@ import { Button } from './Button'
 import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
 
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+
 interface YouTubeThumbnailProps {
   id: string
 }
@@ -214,9 +218,8 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 적용하러 가기 (수동)
                           </Button>
                         </a>
-                        {
-                          // TODO: 적용 업데이트 완료시 false 삭제
-                          false && <Button
+                        {!publicRuntimeConfig.hideApplyButton && (
+                          <Button
                             roundness={16}
                             disabled={session === null}
                             onClick={() =>
@@ -235,7 +238,7 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             자막 자동 적용{' '}
                             {session === null ? '(로그인 필요)' : ''}
                           </Button>
-                        }
+                        )}
                       </div>
                     </div>
                     <div className={styles.row}>

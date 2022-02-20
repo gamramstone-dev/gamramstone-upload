@@ -24,6 +24,9 @@ const baseHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true'
+  },
   images: {
     domains: [
       'yt3.ggpht.com',
