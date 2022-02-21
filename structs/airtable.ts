@@ -42,7 +42,7 @@ export interface AirtableLanguageField {
 }
 
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
-  const syncName = `진행 상황 확인용 - ${name} 카피`
+  const syncName = `${name} 진행 상황 통합`
   if (
     typeof fields[syncName] !== 'undefined' &&
     (fields[syncName] as string[])[0] === '자막 제작 완료'
@@ -102,14 +102,12 @@ export const extractNationalValue = (
 
   const fetchLanguages = (lang: OnWorkingLanguageCode) => {
     if (
-      `제목 (${LanguageNames[lang]})` in data.fields &&
-      `세부 정보 (${LanguageNames[lang]})` in data.fields
+      `${LanguageNames[lang]} 제목` in data.fields &&
+      `${LanguageNames[lang]} 세부 정보` in data.fields
     ) {
-      const title = (data.fields[
-        `제목 (${LanguageNames[lang]})`
-      ] as string[])[0]
+      const title = (data.fields[`${LanguageNames[lang]} 제목`] as string[])[0]
       const description = (data.fields[
-        `세부 정보 (${LanguageNames[lang]})`
+        `${LanguageNames[lang]} 세부 정보`
       ] as string[])[0]
       const status = extractStatus(data.fields, LanguageNames[lang])
 
@@ -149,9 +147,7 @@ export const extractVideoDataFields = (
     url: (v.fields['URL'] as string[])[0],
     title: (v.fields['제목'] as string[])[0],
     description: (v.fields['세부 정보'] as string[])[0],
-    uploadDate: (v.fields[
-      '업로드 날짜'
-    ] as string[])[0],
+    uploadDate: (v.fields['업로드 날짜'] as string[])[0],
     editDate: (v.fields['최근 수정'] as string[])[0],
     captions: extractNationalValue(v),
   }))
@@ -373,12 +369,13 @@ export const ISO639 = [
 
 export type LanguageCode = typeof ISO639[number]
 export type OnWorkingLanguageCode = LanguageCode &
-  ('en' | 'ko' | 'zh' | 'fr' | 'es' | 'ar' | 'ja')
+  ('en' | 'ko' | 'zh' | 'fr' | 'es' | 'ar' | 'ja' | 'vi')
 
 export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   en: '영어',
   ko: '한국어',
   zh: '중국어',
+  vi: '베트남어',
   fr: '프랑스어',
   es: '스페인어',
   ar: '아랍어',
