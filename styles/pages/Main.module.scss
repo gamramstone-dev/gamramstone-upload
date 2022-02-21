@@ -217,11 +217,22 @@ html[data-dark-mode='true'] {
   h2,
   h3 {
     letter-spacing: -1px;
+    word-break: break-word;
   }
+
+  line-height: 160%;
+
+  @media screen and (max-width: $tablet) {
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.9em;
+  }
+
 
   letter-spacing: -0.3px;
   padding-bottom: 20vh;
-  font-size: 1.05em;
 
   a {
     color: rgb(15, 116, 218);

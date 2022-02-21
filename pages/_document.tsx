@@ -15,7 +15,7 @@ class MyDocument extends Document {
     )}`
 
     if (process.env.NODE_ENV !== 'production') {
-      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/ https://dl.airtable.com/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+      csp = `style-src 'self' https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css 'unsafe-inline'; font-src *; connect-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/ https://dl.airtable.com/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
         NextScript.getInlineScriptSource(this.props)
       )}`
     }
