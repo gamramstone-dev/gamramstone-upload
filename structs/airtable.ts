@@ -42,7 +42,7 @@ export interface AirtableLanguageField {
 }
 
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
-  const syncName = `${name} 진행 상황 통합`
+  const syncName = `${name} 진행 상황`
   if (
     typeof fields[syncName] !== 'undefined' &&
     (fields[syncName] as string[])[0] === '자막 제작 완료'
