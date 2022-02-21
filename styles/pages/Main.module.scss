@@ -73,7 +73,7 @@ html[data-dark-mode='true'] {
     }
 
     &[data-id='ine'] {
-      background: #3B2C42;
+      background: #3b2c42;
     }
 
     &[data-id='jingburger'] {
@@ -213,7 +213,13 @@ html[data-dark-mode='true'] {
 }
 
 .privacy {
-  letter-spacing: -1px;
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -1px;
+  }
+
+  letter-spacing: -0.3px;
   padding-bottom: 20vh;
   font-size: 1.05em;
 

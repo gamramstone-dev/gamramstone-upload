@@ -149,7 +149,9 @@ export const validateAccessToken = async (token: string) => {
   ).then(v => v.json())
 
   if (result.error_description) {
-    throw new Error(`토큰 검증 오류 : ${result.error_description}, 로그아웃 후 다시 로그인해주세요.`)
+    throw new Error(
+      `토큰 검증 오류 : ${result.error_description}, 로그아웃 후 다시 로그인해주세요.`
+    )
   }
 
   return true
@@ -180,6 +182,7 @@ export const updateYouTubeTitleMetadata = async (
         id,
         snippet: {
           ...snippet,
+          defaultAudioLanguage: 'ko',
           defaultLanguage: 'ko-kr',
         },
         localizations: !localizations ? data : { ...localizations, ...data },
