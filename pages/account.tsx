@@ -7,7 +7,9 @@ import { classes } from '../utils/string'
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
 import SettingCard from '../components/SettingCard'
 import {
+  CustomUseSession,
   globalSettings,
+  SessionData,
   SettingID,
   Settings,
   SettingTypes,
@@ -30,7 +32,7 @@ const Account: NextPage = () => {
     onUnauthenticated: () => {
       router.push('/')
     },
-  })
+  }) as CustomUseSession
 
   const [settings, setSettings] = useRecoilState(globalSettings)
 
@@ -128,14 +130,21 @@ const Account: NextPage = () => {
           />
           <SettingCard
             setting={{
-              title: '추가 권한 요청',
-              description: (
-                <>
-                  사이트에 YouTube 계정에 접근할 수 있는 권한을 요청합니다.
-                  자세한 사항은 <Link href='/privacy'>개인정보 처리방침</Link>을
-                  확인하세요.
-                </>
-              ),
+              title: '권한 요청',
+              description:
+                (session && session.permissionGranted) || false ? (
+                  <>
+                    이미 권한이 부여되었습니다.<br></br>사용하는 정보 내용은{' '}
+                    <Link href='/privacy'>개인정보 처리방침</Link>을 확인하세요.
+                  </>
+                ) : (
+                  <>
+                    YouTube 계정에 접근할 수 있는 권한을 요청합니다.<br></br>
+                    자세한 사항은 <Link href='/privacy'>개인정보 처리방침</Link>
+                    을 확인하세요.
+                  </>
+                ),
+              disabled: (session && session.permissionGranted) || false,
               type: 'button',
             }}
             onChange={() => signIn('google')}
@@ -145,7 +154,7 @@ const Account: NextPage = () => {
               title: '계정 삭제',
               description: (
                 <>
-                  사이트에서 계정을 삭제합니다. 삭제 후 다시 가입하려면 관리자
+                  사이트에서 계정을 삭제합니다.<br></br>삭제 후 다시 가입하려면 관리자
                   승인이 다시 필요합니다.
                 </>
               ),

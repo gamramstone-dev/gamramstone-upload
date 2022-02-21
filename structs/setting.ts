@@ -1,5 +1,17 @@
+import { Session } from 'next-auth'
 import { ReactNode } from 'react'
 import { atom, DefaultValue, RecoilState, selector } from 'recoil'
+
+export interface SessionData extends Session {
+  accessToken: string
+  id: string
+  permissionGranted: boolean
+}
+
+export interface CustomUseSession {
+  data: SessionData | null
+  status: 'authenticated' | 'loading'
+}
 
 interface GamramSettings {
   darkMode: boolean
@@ -77,6 +89,7 @@ export interface SettingBase<T> {
   title: string
   description: ReactNode
   type: 'checkbox' | 'button'
+  disabled?: boolean
   default: T
   elementParams?: Record<string, unknown>
 }

@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react'
 import Footer from '../../components/Footer'
 
 import getConfig from 'next/config'
+import { CustomUseSession } from '../../structs/setting'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -96,7 +97,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     fetchList
   )
 
-  const { data: session } = useSession()
+  const { data: session } = useSession() as CustomUseSession
   const [openProcessPopup, setOpenProcessPopup] = useState<boolean>(false)
 
   return (
@@ -140,7 +141,11 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                   disabled={!session}
                   onClick={() =>
                     data && data.length
-                      ? setOpenProcessPopup(true)
+                      ? session && !session.permissionGranted
+                        ? toast.error(
+                            '추가 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
+                          )
+                        : setOpenProcessPopup(true)
                       : toast('업로드 대기 중인 영상이 없어요.')
                   }
                 >

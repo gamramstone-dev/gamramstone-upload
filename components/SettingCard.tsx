@@ -14,10 +14,10 @@ export const SettingCard = ({ setting, onChange }: SettingCardProps) => {
       <div className={styles.contents}>
         <div className={styles.value}>
           {setting.type === 'checkbox' ? (
-            <Checkbox checked={setting.value as boolean} onChange={onChange} />
+            <Checkbox checked={setting.value as boolean} disabled={setting.disabled} onChange={onChange} />
           ) : (
             setting.type === 'button' && (
-              <Button onClick={() => onChange(true)} roundness={16}>
+              <Button onClick={() => onChange(true)} disabled={setting.disabled} roundness={16}>
                 {setting.title}
               </Button>
             )

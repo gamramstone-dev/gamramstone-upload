@@ -23,7 +23,7 @@ export default NextAuth({
     error: '/noauth',
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn ({ user }) {
       console.log(`${user.name} (${user.id}) tried to sign in!`)
 
       if (process.env.GOOGLE_NOT_READY === 'true') {
@@ -42,13 +42,20 @@ export default NextAuth({
       if (account) {
         token.accessToken = account.access_token
         token.id = account.providerAccountId
+        token.scope = account.scope
       }
 
       return token
     },
     async session ({ session, token }) {
-      session.accessToken = token.accessToken
       session.id = token.id
+      session.permissionGranted =
+        typeof token.scope === 'string' &&
+        token.scope.indexOf('auth/youtubepartner') !== -1
+
+      if (session.permissionGranted) {
+        session.accessToken = token.accessToken
+      }
 
       return session
     },

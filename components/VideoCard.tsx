@@ -19,6 +19,7 @@ import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
 
 import getConfig from 'next/config'
+import { CustomUseSession } from '../structs/setting'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -90,7 +91,7 @@ const ToastOption = {
 export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
 
-  const { data: session } = useSession()
+  const { data: session } = useSession() as CustomUseSession
 
   const copy = useCallback((text: string, label: string) => {
     if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
@@ -223,16 +224,21 @@ export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
                             roundness={16}
                             disabled={session === null}
                             onClick={() =>
-                              applyTitleDescription(
-                                languages[tabIndex].language,
-                                getYouTubeId(video.url),
-                                languages[tabIndex].title,
-                                languages[tabIndex].description,
-                                video.captions.find(
-                                  v =>
-                                    v.language === languages[tabIndex].language
-                                )?.captions
-                              )
+                              session && !session.permissionGranted
+                                ? toast.error(
+                                    '추가 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
+                                  )
+                                : applyTitleDescription(
+                                    languages[tabIndex].language,
+                                    getYouTubeId(video.url),
+                                    languages[tabIndex].title,
+                                    languages[tabIndex].description,
+                                    video.captions.find(
+                                      v =>
+                                        v.language ===
+                                        languages[tabIndex].language
+                                    )?.captions
+                                  )
                             }
                           >
                             자막 자동 적용{' '}
