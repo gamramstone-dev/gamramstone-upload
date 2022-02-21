@@ -15,7 +15,7 @@ html[data-dark-mode='true'] {
     background-color: #353c47;
 
     &[data-status='waiting'] {
-      background-color: rgb(8, 97, 42);
+      background-color: rgb(19, 102, 51);
       color: white;
     }
 
@@ -95,6 +95,16 @@ html[data-dark-mode='true'] {
     background-color: #ececec;
     letter-spacing: -1px;
 
+    transition: 0.23s opacity cubic-bezier(0.19, 1, 0.22, 1);
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:active {
+      opacity: 0.8;
+    }
+
     &[data-status='waiting'] {
       background-color: rgb(25, 168, 80);
       color: white;
@@ -104,6 +114,14 @@ html[data-dark-mode='true'] {
       background-color: rgb(18, 106, 207);
       color: white;
       opacity: 0.3;
+
+      &:hover {
+        opacity: 0.4;
+      }
+
+      &:active {
+        opacity: 0.5;
+      }
     }
 
     .name {

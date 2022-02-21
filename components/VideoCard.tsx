@@ -44,10 +44,11 @@ export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
 
 interface VideoCardProps {
   video: VideoWithCaption
+  onTagClick?: (tag: number) => void
   onClick?: () => void
 }
 
-export const VideoCard = ({ video, onClick }: VideoCardProps) => {
+export const VideoCard = ({ video, onClick, onTagClick }: VideoCardProps) => {
   return (
     <div className={styles.videoCard} onClick={() => onClick && onClick()}>
       <div className={styles.thumbnail}>
@@ -57,9 +58,17 @@ export const VideoCard = ({ video, onClick }: VideoCardProps) => {
         <div className={styles.title}>
           <h3>{video.title}</h3>
           <div className={styles.tags}>
-            {video.captions.map(v => (
+            {video.captions.map((v, i) => (
               <p
                 className={styles.status}
+                onClick={ev => {
+                  if (!onTagClick) {
+                    return
+                  }
+
+                  ev.stopPropagation()
+                  onTagClick(i)
+                }}
                 key={`${video.id}-${v.language}`}
                 data-status={v.status}
               >
@@ -79,6 +88,7 @@ export const VideoCard = ({ video, onClick }: VideoCardProps) => {
 interface CaptionCardProps {
   languages: TranslatedVideoMetadata[]
   video: VideoWithCaption
+  defaultTabIndex?: number
   open?: boolean
 }
 
@@ -88,8 +98,17 @@ const ToastOption = {
   },
 }
 
-export const CaptionCard = ({ languages, video, open }: CaptionCardProps) => {
-  const [tabIndex, setTabIndex] = useState<number>(0)
+export const CaptionCard = ({
+  languages,
+  video,
+  open,
+  defaultTabIndex = 0,
+}: CaptionCardProps) => {
+  const [tabIndex, setTabIndex] = useState<number>(defaultTabIndex || 0)
+
+  useEffect(() => {
+    setTabIndex(defaultTabIndex)
+  }, [defaultTabIndex])
 
   const { data: session } = useSession() as CustomUseSession
 
@@ -330,13 +349,22 @@ interface VideoProjectCardProps {
 
 export const VideoProjectCard = ({ video }: VideoProjectCardProps) => {
   const [open, setOpen] = useState<boolean>(false)
+  const [tagIndex, setTagIndex] = useState<number>(0)
 
   return (
     <>
-      <VideoCard video={video} onClick={() => setOpen(!open)}></VideoCard>
+      <VideoCard
+        video={video}
+        onClick={() => setOpen(!open)}
+        onTagClick={(index: number) => {
+          !open && setOpen(true)
+          setTagIndex(index)
+        }}
+      ></VideoCard>
       {
         <CaptionCard
           open={open}
+          defaultTabIndex={tagIndex}
           video={video}
           languages={video.captions}
         ></CaptionCard>
