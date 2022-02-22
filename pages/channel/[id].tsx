@@ -7,7 +7,7 @@ import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
@@ -64,6 +64,29 @@ interface ChannelPageProps {
 
 const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 
+const RandomImages = ({ id }: { id: ChannelID }) => {
+  const randomValue = Math.random()
+
+  return (
+    <>
+      <div className={styles.image}>
+        <FadeInImage
+          src={
+            EmptyImages[id][Math.floor(randomValue * EmptyImages[id].length)] ||
+            '/empty.png'
+          }
+          layout='fill'
+          alt='no image'
+        ></FadeInImage>
+      </div>
+      <h3>
+        {EmptyTexts[id][Math.floor(randomValue * EmptyTexts[id].length)] ||
+          '대기 중인 영상이 없어요!'}
+      </h3>
+    </>
+  )
+}
+
 const EmptyImages: Record<ChannelID, string[]> = {
   wakgood: ['/clear/wakgood-001.gif'],
   waktaverse: ['/clear/waktaverse-001.webp'],
@@ -75,7 +98,7 @@ const EmptyImages: Record<ChannelID, string[]> = {
   viichan: ['/clear/viichan-001.png', '/clear/viichan-002.png'],
 }
 
-const EmptyTexts: Record<ChannelID, string[]> = {
+const EmptyTexts: Record<ChannelID, ReactNode[]> = {
   wakgood: ['업로드 완료 킹아~', '이야야야야야야 넥슬라이스'],
   waktaverse: ['자막 업로드 감사띠~'],
   ine: ['전부 업로드 완료~ 고막따네'],
@@ -87,7 +110,7 @@ const EmptyTexts: Record<ChannelID, string[]> = {
     '오늘 자막 휴식',
   ],
   gosegu: ['전부 업로드 완료! 감사합니다~ 킹아~~~ ^ㅁ^'],
-  viichan: ['탸니탸니 전부 업로드 완료~ 감사합니다~'],
+  viichan: ['탸니탸니 전부 업로드 완료~ 감사합니다~', <span key='no-movie' className={styles.tanoshii}>자막 없다</span>],
 }
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
@@ -167,22 +190,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
           ) : (
             <div className={styles.empty}>
               <div className={styles.contents}>
-                <div className={styles.image}>
-                  <FadeInImage
-                    src={
-                      EmptyImages[id][
-                        Math.floor(Math.random() * EmptyImages[id].length)
-                      ] || '/empty.png'
-                    }
-                    layout='fill'
-                    alt='no image'
-                  ></FadeInImage>
-                </div>
-                <h3>
-                  {EmptyTexts[id][
-                    Math.floor(Math.random() * EmptyTexts[id].length)
-                  ] || '대기 중인 영상이 없어요!'}
-                </h3>
+                <RandomImages id={id}></RandomImages>
               </div>
             </div>
           )}
