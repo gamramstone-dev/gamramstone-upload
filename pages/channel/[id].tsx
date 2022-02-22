@@ -7,7 +7,7 @@ import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
@@ -67,6 +67,8 @@ const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 const RandomImages = ({ id }: { id: ChannelID }) => {
   const randomValue = Math.random()
 
+  const [ratio, setRatio] = useState(1)
+
   return (
     <>
       <div className={styles.image}>
@@ -75,8 +77,13 @@ const RandomImages = ({ id }: { id: ChannelID }) => {
             EmptyImages[id][Math.floor(randomValue * EmptyImages[id].length)] ||
             '/empty.png'
           }
-          layout='fill'
+          layout='fixed'
           alt='no image'
+          width={150}
+          height={150 * ratio}
+          onLoadingComplete={result =>
+            setRatio(result.naturalHeight / result.naturalWidth)
+          }
         ></FadeInImage>
       </div>
       <h3>
@@ -110,7 +117,12 @@ const EmptyTexts: Record<ChannelID, ReactNode[]> = {
     '오늘 자막 휴식',
   ],
   gosegu: ['전부 업로드 완료! 감사합니다~ 킹아~~~ ^ㅁ^'],
-  viichan: ['탸니탸니 전부 업로드 완료~ 감사합니다~', <span key='no-movie' className={styles.tanoshii}>자막 없다</span>],
+  viichan: [
+    '탸니탸니 전부 업로드 완료~ 감사합니다~',
+    <span key='no-movie' className={styles.tanoshii}>
+      자막 없다
+    </span>,
+  ],
 }
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
