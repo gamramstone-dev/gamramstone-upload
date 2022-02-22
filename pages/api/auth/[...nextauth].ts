@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { getUser } from '../../../utils/database'
+import { v4 } from 'uuid'
+import { createRegisterRequest, getUser } from '../../../utils/database'
 
 export default NextAuth({
   providers: [
@@ -33,7 +34,15 @@ export default NextAuth({
       const savedUser = await getUser(user.id)
 
       if (savedUser === null) {
-        return false
+        const uuid = v4()
+
+        const result = await createRegisterRequest(uuid, `${user.id} | ${user.name}`)
+
+        if (!result) {
+          return false
+        }
+
+        return `/noauth?error=AccessDenied&code=${uuid}`
       }
 
       return true

@@ -245,7 +245,7 @@ export const CaptionCard = ({
                             onClick={() =>
                               session && !session.permissionGranted
                                 ? toast.error(
-                                    '추가 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
+                                    'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
                                   )
                                 : applyTitleDescription(
                                     languages[tabIndex].language,

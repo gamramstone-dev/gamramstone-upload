@@ -72,7 +72,7 @@ const EmptyImages: Record<ChannelID, string[]> = {
   lilpa: ['/clear/lilpa-001.jpg'],
   jururu: ['/clear/jururu-001.webp', '/clear/jururu-002.webp'],
   gosegu: ['/clear/gosegu-001.webp'],
-  viichan: ['/clear/viichan-001.webp'],
+  viichan: ['/clear/viichan-001.png', '/clear/viichan-002.png'],
 }
 
 const EmptyTexts: Record<ChannelID, string[]> = {
@@ -143,7 +143,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                     data && data.length
                       ? session && !session.permissionGranted
                         ? toast.error(
-                            '추가 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
+                            'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
                           )
                         : setOpenProcessPopup(true)
                       : toast('업로드 대기 중인 영상이 없어요.')
