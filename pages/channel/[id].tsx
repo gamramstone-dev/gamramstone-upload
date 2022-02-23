@@ -172,7 +172,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               {// TODO: 적용 업데이트 완료시 false 삭제
               tabIndex === 0 && !publicRuntimeConfig.hideApplyButton && (
                 <Button
-                  roundness={16}
+                 
                   size='large'
                   disabled={!session}
                   onClick={() =>

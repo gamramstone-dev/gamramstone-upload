@@ -20,6 +20,7 @@ import toast from 'react-hot-toast'
 import Footer from '../components/Footer'
 import Link from 'next/link'
 import { UserStateNames } from '../structs/user'
+import { Button } from '../components/Button'
 
 const isWakgoodHyeong = (name?: unknown) => {
   return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
@@ -170,6 +171,24 @@ const Account: NextPage = () => {
             onChange={() => removeAccount()}
           />
         </div>
+        <div className={classes(pageStyles.contents, styles.accountData)}>
+          <p className={styles.mute}>
+            마지막 로그인 :{' '}
+            {session &&
+              session.lastLogin &&
+              new Date(session.lastLogin as string).toLocaleString()}
+          </p>
+          <p className={styles.mute}>UUID : {session && session.uuid}</p>
+        </div>
+        {session?.userState === 'admin' ? (
+          <div className={classes(pageStyles.contents)}>
+            <Button onClick={() => router.push('/admin')}>
+              사이트 관리하러 가기
+            </Button>
+          </div>
+        ) : (
+          void 0
+        )}
       </div>
       <Footer></Footer>
     </div>

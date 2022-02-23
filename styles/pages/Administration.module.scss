@@ -1,0 +1,45 @@
+@import '../constants.scss';
+
+.heading {
+  position: relative;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+
+  font-weight: bold;
+  letter-spacing: -1px;
+  font-size: 1.75em;
+
+  @media screen and (max-width: $tablet) {
+    font-size: 1.5em;
+  }
+}
+
+.inner {
+  margin-top: auto;
+  margin-bottom: auto;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.users {
+  display: flex;
+  flex-direction: column;
+
+  .uuid {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  .user {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
+
+  .actions {
+    display: flex;
+    gap: 16px;
+  }
+}

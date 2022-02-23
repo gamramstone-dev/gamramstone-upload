@@ -75,6 +75,8 @@ export default NextAuth({
 
         if (savedUser !== null) {
           token.userState = savedUser.state
+          token.lastLogin = savedUser.lastLogin
+          token.uuid = savedUser.uuid
         }
       }
 
@@ -87,6 +89,9 @@ export default NextAuth({
         token.scope.indexOf('auth/youtube.force-ssl') !== -1
       session.userState = token.userState
       session.accessToken = token.accessToken
+
+      session.lastLogin = token.lastLogin
+      session.uuid = token.uuid
 
       return session
     },

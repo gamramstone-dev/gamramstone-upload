@@ -37,7 +37,7 @@ export const Header = () => {
           ) : (
             <Button
               size='medium'
-              roundness={16}
+             
               // onClick={() =>
               //   toast.error(
               //     '아직 로그인 기능이 준비되지 않았습니다. 업데이트 공지가 뜨면 사용해주세요!'

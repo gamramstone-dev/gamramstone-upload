@@ -24,7 +24,7 @@ export const Button = ({
   children,
   className,
   disabled = false,
-  roundness = 0,
+  roundness = 16,
   size = 'medium',
   theme = 'primary',
   onClick,

@@ -11,6 +11,7 @@ export const UserStateNames: Record<UserState, string> = {
 }
 
 export interface DatabaseUser {
+  uuid: string
   lastLogin: string
   state: UserState
   settings: SettingTypes

@@ -239,13 +239,13 @@ export const CaptionCard = ({
                           target='_blank'
                           rel='noreferrer'
                         >
-                          <Button roundness={16}>
+                          <Button>
                             자막 적용하러 가기 (수동)
                           </Button>
                         </a>
                         {!publicRuntimeConfig.hideApplyButton && (
                           <Button
-                            roundness={16}
+                           
                             disabled={session === null}
                             onClick={() =>
                               isUploadable(session, () =>
@@ -306,7 +306,7 @@ export const CaptionCard = ({
                             languages[tabIndex].captions.map(v => (
                               <Button
                                 key={`file-${v.filename}`}
-                                roundness={16}
+                               
                                 onClick={() => download(v.url, v.filename)}
                               >
                                 {v.filename} 다운로드

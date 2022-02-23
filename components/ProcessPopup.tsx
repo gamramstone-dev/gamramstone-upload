@@ -260,10 +260,10 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
         {data && data.length}개의 영상에 자동으로 자막을 달까요?
       </h1>
       <div className={styles.actions}>
-        <Button theme='secondary' roundness={16} onClick={close}>
+        <Button theme='secondary' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' roundness={16} onClick={() => setStep(1)}>
+        <Button theme='primary' onClick={() => setStep(1)}>
           개같이 시작
         </Button>
       </div>
@@ -296,12 +296,12 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
             에러가 계속 발생하고 있어요. 계속 진행할까요?
           </h1>
           <div className={styles.actions}>
-            <Button theme='secondary' roundness={16} onClick={close}>
+            <Button theme='secondary' onClick={close}>
               취소
             </Button>
             <Button
               theme='primary'
-              roundness={16}
+             
               onClick={() => {
                 errorStreaks.current = 0
                 setPause(false)
@@ -358,10 +358,10 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
       </p>
 
       <div className={styles.actions}>
-        <Button theme='secondary' roundness={16} onClick={close}>
+        <Button theme='secondary' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' roundness={16} onClick={() => signOut()}>
+        <Button theme='primary' onClick={() => signOut()}>
           로그아웃
         </Button>
       </div>
@@ -391,10 +391,10 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
       </h1>
 
       <div className={styles.actions}>
-        <Button theme='secondary' roundness={16} onClick={close}>
+        <Button theme='secondary' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' roundness={16} onClick={() => retryErrors()}>
+        <Button theme='primary' onClick={() => retryErrors()}>
           다시 시도
         </Button>
       </div>
