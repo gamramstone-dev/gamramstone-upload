@@ -40,6 +40,14 @@ const Account: NextPage = () => {
 
   const updatePermission = useCallback(
     (uuid: string, permission: UserState) => {
+      if (
+        !confirm(
+          `Are you sure to change ${uuid}'s permission to ${permission}?`
+        )
+      ) {
+        return
+      }
+
       fetch(`/api/user/admin/update?uuid=${uuid}&permission=${permission}`)
         .then(v => v.json())
         .then(v => {
