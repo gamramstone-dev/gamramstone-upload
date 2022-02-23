@@ -11,7 +11,7 @@ export default NextAuth({
       authorization: {
         params: {
           scope:
-            'openid profile https://www.googleapis.com/auth/youtubepartner',
+            'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
         },
       },
     }),
@@ -60,7 +60,7 @@ export default NextAuth({
       session.id = token.id
       session.permissionGranted =
         typeof token.scope === 'string' &&
-        token.scope.indexOf('auth/youtubepartner') !== -1
+        token.scope.indexOf('auth/youtube.force-ssl') !== -1
 
       if (session.permissionGranted) {
         session.accessToken = token.accessToken
