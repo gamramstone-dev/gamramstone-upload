@@ -1,5 +1,6 @@
-import { auth, del, hgetall, hmset, set } from '@upstash/redis'
+import { auth, del, hgetall, hmset, hset, set } from '@upstash/redis'
 import { DatabaseUser } from '../structs/user'
+import { objectToJSON } from './string'
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
 
@@ -29,6 +30,35 @@ export const getUser = async (id: string) => {
   return hashesToObject<DatabaseUser>(user.data)
 }
 
+const DefaultUserTemplate = () => ({
+  state: 'guest',
+  lastLogin: new Date().toISOString(),
+  settings: {
+    darkMode: false,
+  },
+}) as DatabaseUser
+
+export const createUser = async (
+  id: string,
+  data: Partial<DatabaseUser> = DefaultUserTemplate()
+) => {
+  const result = await hset(
+    `user:${id}`,
+    ...Object.entries({
+      ...DefaultUserTemplate(),
+      ...data,
+    })
+      .flat()
+      .map(objectToJSON)
+  )
+
+  if (result.error) {
+    throw new Error(result.error)
+  }
+
+  return result.data
+}
+
 export const deleteUser = async (id: string) => {
   const user = await del(`user:${id}`)
 
@@ -37,6 +67,21 @@ export const deleteUser = async (id: string) => {
   }
 
   return user.data
+}
+
+export const updateUser = async (id: string, data: Partial<DatabaseUser>) => {
+  const result = await hset(
+    `user:${id}`,
+    ...Object.entries(data)
+      .flat()
+      .map(objectToJSON)
+  )
+
+  if (result.error) {
+    throw new Error(result.error)
+  }
+
+  return result.data
 }
 
 export const updateUserSettings = async (id: string, settings: string) => {

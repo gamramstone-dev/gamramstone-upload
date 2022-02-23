@@ -7,7 +7,7 @@ import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
@@ -21,7 +21,8 @@ import { useSession } from 'next-auth/react'
 import Footer from '../../components/Footer'
 
 import getConfig from 'next/config'
-import { CustomUseSession } from '../../structs/setting'
+import { CustomUseSession, SessionData } from '../../structs/setting'
+import { isUploadable } from '../../utils/clientAPI'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -176,11 +177,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                   disabled={!session}
                   onClick={() =>
                     data && data.length
-                      ? session && !session.permissionGranted
-                        ? toast.error(
-                            'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
-                          )
-                        : setOpenProcessPopup(true)
+                      ? isUploadable(session, () => setOpenProcessPopup(true))
                       : toast('업로드 대기 중인 영상이 없어요.')
                   }
                 >

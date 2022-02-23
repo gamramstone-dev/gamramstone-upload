@@ -5,6 +5,10 @@ import {
   validateAccessToken,
 } from './youtube'
 
+import toast from 'react-hot-toast'
+import { SessionData } from '../structs/setting'
+import { hasCreatorPermission } from '../structs/user'
+
 export const applyCaptions = async (
   token: string,
   language: LanguageCode,
@@ -78,4 +82,28 @@ export const applyCaptions = async (
       }`
     )
   }
+}
+
+export const isUploadable = (session: SessionData | null, func: () => void) => {
+  if (!session) {
+    toast.error('로그인 해주세요.')
+
+    return
+  }
+
+  if (!hasCreatorPermission(session.userState)) {
+    toast.error('계정에 YouTube 크리에이터 권한이 있어야 업로드할 수 있어요.')
+
+    return
+  }
+
+  if (!session?.permissionGranted) {
+    toast.error(
+      'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
+    )
+
+    return
+  }
+
+  func()
 }

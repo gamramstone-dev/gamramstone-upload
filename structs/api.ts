@@ -13,7 +13,9 @@ export interface APIResponseError {
 }
 
 const parseError = (error: unknown): [number, string] => {
-  console.error(error)
+  if (error instanceof Error) {
+    console.error(error.message)
+  }
 
   if (!(error instanceof Error)) {
     if (error !== null && typeof error === 'object' && 'message' in error) {

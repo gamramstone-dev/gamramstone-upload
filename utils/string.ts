@@ -79,3 +79,11 @@ export const extractCaptionTrackName = (name: string) => {
 
   return undefined
 }
+
+export const objectToJSON = (obj: unknown) => {
+  if (typeof obj === 'object' && obj !== null) {
+    return JSON.stringify(obj)
+  }
+
+  return obj
+}

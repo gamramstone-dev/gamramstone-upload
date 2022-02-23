@@ -9,7 +9,6 @@ import SettingCard from '../components/SettingCard'
 import {
   CustomUseSession,
   globalSettings,
-  SessionData,
   SettingID,
   Settings,
   SettingTypes,
@@ -20,6 +19,7 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import Footer from '../components/Footer'
 import Link from 'next/link'
+import { UserStateNames } from '../structs/user'
 
 const isWakgoodHyeong = (name?: unknown) => {
   return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
@@ -63,27 +63,20 @@ const Account: NextPage = () => {
   }, [settings])
 
   const removeAccount = useCallback(async () => {
-    if (!session || !session.accessToken) {
+    if (!session) {
       return
     }
 
-    const data = await fetch(
-      `https://accounts.google.com/o/oauth2/revoke?token=${session.accessToken}`
-    ).then(v => v.json())
-
-    if (data.error) {
-      toast.error('세션이 만료되었습니다. 로그아웃 했다가 다시 탈퇴하세요.')
-      return
-    }
-
-    const result = await fetch('/api/auth/unregister', {
+    const result = await fetch('/api/user/unregister', {
       method: 'POST',
     }).then(v => v.json())
 
     if (result.status === 'success') {
       signOut()
+    } else if (result.status === 'error' && result.message) {
+      toast.error(result.message)
     } else {
-      toast.error('계정 삭제 실패, gamramstone @ wesub.io로 문의하세요.')
+      toast.error('계정 삭제 실패, gamramstone@wesub.io로 문의하세요.')
     }
   }, [session])
 
@@ -128,34 +121,45 @@ const Account: NextPage = () => {
             }}
             onChange={() => signOut()}
           />
-          <SettingCard
-            setting={{
-              title: '권한 요청',
-              description:
-                (session && session.permissionGranted) || false ? (
-                  <>
-                    이미 권한이 부여되었습니다.<br></br>사용하는 정보 내용은{' '}
-                    <Link href='/privacy'>개인정보 처리방침</Link>을 확인하세요.
-                  </>
-                ) : (
-                  <>
-                    YouTube 계정에 접근할 수 있는 권한을 요청합니다.<br></br>
-                    자세한 사항은 <Link href='/privacy'>개인정보 처리방침</Link>
-                    을 확인하세요.
-                  </>
-                ),
-              disabled: (session && session.permissionGranted) || false,
-              type: 'button',
-            }}
-            onChange={() => signIn('google')}
-          />
+          {session?.userState === 'creator' ||
+          session?.userState === 'admin' ? (
+            <SettingCard
+              setting={{
+                title: '권한 요청',
+                description:
+                  (session && session.permissionGranted) || false ? (
+                    <>
+                      이미 권한이 부여되었습니다.<br></br>사용하는 정보 내용은{' '}
+                      <Link href='/privacy'>개인정보 처리방침</Link>을
+                      확인하세요.
+                    </>
+                  ) : (
+                    <>
+                      YouTube 계정에 접근할 수 있는 권한을 요청합니다.<br></br>
+                      자세한 사항은{' '}
+                      <Link href='/privacy'>개인정보 처리방침</Link>을
+                      확인하세요.
+                    </>
+                  ),
+                disabled: (session && session.permissionGranted) || false,
+                type: 'button',
+              }}
+              onChange={() => signIn('google')}
+            />
+          ) : (
+            undefined
+          )}
           <SettingCard
             setting={{
               title: '계정 삭제',
               description: (
                 <>
-                  사이트에서 계정을 삭제합니다.<br></br>삭제 후 다시 가입하려면 관리자
-                  승인이 다시 필요합니다.
+                  사이트에서 계정을 삭제합니다.<br></br>
+                  {session ? (
+                    <>현재 {UserStateNames[session.userState]} 계정입니다.</>
+                  ) : (
+                    undefined
+                  )}
                 </>
               ),
               type: 'button',

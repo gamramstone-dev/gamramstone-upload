@@ -46,7 +46,6 @@
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 20px;
 
-  padding-bottom: 20vh;
   user-select: none;
 
   @media screen and (max-width: $tablet) {
@@ -64,6 +63,10 @@ a .card {
 
 html[data-dark-mode='true'] {
   .card {
+    &[data-id] {
+      background: #242629;
+    }
+
     &[data-id='wakgood'] {
       background: #3f321f;
     }
@@ -236,5 +239,14 @@ html[data-dark-mode='true'] {
 
   a {
     color: rgb(15, 116, 218);
+  }
+}
+
+.mine {
+  margin-top: 10vh;
+  margin-bottom: 20vh;
+
+  > h2 {
+    margin-bottom: 2em;
   }
 }

@@ -11,7 +11,7 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
-import { applyCaptions } from '../utils/clientAPI'
+import { applyCaptions, isUploadable } from '../utils/clientAPI'
 import { useDeviceWidthLimiter } from '../utils/react'
 import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
@@ -211,13 +211,18 @@ export const CaptionCard = ({
                 {languages.map(v => (
                   <TabButton
                     key={v.language}
-                    disabled={v.status !== 'waiting' && v.status !== 'done'}
+                    disabled={
+                      session?.userState !== 'translator' &&
+                      v.status !== 'waiting' &&
+                      v.status !== 'done'
+                    }
                   >
                     {LanguageNames[v.language]}
                   </TabButton>
                 ))}
               </TabGroup>
               {typeof languages[tabIndex] !== 'undefined' ? (
+                session?.userState !== 'translator' &&
                 languages[tabIndex].status === 'wip' ? (
                   <div className={styles.details}>
                     현재 자막 제작 중입니다...
@@ -243,21 +248,19 @@ export const CaptionCard = ({
                             roundness={16}
                             disabled={session === null}
                             onClick={() =>
-                              session && !session.permissionGranted
-                                ? toast.error(
-                                    'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 요청 버튼을 클릭해주세요.'
-                                  )
-                                : applyTitleDescription(
-                                    languages[tabIndex].language,
-                                    getYouTubeId(video.url),
-                                    languages[tabIndex].title,
-                                    languages[tabIndex].description,
-                                    video.captions.find(
-                                      v =>
-                                        v.language ===
-                                        languages[tabIndex].language
-                                    )?.captions
-                                  )
+                              isUploadable(session, () =>
+                                applyTitleDescription(
+                                  languages[tabIndex].language,
+                                  getYouTubeId(video.url),
+                                  languages[tabIndex].title,
+                                  languages[tabIndex].description,
+                                  video.captions.find(
+                                    v =>
+                                      v.language ===
+                                      languages[tabIndex].language
+                                  )?.captions
+                                )
+                              )
                             }
                           >
                             자막 자동 적용{' '}

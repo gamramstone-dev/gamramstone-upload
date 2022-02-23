@@ -1,7 +1,11 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { v4 } from 'uuid'
-import { createRegisterRequest, getUser } from '../../../utils/database'
+import { hasCreatorPermission } from '../../../structs/user'
+import {
+  createUser,
+  getUser,
+  updateUser,
+} from '../../../utils/database'
 
 export default NextAuth({
   providers: [
@@ -24,7 +28,7 @@ export default NextAuth({
     error: '/noauth',
   },
   callbacks: {
-    async signIn ({ user }) {
+    async signIn ({ user, account }) {
       console.log(`${user.name} (${user.id}) tried to sign in!`)
 
       if (process.env.GOOGLE_NOT_READY === 'true') {
@@ -33,17 +37,31 @@ export default NextAuth({
 
       const savedUser = await getUser(user.id)
 
+      if (
+        (!savedUser || !hasCreatorPermission(savedUser.state)) &&
+        account.scope &&
+        account.scope.indexOf('auth/youtube') > -1
+      ) {
+        return '/noauth?error=NoYouTubePermission'
+      }
+
       if (savedUser === null) {
-        const uuid = v4()
-
-        const result = await createRegisterRequest(uuid, `${user.id} | ${user.name}`)
-
-        if (!result) {
-          return false
+        try {
+          await createUser(user.id)
+        } catch (e) {
+          return '/noauth?error=FailedToCreateUser'
         }
 
-        return `/noauth?error=AccessDenied&code=${uuid}`
+        return true
       }
+
+      if (savedUser.state === 'banned') {
+        return '/noauth?error=Banned'
+      }
+
+      await updateUser(user.id, {
+        lastLogin: new Date().toISOString(),
+      })
 
       return true
     },
@@ -52,6 +70,12 @@ export default NextAuth({
         token.accessToken = account.access_token
         token.id = account.providerAccountId
         token.scope = account.scope
+
+        const savedUser = await getUser(account.providerAccountId)
+
+        if (savedUser !== null) {
+          token.userState = savedUser.state
+        }
       }
 
       return token
@@ -61,10 +85,8 @@ export default NextAuth({
       session.permissionGranted =
         typeof token.scope === 'string' &&
         token.scope.indexOf('auth/youtube.force-ssl') !== -1
-
-      if (session.permissionGranted) {
-        session.accessToken = token.accessToken
-      }
+      session.userState = token.userState
+      session.accessToken = token.accessToken
 
       return session
     },
