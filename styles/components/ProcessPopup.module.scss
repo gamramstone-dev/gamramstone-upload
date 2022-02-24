@@ -293,10 +293,19 @@ html[data-dark-mode='true'] {
 .statusTab {
   position: relative;
 
+  .center {
+    margin-top: 170px;
+    margin-bottom: 30px;
+  }
+
   .description {
     opacity: 0.5;
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  a {
+    color: rgb(15, 116, 218);
   }
 }

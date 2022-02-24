@@ -1,11 +1,9 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { hasCreatorPermission } from '../../../structs/user'
-import {
-  createUser,
-  getUser,
-  updateUser,
-} from '../../../utils/database'
+import { Channels } from '../../../structs/channels'
+import { DatabaseUser, hasCreatorPermission } from '../../../structs/user'
+import { createUser, getUser, updateUser } from '../../../utils/database'
+import { getMyYouTubeChannelID } from '../../../utils/youtube'
 
 export default NextAuth({
   providers: [
@@ -37,10 +35,12 @@ export default NextAuth({
 
       const savedUser = await getUser(user.id)
 
+      const hasYouTubeScope =
+        account.scope && account.scope.indexOf('auth/youtube') > -1
+
       if (
         (!savedUser || !hasCreatorPermission(savedUser.state)) &&
-        account.scope &&
-        account.scope.indexOf('auth/youtube') > -1
+        hasYouTubeScope
       ) {
         return '/noauth?error=NoYouTubePermission'
       }
@@ -59,9 +59,32 @@ export default NextAuth({
         return '/noauth?error=Banned'
       }
 
-      await updateUser(user.id, {
+      const userFields: Partial<DatabaseUser> = {
         lastLogin: new Date().toISOString(),
-      })
+      }
+
+      if (
+        !hasCreatorPermission(savedUser.state) &&
+        hasYouTubeScope &&
+        typeof account.access_token === 'string'
+      ) {
+        try {
+          const id = await getMyYouTubeChannelID(account.access_token)
+
+          const hasRegisteredID =
+            Object.values(Channels).filter(v => v.channelId === id).length > 0
+
+          if (!hasRegisteredID) {
+            return '/noauth?error=NoYouTubePermission'
+          }
+        } catch (e) {
+          return '/noauth?error=NoYouTubePermission'
+        }
+
+        userFields.state = 'creator'
+      }
+
+      await updateUser(user.id, userFields)
 
       return true
     },
@@ -87,14 +110,16 @@ export default NextAuth({
       session.permissionGranted =
         typeof token.scope === 'string' &&
         token.scope.indexOf('auth/youtube.force-ssl') !== -1
-      session.accessToken = token.accessToken
 
       const user = await getUser(token.id as string)
 
       session.userState = user?.state
-
       session.lastLogin = token.lastLogin
       session.uuid = token.uuid
+
+      if (hasCreatorPermission(user!.state!)) {
+        session.accessToken = token.accessToken
+      }
 
       return session
     },

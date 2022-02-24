@@ -90,6 +90,7 @@ interface CaptionCardProps {
   video: VideoWithCaption
   defaultTabIndex?: number
   open?: boolean
+  onUploadAuth?: () => void
 }
 
 const ToastOption = {
@@ -103,6 +104,7 @@ export const CaptionCard = ({
   video,
   open,
   defaultTabIndex = 0,
+  onUploadAuth,
 }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(defaultTabIndex || 0)
 
@@ -239,27 +241,27 @@ export const CaptionCard = ({
                           target='_blank'
                           rel='noreferrer'
                         >
-                          <Button>
-                            자막 적용하러 가기 (수동)
-                          </Button>
+                          <Button>자막 적용하러 가기 (수동)</Button>
                         </a>
                         {!publicRuntimeConfig.hideApplyButton && (
                           <Button
-                           
                             disabled={session === null}
                             onClick={() =>
-                              isUploadable(session, () =>
-                                applyTitleDescription(
-                                  languages[tabIndex].language,
-                                  getYouTubeId(video.url),
-                                  languages[tabIndex].title,
-                                  languages[tabIndex].description,
-                                  video.captions.find(
-                                    v =>
-                                      v.language ===
-                                      languages[tabIndex].language
-                                  )?.captions
-                                )
+                              isUploadable(
+                                session,
+                                () =>
+                                  applyTitleDescription(
+                                    languages[tabIndex].language,
+                                    getYouTubeId(video.url),
+                                    languages[tabIndex].title,
+                                    languages[tabIndex].description,
+                                    video.captions.find(
+                                      v =>
+                                        v.language ===
+                                        languages[tabIndex].language
+                                    )?.captions
+                                  ),
+                                onUploadAuth
                               )
                             }
                           >
@@ -306,7 +308,6 @@ export const CaptionCard = ({
                             languages[tabIndex].captions.map(v => (
                               <Button
                                 key={`file-${v.filename}`}
-                               
                                 onClick={() => download(v.url, v.filename)}
                               >
                                 {v.filename} 다운로드
@@ -348,9 +349,10 @@ export const CaptionCard = ({
 
 interface VideoProjectCardProps {
   video: VideoWithCaption
+  onUploadAuth?: () => void
 }
 
-export const VideoProjectCard = ({ video }: VideoProjectCardProps) => {
+export const VideoProjectCard = ({ video, onUploadAuth }: VideoProjectCardProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const [tagIndex, setTagIndex] = useState<number>(0)
 
@@ -370,6 +372,7 @@ export const VideoProjectCard = ({ video }: VideoProjectCardProps) => {
           defaultTabIndex={tagIndex}
           video={video}
           languages={video.captions}
+          onUploadAuth={onUploadAuth}
         ></CaptionCard>
       }
     </>

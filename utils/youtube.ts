@@ -91,6 +91,27 @@ export const getYouTubeLocalizedVideos = async (ids: string[], key: string) => {
   return videos
 }
 
+export const getMyYouTubeChannelID = async (token: string) => {
+  const result = await fetch(
+    'https://www.googleapis.com/youtube/v3/channels?part=id&mine=true',
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  ).then(v => v.json())
+
+  if (result.error) {
+    throw new Error('유튜브 채널을 가져올 수 없습니다.')
+  }
+
+  if (result.items.length === 0) {
+    throw new Error('유튜브 채널을 찾을 수 없습니다.')
+  }
+
+  return result.items[0].id
+}
+
 export const getYouTubeSubtitleList = async (id: string, key: string) => {
   const res = await fetch(
     `https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${id}&key=${key}`

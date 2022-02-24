@@ -68,9 +68,13 @@ const Account: NextPage = () => {
       return
     }
 
+    const loading = toast.loading('계정 삭제 중...')
+
     const result = await fetch('/api/user/unregister', {
       method: 'POST',
-    }).then(v => v.json())
+    })
+      .then(v => v.json())
+      .finally(() => toast.remove(loading))
 
     if (result.status === 'success') {
       signOut()
@@ -126,7 +130,7 @@ const Account: NextPage = () => {
           session?.userState === 'admin' ? (
             <SettingCard
               setting={{
-                title: '권한 요청',
+                title: '권한 부여',
                 description:
                   (session && session.permissionGranted) || false ? (
                     <>
@@ -136,7 +140,7 @@ const Account: NextPage = () => {
                     </>
                   ) : (
                     <>
-                      YouTube 계정에 접근할 수 있는 권한을 요청합니다.<br></br>
+                      YouTube 계정에 접근할 수 있는 권한을 부여합니다.<br></br>
                       자세한 사항은{' '}
                       <Link href='/privacy'>개인정보 처리방침</Link>을
                       확인하세요.

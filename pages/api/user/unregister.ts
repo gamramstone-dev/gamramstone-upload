@@ -1,12 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { getToken } from 'next-auth/jwt'
 import { getSession } from 'next-auth/react'
 import { apify } from '../../../structs/api'
 import { deleteUser, getUser } from '../../../utils/database'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })
+  const token = await getToken({ req })
 
-  if (!session) {
+  if (!session || !token) {
     throw new Error(
       '401: Unauthorized. Only member could access to this endpoint.'
     )
@@ -22,7 +24,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const data = await fetch(
-      `https://accounts.google.com/o/oauth2/revoke?token=${session.accessToken}`
+      `https://accounts.google.com/o/oauth2/revoke?token=${token.accessToken}`
     ).then(v => v.json())
 
     if (data.error) {

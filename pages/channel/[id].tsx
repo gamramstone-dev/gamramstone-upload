@@ -7,7 +7,7 @@ import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
@@ -23,6 +23,7 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import { CustomUseSession, SessionData } from '../../structs/setting'
 import { isUploadable } from '../../utils/clientAPI'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -135,6 +136,18 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
 
   const { data: session } = useSession() as CustomUseSession
   const [openProcessPopup, setOpenProcessPopup] = useState<boolean>(false)
+  const [needPermission, setNeedPermission] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (
+      typeof window !== 'undefined' &&
+      window.location.hash === '#apply' &&
+      session?.permissionGranted
+    ) {
+      setOpenProcessPopup(true)
+      window.location.hash = ''
+    }
+  }, [session?.permissionGranted])
 
   return (
     <div className={styles.container}>
@@ -146,16 +159,17 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         />
       </Head>
       <AnimatePresence>
-        {openProcessPopup &&
-          data &&
-          session &&
-          typeof session.accessToken === 'string' && (
-            <ProcessPopup
-              token={session.accessToken}
-              data={data}
-              close={() => setOpenProcessPopup(false)}
-            ></ProcessPopup>
-          )}
+        {openProcessPopup && data && session && (
+          <ProcessPopup
+            token={session.accessToken}
+            data={data}
+            noPermission={needPermission}
+            close={() => {
+              setOpenProcessPopup(false)
+              setNeedPermission(false)
+            }}
+          ></ProcessPopup>
+        )}
       </AnimatePresence>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
@@ -172,12 +186,21 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               {// TODO: 적용 업데이트 완료시 false 삭제
               tabIndex === 0 && !publicRuntimeConfig.hideApplyButton && (
                 <Button
-                 
                   size='large'
                   disabled={!session}
                   onClick={() =>
                     data && data.length
-                      ? isUploadable(session, () => setOpenProcessPopup(true))
+                      ? isUploadable(
+                          session,
+                          () => {
+                            setOpenProcessPopup(true)
+                          },
+                          () => {
+                            window.location.hash = 'apply'
+                            setOpenProcessPopup(true)
+                            setNeedPermission(true)
+                          }
+                        )
                       : toast('업로드 대기 중인 영상이 없어요.')
                   }
                 >
@@ -193,8 +216,15 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
           ) : !data ? (
             <LoadSpinner></LoadSpinner>
           ) : data.length ? (
-            data.map((video, index) => (
-              <VideoProjectCard key={video.id} video={video}></VideoProjectCard>
+            data.map(video => (
+              <VideoProjectCard
+                key={video.id}
+                video={video}
+                onUploadAuth={() => {
+                  setOpenProcessPopup(true)
+                  setNeedPermission(true)
+                }}
+              ></VideoProjectCard>
             ))
           ) : (
             <div className={styles.empty}>

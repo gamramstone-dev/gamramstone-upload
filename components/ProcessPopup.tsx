@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, Variants } from 'framer-motion'
-import { signOut } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import {
@@ -132,9 +133,15 @@ interface ProcessPopupProps {
   data: VideoWithCaption[]
   token: string
   close?: () => void
+  noPermission?: boolean
 }
 
-export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
+export const ProcessPopup = ({
+  data,
+  close,
+  token,
+  noPermission,
+}: ProcessPopupProps) => {
   useBodyLock(true)
 
   const [step, setStep] = useState(0)
@@ -301,7 +308,6 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
             </Button>
             <Button
               theme='primary'
-             
               onClick={() => {
                 errorStreaks.current = 0
                 setPause(false)
@@ -367,9 +373,10 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
       </div>
     </PopupTab>
   )
+
   const Error = (
     <PopupTab
-      className={classes(styles.tab, styles.status)}
+      className={classes(styles.tab, styles.statusTab)}
       key='tab-error'
       custom={step - previousStep}
     >
@@ -396,6 +403,37 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
         </Button>
         <Button theme='primary' onClick={() => retryErrors()}>
           다시 시도
+        </Button>
+      </div>
+    </PopupTab>
+  )
+
+  const RequestPermission = (
+    <PopupTab
+      className={classes(styles.tab, styles.statusTab)}
+      key='tab-permission'
+      custom={step - previousStep}
+    >
+      <div className={styles.center}>
+        <h1 className={styles.title}>
+          업로드하려면 YouTube 계정 권한이 필요해요.
+        </h1>
+
+        <p className={styles.description}>
+          계속하기 전에, 감람스톤에서 어떤 정보를 사용하고 처리하는지{' '}
+          <Link href={'/privacy'} passHref>
+            <a target='_blank'>개인정보 처리방침</a>
+          </Link>
+          에서 알아보세요.
+        </p>
+      </div>
+
+      <div className={styles.actions}>
+        <Button theme='secondary' onClick={close}>
+          닫기
+        </Button>
+        <Button theme='primary' onClick={() => signIn('google')}>
+          권한 부여
         </Button>
       </div>
     </PopupTab>
@@ -432,7 +470,9 @@ export const ProcessPopup = ({ data, close, token }: ProcessPopupProps) => {
         }}
       >
         <AnimatePresence custom={step - previousStep}>
-          {step === 0
+          {noPermission
+            ? RequestPermission
+            : step === 0
             ? Ask
             : step === 1
             ? OnProgress
