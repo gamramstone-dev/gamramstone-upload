@@ -83,27 +83,29 @@ const Account: NextPage = () => {
             {error ? (
               <p>Error occurred while fetching user lists.</p>
             ) : (
-              users?.map(uuid => (
-                <div key={uuid} className={styles.user}>
-                  <span className={styles.uuid}>{uuid}</span>
-                  <div className={styles.actions}>
-                    <Button onClick={() => updatePermission(uuid, 'banned')}>
-                      Ban
-                    </Button>
-                    <Button onClick={() => updatePermission(uuid, 'creator')}>
-                      Creator
-                    </Button>
-                    <Button
-                      onClick={() => updatePermission(uuid, 'translator')}
-                    >
-                      Translator
-                    </Button>
-                    <Button onClick={() => updatePermission(uuid, 'guest')}>
-                      Guest
-                    </Button>
+              users
+                ?.sort((a, b) => a.localeCompare(b))
+                .map(uuid => (
+                  <div key={uuid} className={styles.user}>
+                    <span className={styles.uuid}>{uuid}</span>
+                    <div className={styles.actions}>
+                      <Button onClick={() => updatePermission(uuid, 'banned')}>
+                        Ban
+                      </Button>
+                      <Button onClick={() => updatePermission(uuid, 'creator')}>
+                        Creator
+                      </Button>
+                      <Button
+                        onClick={() => updatePermission(uuid, 'translator')}
+                      >
+                        Translator
+                      </Button>
+                      <Button onClick={() => updatePermission(uuid, 'guest')}>
+                        Guest
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             )}
           </div>
         </div>
