@@ -44,6 +44,7 @@ html[data-dark-mode='true'] {
   background: #f5f5f5;
   min-height: 350px;
   display: flex;
+  margin-top: 20vh;
 
   .contents {
     max-width: $page;
