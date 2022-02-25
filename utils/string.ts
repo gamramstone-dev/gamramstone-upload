@@ -87,3 +87,19 @@ export const objectToJSON = (obj: unknown) => {
 
   return obj
 }
+
+export const localeTimeDifference = (start: Date, end: Date) => {
+  const diff = (end.getTime() - start.getTime()) / 1000
+
+  const hours = Math.floor(diff / 3600)
+  const minutes = Math.floor((diff % 3600) / 60)
+  const seconds = Math.floor(diff % 60)
+
+  if (hours > 0) {
+    return `${hours}시간 ${minutes}분`
+  } else if (minutes > 0) {
+    return `${minutes}분 ${seconds}초`
+  } else {
+    return `${seconds}초`
+  }
+}

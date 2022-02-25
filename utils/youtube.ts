@@ -1,6 +1,7 @@
 import { LanguageCode } from '../structs/airtable'
 
 import { v4 as uuid } from 'uuid'
+import { localeTimeDifference } from './string'
 
 const fields = ['localizations']
 
@@ -132,6 +133,27 @@ export const getYouTubeSubtitleList = async (id: string, key: string) => {
   })) as YouTubeCaption[]
 }
 
+const checkQuotaExceedError = (error: any) => {
+  if (error.errors && error.errors[0].reason === 'quotaExceeded') {
+    const pstTime = new Date().toLocaleString('en-US', {
+      timeZone: 'America/Los_Angeles',
+    })
+
+    const start = new Date(pstTime)
+
+    const tomorrow = new Date(pstTime)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    tomorrow.setHours(0, 0, 0, 0)
+
+    throw new Error(
+      `사이트에서 업로드할 수 있는 자막 업로드 티켓이 전부 다 나갔답니다... ${localeTimeDifference(
+        start,
+        tomorrow
+      )} 후에 오세요~`
+    )
+  }
+}
+
 const getYouTubeVideoSnippetLocalizations = async (
   id: string,
   token: string
@@ -153,6 +175,8 @@ const getYouTubeVideoSnippetLocalizations = async (
         '로그인할 때 권한이 부여되지 않았습니다. 화면 오른쪽 위 계정 아이콘을 클릭해 로그아웃 한 후 다시 로그인해주세요.'
       )
     }
+
+    checkQuotaExceedError(result.error)
 
     throw new Error('영상 snippet을 가져올 수 없습니다.')
   }
@@ -209,12 +233,18 @@ export const updateYouTubeTitleMetadata = async (
         localizations: !localizations ? data : { ...localizations, ...data },
       }),
     }
-  ).then(v => v.json())
+  )
+    .then(v => v.json())
+    .catch(e => {
+      throw new Error(`제목 업데이트 요청을 보낼 수 없어요 : ${e.message}`)
+    })
 
   if (result.error) {
     if (result.error.message === 'Forbidden') {
       throw new Error('접근 권한이 없습니다. 본인 영상이 맞나요?')
     }
+
+    checkQuotaExceedError(result.error)
 
     throw new Error(result.error.message)
   }
@@ -298,7 +328,11 @@ export const uploadYouTubeCaption = async (
       },
       body: content,
     }
-  ).then(v => v.json())
+  )
+    .then(v => v.json())
+    .catch(e => {
+      throw new Error(`자막 업로드 요청을 보낼 수 없어요 : ${e.message}`)
+    })
 
   if (result.error) {
     if (result.error.code === 409) {
@@ -306,6 +340,8 @@ export const uploadYouTubeCaption = async (
         '이미 해당 영상에 같은 언어의 자막 파일이 존재합니다. 수동으로 자막 파일을 삭제한 후 다시 시도해주세요.'
       )
     }
+
+    checkQuotaExceedError(result.error)
 
     throw new Error(result.error.message)
   }

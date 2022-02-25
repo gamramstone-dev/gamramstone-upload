@@ -39,7 +39,7 @@ export const applyCaptions = async (
     }
   } catch (e) {
     throw new Error(
-      `영상 제목 / 설명을 업데이트하는 도중에 오류가 발생했어요. ${
+      `제목 업데이트 오류 : ${
         (e as Error).message
       }`
     )
@@ -76,7 +76,7 @@ export const applyCaptions = async (
     }
   } catch (e) {
     throw new Error(
-      `영상 자막 파일을 업로드 하는 도중에 오류가 발생하였습니다: ${
+      `자막 파일 업로드 오류 : ${
         (e as Error).message
       }`
     )
