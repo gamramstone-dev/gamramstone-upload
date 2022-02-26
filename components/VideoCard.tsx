@@ -216,6 +216,7 @@ export const CaptionCard = ({
                     key={v.language}
                     disabled={
                       session?.userState !== 'translator' &&
+                      session?.userState !== 'admin' &&
                       v.status !== 'waiting' &&
                       v.status !== 'done'
                     }
@@ -226,6 +227,7 @@ export const CaptionCard = ({
               </TabGroup>
               {typeof languages[tabIndex] !== 'undefined' ? (
                 session?.userState !== 'translator' &&
+                session?.userState !== 'admin' &&
                 languages[tabIndex].status === 'wip' ? (
                   <div className={styles.details}>
                     현재 자막 제작 중입니다...
@@ -281,7 +283,8 @@ export const CaptionCard = ({
                       <h3 className={styles.title}>영상 업로드 시각</h3>
                       <p>{new Date(video.uploadDate).toLocaleString()}</p>
                     </div>
-                    {session?.userState === 'admin' ? (
+                    {session?.userState === 'admin' ||
+                    session?.userState === 'translator' ? (
                       <div className={styles.row}>
                         <h3 className={styles.title}>Debug</h3>
                         <p className={styles.debug}>
@@ -289,9 +292,6 @@ export const CaptionCard = ({
                           <br></br>
                           YouTube Link :{' '}
                           <Link href={video.url}>{video.url}</Link>
-                          <br></br>
-                          Video Uploaded :{' '}
-                          {new Date(video.uploadDate).toLocaleString()}
                         </p>
                       </div>
                     ) : (

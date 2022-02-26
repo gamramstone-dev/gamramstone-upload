@@ -146,7 +146,7 @@ const checkQuotaExceedError = (error: any) => {
     tomorrow.setHours(0, 0, 0, 0)
 
     throw new Error(
-      `사이트에서 업로드할 수 있는 자막 업로드 티켓이 전부 다 나갔답니다... ${localeTimeDifference(
+      `오늘 자막 재료가 다 떨어졌어요... ${localeTimeDifference(
         start,
         tomorrow
       )} 후에 오세요~`
