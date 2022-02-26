@@ -15,6 +15,7 @@ interface ButtonBaseProps {
   children?: ReactNode
   roundness?: number
   onClick?: () => void
+  onContext?: () => void
 }
 
 interface ButtonStyles extends CSSProperties {
@@ -30,6 +31,7 @@ export const Button = ({
   size = 'medium',
   theme = 'primary',
   onClick,
+  onContext,
 }: ButtonBaseProps) => {
   return (
     <div
@@ -41,6 +43,9 @@ export const Button = ({
         theme && styles[theme]
       )}
       onClick={() => onClick && !disabled && onClick()}
+      onContextMenu={ev =>
+        onContext && !disabled && (ev.preventDefault(), onContext())
+      }
       style={
         {
           '--round': `${roundness}px`,

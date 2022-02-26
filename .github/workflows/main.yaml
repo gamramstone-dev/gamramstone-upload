@@ -45,7 +45,7 @@ jobs:
           --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=es' \
           --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
       - name: Sleep
-        run: sleep 10s
+        run: sleep 5s
         shell: bash
       - name: Refresh Arabic
         run: |

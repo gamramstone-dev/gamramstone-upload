@@ -280,24 +280,6 @@ export const CaptionCard = ({
                       <p>{WorkStatusNames[languages[tabIndex].status]}</p>
                     </div>
                     <div className={styles.row}>
-                      <h3 className={styles.title}>영상 업로드 시각</h3>
-                      <p>{new Date(video.uploadDate).toLocaleString()}</p>
-                    </div>
-                    {session?.userState === 'admin' ||
-                    session?.userState === 'translator' ? (
-                      <div className={styles.row}>
-                        <h3 className={styles.title}>Debug</h3>
-                        <p className={styles.debug}>
-                          AirTable ID : {video.id}
-                          <br></br>
-                          YouTube Link :{' '}
-                          <Link href={video.url}>{video.url}</Link>
-                        </p>
-                      </div>
-                    ) : (
-                      void 0
-                    )}
-                    <div className={styles.row}>
                       <h3 className={styles.title}>제목</h3>
                       <p
                         className={styles.copyable}
@@ -342,11 +324,23 @@ export const CaptionCard = ({
                         </div>
                       </div>
                     }
-
-                    <div className={styles.help}>
-                      <i className='ri-file-copy-line' />
-                      <p>제목과 세부 정보는 클릭하여 복사할 수 있어요.</p>
-                    </div>
+                    {session?.userState === 'admin' ||
+                    session?.userState === 'translator' ? (
+                      <div className={styles.row}>
+                        <h3 className={styles.title}>Details</h3>
+                        <p className={styles.debug}>
+                          Airtable ID : {video.id}
+                          <br></br>
+                          YouTube Link :{' '}
+                          <Link href={video.url}>{video.url}</Link>
+                          <br></br>
+                          Upload Date:{' '}
+                          {new Date(video.uploadDate).toLocaleString()}
+                        </p>
+                      </div>
+                    ) : (
+                      void 0
+                    )}
                   </div>
                 )
               ) : (
