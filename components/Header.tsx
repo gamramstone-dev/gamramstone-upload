@@ -5,7 +5,6 @@ import { Button } from './Button'
 import { useSession, signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
 
 export const Header = () => {
   const router = useRouter()
@@ -38,11 +37,6 @@ export const Header = () => {
             <Button
               size='medium'
               icon='login-box-line'
-              // onClick={() =>
-              //   toast.error(
-              //     '아직 로그인 기능이 준비되지 않았습니다. 업데이트 공지가 뜨면 사용해주세요!'
-              //   )
-              // }
               onClick={() =>
                 signIn('google', undefined, {
                   scope: 'profile openid',

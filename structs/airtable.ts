@@ -162,13 +162,14 @@ export const extractLanguageSpecificData = (
     url: (v.fields['URL'] as string[])[0],
     channel: v.fields['채널'] as string,
     noCC:
-      (v.fields['진행 상황'] as string[])[0] ===
-      '해당 없음 (자막 필요 없는 영상)',
+      (v.fields[
+        (checkIsIndividualLanguage(language)
+          ? ''
+          : `${LanguageNames[language]} `) + '진행 상황'
+      ] as string[])[0] === '해당 없음 (자막 필요 없는 영상)',
     originalTitle: v.fields['제목'] as string,
-    title: v.fields[`제목 (${LanguageNames[language]} 번역)`] as string,
-    description: v.fields[
-      `세부 정보 (${LanguageNames[language]} 번역)`
-    ] as string,
+    title: v.fields[`${LanguageNames[language]} 제목`] as string,
+    description: v.fields[`${LanguageNames[language]} 세부 정보`] as string,
     uploadDate: (v.fields['업로드 날짜'] as string[])[0],
     editDate: v.fields['Last Modified'] as string,
     files:
@@ -370,6 +371,15 @@ export const ISO639 = [
 export type LanguageCode = typeof ISO639[number]
 export type OnWorkingLanguageCode = LanguageCode &
   ('en' | 'ko' | 'zh' | 'fr' | 'es' | 'ar' | 'ja' | 'vi')
+
+export const IndividualLanguages = ['en', 'ja', 'zh'] as const
+export type IndividualTableLanguageCode = typeof IndividualLanguages[number]
+
+export const checkIsIndividualLanguage = (
+  str: string
+): str is IndividualTableLanguageCode => {
+  return (Object.values(IndividualLanguages) as string[]).includes(str)
+}
 
 export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   en: '영어',

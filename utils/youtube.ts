@@ -2,6 +2,7 @@ import { LanguageCode } from '../structs/airtable'
 
 import { v4 as uuid } from 'uuid'
 import { localeTimeDifference } from './string'
+import { chunks } from './items'
 
 const fields = ['localizations']
 
@@ -48,12 +49,6 @@ interface YouTubeCaption {
   trackKind: string
   language: LanguageCode
 }
-
-const chunks = (array: any[], size: number) =>
-  array.reduce((acc, _, i) => {
-    if (i % size === 0) acc.push(array.slice(i, i + size))
-    return acc
-  }, [])
 
 const getVideoLocalizedMetadata = (data: YouTubeVideo) =>
   (data.localizations !== null &&

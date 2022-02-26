@@ -14,7 +14,9 @@ export interface APIResponseError {
 
 const parseError = (error: unknown): [number, string] => {
   if (error instanceof Error) {
-    console.error(error.message)
+    console.error(
+      process.env.NODE_ENV === 'development' ? error : error.message
+    )
   }
 
   if (!(error instanceof Error)) {

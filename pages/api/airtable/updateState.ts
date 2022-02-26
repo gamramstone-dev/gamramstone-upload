@@ -3,11 +3,15 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import {
   AirtableLanguageField,
   extractLanguageSpecificData,
+  IndividualLanguages,
   isValidLanguageName,
   LanguageNames,
+  OnWorkingLanguageCode,
 } from '../../../structs/airtable'
 import { apify } from '../../../structs/api'
-import discord from '../../../utils/server/discord'
+import { Channels, getChannelIDByName } from '../../../structs/channels'
+import { chunks } from '../../../utils/items'
+import discord, { DiscordEmbed } from '../../../utils/server/discord'
 import { getYouTubeId } from '../../../utils/string'
 import {
   getYouTubeLocalizedVideos,
@@ -28,6 +32,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const lang = req.query.lang
+  const video = req.query.video
 
   if (
     typeof lang !== 'string' ||
@@ -37,17 +42,29 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('invalid language code')
   }
 
+  if (typeof video === 'object') {
+    throw new Error('invalid video')
+  }
+
   console.log(`[updateState] started for ${lang}.`)
 
-  const uploadBase = base(`${LanguageNames[lang]} 번역`)
+  const isMajorLanguage = (Object.values(
+    IndividualLanguages
+  ) as string[]).includes(lang)
+
+  const uploadBase = base(
+    `${isMajorLanguage ? LanguageNames[lang] : '기타 언어'} 번역`
+  )
   const airtableVideos = await uploadBase
     .select({
-      view: `자막 제작 완료`,
+      view: `${isMajorLanguage ? '' : LanguageNames[lang] + ' '}자막 제작 완료`,
     })
     .all()
     .then(records => extractLanguageSpecificData(lang, records))
 
-  const youtubeIds = airtableVideos.map(v => getYouTubeId(v.url))
+  const youtubeIds = video
+    ? video.split(',')
+    : airtableVideos.map(v => getYouTubeId(v.url))
 
   const videos = await getYouTubeLocalizedVideos(
     youtubeIds,
@@ -112,20 +129,57 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(`[updateState] nothing to update.`)
   }
 
+  const discordMessages: DiscordEmbed[] = []
+
   for (let i = 0; i < results.length; i++) {
     console.log(
       `[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
     )
 
-    if (typeof process.env[`DISCORD_${lang.toUpperCase()}_HOOK`] === 'string') {
-      discord.send(
-        process.env[`DISCORD_${lang.toUpperCase()}_HOOK`]!,
-        `${results[i].channel} - "${results[i].originalTitle}" 영상의 ${LanguageNames[lang]} 자막이 YouTube에 적용된 것을 확인하여 \`유튜브 적용 완료\` 상태로 변경하였습니다! 🎉`
-      )
-    }
-    await uploadBase.update(results[i].id, {
-      '진행 상황': '유튜브 적용 완료',
+    const channelId = getChannelIDByName(results[i].channel)
+
+    discordMessages.push({
+      title: results[i].originalTitle,
+      color: channelId
+        ? parseInt(Channels[channelId].color.replace(/#/g, ''), 16)
+        : 0x118bf5,
+      description: `${LanguageNames[lang]} 자막이 적용됐습니다! 🎉`,
+      url: results[i].url,
+      thumbnail: {
+        url: `https://i.ytimg.com/vi/${getYouTubeId(
+          results[i].url
+        )}/hqdefault.jpg`,
+      },
+      footer: channelId
+        ? {
+            text: Channels[channelId].name,
+            icon_url: Channels[channelId].image,
+          }
+        : undefined,
     })
+
+    await uploadBase.update(results[i].id, {
+      [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
+      '진행 상황']: '유튜브 적용 완료',
+    })
+  }
+
+  const chunked = chunks(discordMessages, 10)
+
+  for (let i = 0; i < chunked.length; i++) {
+    const item = chunked[i]
+
+    if (!item) {
+      continue
+    }
+
+    const env = process.env[
+      `DISCORD_${isMajorLanguage ? item[i].toUpperCase() : 'EN'}_HOOK`
+    ]!
+
+    if (env) {
+      await discord.sendFancy(env, item)
+    }
   }
 
   return results
