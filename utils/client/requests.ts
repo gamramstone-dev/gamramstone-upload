@@ -1,12 +1,12 @@
-import { CaptionFile, LanguageCode } from '../structs/airtable'
+import { CaptionFile, LanguageCode } from '../../structs/airtable'
 import {
   updateYouTubeTitleMetadata,
   uploadYouTubeCaption,
   validateAccessToken,
-} from './youtube'
+} from '../youtube'
 
 import toast from 'react-hot-toast'
-import { SessionData } from '../structs/setting'
+import { SessionData } from '../../structs/setting'
 
 export const applyCaptions = async (
   token: string,

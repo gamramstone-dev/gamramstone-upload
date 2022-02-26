@@ -7,7 +7,7 @@ import {
   LanguageNames,
 } from '../../../structs/airtable'
 import { apify } from '../../../structs/api'
-import { sendMessage } from '../../../utils/discord'
+import discord from '../../../utils/server/discord'
 import { getYouTubeId } from '../../../utils/string'
 import {
   getYouTubeLocalizedVideos,
@@ -89,6 +89,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       continue
     }
 
+    /**
+     * 영상에 등록된 자동 생성된 자막 및 다른 언어 자막을 제외한 자막 트랙을 가져옵니다.
+     */
     const caption = (
       await getYouTubeSubtitleList(video.id, process.env.YOUTUBE_API_KEY!)
     ).filter(v => v.trackKind !== 'asr' && v.language === lang)
@@ -115,7 +118,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     )
 
     if (typeof process.env[`DISCORD_${lang.toUpperCase()}_HOOK`] === 'string') {
-      sendMessage(
+      discord.send(
         process.env[`DISCORD_${lang.toUpperCase()}_HOOK`]!,
         `${results[i].channel} - "${results[i].originalTitle}" 영상의 ${LanguageNames[lang]} 자막이 YouTube에 적용된 것을 확인하여 \`유튜브 적용 완료\` 상태로 변경하였습니다! 🎉`
       )

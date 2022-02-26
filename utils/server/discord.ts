@@ -1,4 +1,4 @@
-export const sendMessage = async (url: string, message: string) => {
+export const sendSimpleMessage = async (url: string, message: string) => {
   const result = await fetch(url, {
     method: 'POST',
     headers: {
@@ -13,3 +13,9 @@ export const sendMessage = async (url: string, message: string) => {
     throw new Error('failed to send message')
   }
 }
+
+const functions = {
+  send: sendSimpleMessage
+}
+
+export default functions

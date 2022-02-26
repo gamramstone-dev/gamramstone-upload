@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { apify } from '../../../structs/api'
 import { checkIsValidUserState } from '../../../structs/user'
-import { updateUser } from '../../../utils/database'
+import { updateUser } from '../../../utils/server/database'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { authorization } = req.headers

@@ -10,8 +10,8 @@ import {
   VideoWithCaption,
 } from '../structs/airtable'
 import styles from '../styles/components/ProcessPopup.module.scss'
-import { applyCaptions } from '../utils/clientAPI'
-import { useBodyLock } from '../utils/react'
+import { applyCaptions } from '../utils/client/requests'
+import { useBodyLock } from '../hooks/styles'
 import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
 import { LoadSpinner } from './Loading'

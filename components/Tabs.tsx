@@ -14,7 +14,7 @@ import {
   useState,
 } from 'react'
 import styles from '../styles/components/Tabs.module.scss'
-import { useDebouncer } from '../utils/run'
+import { useDebouncer } from '../hooks/debouncer'
 
 interface TabButtonProps {
   children: string

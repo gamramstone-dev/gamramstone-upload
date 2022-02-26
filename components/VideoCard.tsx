@@ -11,8 +11,8 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
-import { applyCaptions, isUploadable } from '../utils/clientAPI'
-import { useDeviceWidthLimiter } from '../utils/react'
+import { applyCaptions, isUploadable } from '../utils/client/requests'
+import { useDeviceWidthLimiter } from '../hooks/styles'
 import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
 import FadeInImage from './FadeInImage'

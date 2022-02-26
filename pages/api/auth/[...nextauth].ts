@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { Channels } from '../../../structs/channels'
 import { DatabaseUser, hasCreatorPermission } from '../../../structs/user'
-import { createUser, getUser, updateUser } from '../../../utils/database'
+import { createUser, getUser, updateUser } from '../../../utils/server/database'
 import { getMyYouTubeChannelID } from '../../../utils/youtube'
 
 export default NextAuth({

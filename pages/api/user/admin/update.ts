@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
 import { apify } from '../../../../structs/api'
 import { checkIsValidUserState } from '../../../../structs/user'
-import { getUser, getUUIDUser, updateUser } from '../../../../utils/database'
+import { getUser, getUUIDUser, updateUser } from '../../../../utils/server/database'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession({ req })

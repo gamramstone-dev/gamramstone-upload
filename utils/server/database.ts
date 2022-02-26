@@ -8,11 +8,10 @@ import {
   hkeys,
   hmset,
   hset,
-  set,
 } from '@upstash/redis'
 import { v4 } from 'uuid'
-import { DatabaseUser } from '../structs/user'
-import { objectToJSON } from './string'
+import { DatabaseUser } from '../../structs/user'
+import { objectToJSON } from '../string'
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
 
