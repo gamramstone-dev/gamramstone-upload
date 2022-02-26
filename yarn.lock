@@ -1412,6 +1412,7 @@ __metadata:
     react-dom: 17.0.2
     react-hot-toast: ^2.2.0
     recoil: ^0.6.1
+    remixicon: ^2.5.0
     sass: ^1.49.8
     swr: ^1.2.1
     typescript: 4.5.5
@@ -2789,6 +2790,13 @@ __metadata:
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
   checksum: a78dc5c7158ad9ddcfe01aa9144f46e192ddbfa7b263895a70a5c6c73edd9ce85faf7c0430e59ac38839e1734e275b9c3de5c57ee3ab6edc0e0b1bdebefccef8
+  languageName: node
+  linkType: hard
+
+"remixicon@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "remixicon@npm:2.5.0"
+  checksum: 7fa8f3643e3f24d7fa1cdbf37391bb4b3bfc0fda6643ba4e09e92fb8639351cee03f51539f18640747c2055e3622c8b81369f323857793ffbe7d2292cbac60c6
   languageName: node
   linkType: hard
 

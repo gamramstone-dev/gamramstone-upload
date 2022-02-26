@@ -49,6 +49,10 @@ html[data-dark-mode='true'] {
   transition: 0.23s background cubic-bezier(0.19, 1, 0.22, 1);
   user-select: none;
 
+  .icon {
+    margin-right: 6px;
+  }
+
   &.large {
     padding: 12px 42px;
   }

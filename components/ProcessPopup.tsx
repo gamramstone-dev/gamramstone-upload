@@ -267,7 +267,7 @@ export const ProcessPopup = ({
         {data && data.length}개의 영상에 자동으로 자막을 달까요?
       </h1>
       <div className={styles.actions}>
-        <Button theme='secondary' onClick={close}>
+        <Button theme='secondary' icon='close' onClick={close}>
           닫기
         </Button>
         <Button theme='primary' onClick={() => setStep(1)}>
@@ -364,10 +364,14 @@ export const ProcessPopup = ({
       </p>
 
       <div className={styles.actions}>
-        <Button theme='secondary' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' onClick={() => signOut()}>
+        <Button
+          theme='primary'
+          icon='logout-box-line'
+          onClick={() => signOut()}
+        >
           로그아웃
         </Button>
       </div>
@@ -398,10 +402,14 @@ export const ProcessPopup = ({
       </h1>
 
       <div className={styles.actions}>
-        <Button theme='secondary' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' onClick={() => retryErrors()}>
+        <Button
+          theme='primary'
+          icon='restart-line'
+          onClick={() => retryErrors()}
+        >
           다시 시도
         </Button>
       </div>
@@ -429,10 +437,14 @@ export const ProcessPopup = ({
       </div>
 
       <div className={styles.actions}>
-        <Button theme='secondary' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={close}>
           닫기
         </Button>
-        <Button theme='primary' onClick={() => signIn('google')}>
+        <Button
+          theme='primary'
+          icon='login-box-line'
+          onClick={() => signIn('google')}
+        >
           권한 부여
         </Button>
       </div>

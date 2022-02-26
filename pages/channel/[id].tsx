@@ -188,6 +188,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                 <Button
                   size='large'
                   disabled={!session}
+                  icon='upload-line'
                   onClick={() =>
                     data && data.length
                       ? isUploadable(

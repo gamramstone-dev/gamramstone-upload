@@ -10,6 +10,7 @@ interface ButtonBaseProps {
   className?: string
   theme?: ButtonTheme
   size?: ButtonSize
+  icon?: string
   disabled?: boolean
   children?: ReactNode
   roundness?: number
@@ -23,6 +24,7 @@ interface ButtonStyles extends CSSProperties {
 export const Button = ({
   children,
   className,
+  icon,
   disabled = false,
   roundness = 16,
   size = 'medium',
@@ -45,6 +47,7 @@ export const Button = ({
         } as ButtonStyles
       }
     >
+      {icon && <i className={classes(styles.icon, `ri-${icon}`)}></i>}
       {children}
     </div>
   )

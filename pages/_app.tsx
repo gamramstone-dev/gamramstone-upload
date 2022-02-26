@@ -14,6 +14,8 @@ import { useEffect } from 'react'
 import Script from 'next/script'
 import Head from 'next/head'
 
+import 'remixicon/fonts/remixicon.css'
+
 const variants = {
   hidden: { opacity: 0 },
   enter: { opacity: 1 },

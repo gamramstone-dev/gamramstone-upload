@@ -244,9 +244,20 @@ $link-color: #0a84e9;
   background-color: #dbeefd;
   border-radius: 16px;
 
-  svg {
+  i {
     margin-top: auto;
     margin-bottom: auto;
     margin-right: 8px;
+  }
+}
+
+.debug {
+  white-space: pre-line;
+  letter-spacing: 0.3px;
+  font-size: 0.9em;
+  line-height: 140%;
+
+  a {
+    color: #0a84e9;
   }
 }

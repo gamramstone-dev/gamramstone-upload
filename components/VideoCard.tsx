@@ -20,6 +20,7 @@ import { TabButton, TabGroup } from './Tabs'
 
 import getConfig from 'next/config'
 import { CustomUseSession } from '../structs/setting'
+import Link from 'next/link'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -241,11 +242,12 @@ export const CaptionCard = ({
                           target='_blank'
                           rel='noreferrer'
                         >
-                          <Button>자막 적용하러 가기 (수동)</Button>
+                          <Button icon='link'>자막 수동 적용</Button>
                         </a>
                         {!publicRuntimeConfig.hideApplyButton && (
                           <Button
                             disabled={session === null}
+                            icon='file-upload-line'
                             onClick={() =>
                               isUploadable(
                                 session,
@@ -275,6 +277,26 @@ export const CaptionCard = ({
                       <h3 className={styles.title}>상태</h3>
                       <p>{WorkStatusNames[languages[tabIndex].status]}</p>
                     </div>
+                    <div className={styles.row}>
+                      <h3 className={styles.title}>영상 업로드 시각</h3>
+                      <p>{new Date(video.uploadDate).toLocaleString()}</p>
+                    </div>
+                    {session?.userState === 'admin' ? (
+                      <div className={styles.row}>
+                        <h3 className={styles.title}>Debug</h3>
+                        <p className={styles.debug}>
+                          AirTable ID : {video.id}
+                          <br></br>
+                          YouTube Link :{' '}
+                          <Link href={video.url}>{video.url}</Link>
+                          <br></br>
+                          Video Uploaded :{' '}
+                          {new Date(video.uploadDate).toLocaleString()}
+                        </p>
+                      </div>
+                    ) : (
+                      void 0
+                    )}
                     <div className={styles.row}>
                       <h3 className={styles.title}>제목</h3>
                       <p
@@ -307,10 +329,11 @@ export const CaptionCard = ({
                           languages[tabIndex].captions.length ? (
                             languages[tabIndex].captions.map(v => (
                               <Button
+                                icon='download-line'
                                 key={`file-${v.filename}`}
                                 onClick={() => download(v.url, v.filename)}
                               >
-                                {v.filename} 다운로드
+                                {v.filename}
                               </Button>
                             ))
                           ) : (
@@ -321,15 +344,7 @@ export const CaptionCard = ({
                     }
 
                     <div className={styles.help}>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        viewBox='0 0 24 24'
-                        width='20'
-                        height='20'
-                      >
-                        <path fill='none' d='M0 0h24v24H0z' />
-                        <path d='M7 6V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-3v3c0 .552-.45 1-1.007 1H4.007A1.001 1.001 0 0 1 3 21l.003-14c0-.552.45-1 1.007-1H7zM5.003 8L5 20h10V8H5.003zM9 6h8v10h2V4H9v2z' />
-                      </svg>
+                      <i className='ri-file-copy-line' />
                       <p>제목과 세부 정보는 클릭하여 복사할 수 있어요.</p>
                     </div>
                   </div>
@@ -352,7 +367,10 @@ interface VideoProjectCardProps {
   onUploadAuth?: () => void
 }
 
-export const VideoProjectCard = ({ video, onUploadAuth }: VideoProjectCardProps) => {
+export const VideoProjectCard = ({
+  video,
+  onUploadAuth,
+}: VideoProjectCardProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const [tagIndex, setTagIndex] = useState<number>(0)
 
