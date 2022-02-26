@@ -1,5 +1,7 @@
 name: CronJob
 on:
+  push:
+    branches: [ main ]
   schedule:
     - cron: '0 * * * *'
 jobs:
@@ -16,8 +18,37 @@ jobs:
           curl --request GET \
           --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=ja' \
           --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+      - name: Sleep
+        run: sleep 5s
+        shell: bash
       - name: Refresh Chinese
         run: |
           curl --request GET \
           --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=zh' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+      - name: Refresh Vietnamese
+        run: |
+          curl --request GET \
+          --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=vi' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+      - name: Sleep
+        run: sleep 5s
+        shell: bash
+      - name: Refresh Franch
+        run: |
+          curl --request GET \
+          --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=fr' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+      - name: Refresh Spanish
+        run: |
+          curl --request GET \
+          --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=es' \
+          --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
+      - name: Sleep
+        run: sleep 10s
+        shell: bash
+      - name: Refresh Arabic
+        run: |
+          curl --request GET \
+          --url 'https://gamramstone.wesub.io/api/airtable/updateState?lang=ar' \
           --header 'Authorization: Bearer ${{ secrets.CRON_SECRET_KEY }}'
