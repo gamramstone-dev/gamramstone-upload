@@ -21,9 +21,8 @@ import { useSession } from 'next-auth/react'
 import Footer from '../../components/Footer'
 
 import getConfig from 'next/config'
-import { CustomUseSession, SessionData } from '../../structs/setting'
+import { CustomUseSession } from '../../structs/setting'
 import { isUploadable } from '../../utils/client/requests'
-import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 
