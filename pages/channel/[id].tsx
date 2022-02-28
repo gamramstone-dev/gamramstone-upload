@@ -183,30 +183,32 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
             </TabGroup>
             <div className={styles.actions}>
               {// TODO: 적용 업데이트 완료시 false 삭제
-              tabIndex === 0 && !publicRuntimeConfig.hideApplyButton && (
-                <Button
-                  size='large'
-                  disabled={!session}
-                  icon='upload-line'
-                  onClick={() =>
-                    data && data.length
-                      ? isUploadable(
-                          session,
-                          () => {
-                            setOpenProcessPopup(true)
-                          },
-                          () => {
-                            window.location.hash = 'apply'
-                            setOpenProcessPopup(true)
-                            setNeedPermission(true)
-                          }
-                        )
-                      : toast('업로드 대기 중인 영상이 없어요.')
-                  }
-                >
-                  전체 적용 {!session ? '(로그인 필요)' : undefined}
-                </Button>
-              )}
+              tabIndex === 0 &&
+                (!publicRuntimeConfig.hideApplyButton ||
+                  session?.userState === 'admin') && (
+                  <Button
+                    size='large'
+                    disabled={!session}
+                    icon='upload-line'
+                    onClick={() =>
+                      data && data.length
+                        ? isUploadable(
+                            session,
+                            () => {
+                              setOpenProcessPopup(true)
+                            },
+                            () => {
+                              window.location.hash = 'apply'
+                              setOpenProcessPopup(true)
+                              setNeedPermission(true)
+                            }
+                          )
+                        : toast('업로드 대기 중인 영상이 없어요.')
+                    }
+                  >
+                    전체 적용 {!session ? '(로그인 필요)' : undefined}
+                  </Button>
+                )}
             </div>
           </div>
         </div>

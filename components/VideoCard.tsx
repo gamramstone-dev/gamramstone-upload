@@ -246,7 +246,8 @@ export const CaptionCard = ({
                         >
                           <Button icon='link'>자막 수동 적용</Button>
                         </a>
-                        {!publicRuntimeConfig.hideApplyButton && (
+                        {(!publicRuntimeConfig.hideApplyButton ||
+                          session?.userState === 'admin') && (
                           <Button
                             disabled={session === null}
                             icon='file-upload-line'
@@ -378,15 +379,13 @@ export const VideoProjectCard = ({
           setTagIndex(index)
         }}
       ></VideoCard>
-      {
-        <CaptionCard
-          open={open}
-          defaultTabIndex={tagIndex}
-          video={video}
-          languages={video.captions}
-          onUploadAuth={onUploadAuth}
-        ></CaptionCard>
-      }
+      <CaptionCard
+        open={open}
+        defaultTabIndex={tagIndex}
+        video={video}
+        languages={video.captions}
+        onUploadAuth={onUploadAuth}
+      ></CaptionCard>
     </>
   )
 }

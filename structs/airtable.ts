@@ -41,6 +41,14 @@ export interface AirtableLanguageField {
   files: CaptionFile[]
 }
 
+const getFirstItem = (items: unknown) => {
+  if (Array.isArray(items)) {
+    return items[0]
+  }
+
+  return items
+}
+
 export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
   const syncName = `${name} 진행 상황`
   if (
@@ -144,11 +152,11 @@ export const extractVideoDataFields = (
 ): VideoWithCaption[] => {
   return data.map(v => ({
     id: v.id,
-    url: (v.fields['URL'] as string[])[0],
-    title: (v.fields['제목'] as string[])[0],
-    description: (v.fields['세부 정보'] as string[])[0],
-    uploadDate: (v.fields['업로드 날짜'] as string[])[0],
-    editDate: (v.fields['최근 수정'] as string[])[0],
+    url: getFirstItem(v.fields['URL']),
+    title: getFirstItem(v.fields['제목']),
+    description: getFirstItem(v.fields['세부 정보']),
+    uploadDate: getFirstItem(v.fields['업로드 날짜']),
+    editDate: getFirstItem(v.fields['최근 수정']),
     captions: extractNationalValue(v),
   }))
 }
