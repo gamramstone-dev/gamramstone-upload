@@ -99,6 +99,10 @@ html[data-dark-mode='true'] {
       background: #293a1c;
     }
   }
+
+  .privacy {
+    color: $dark-link-color;
+  }
 }
 
 .card {
@@ -109,15 +113,15 @@ html[data-dark-mode='true'] {
   user-select: none;
 
   &[data-id='wakgood'] {
-    background: #fcf2e3;
+    background: #f8f1e7;
   }
 
   &[data-id='waktaverse'] {
-    background: #d5e9e4;
+    background: #e5f8f3;
   }
 
   &[data-id='ine'] {
-    background: #f4ecf8;
+    background: #f2eaf7;
   }
 
   &[data-id='jingburger'] {
@@ -125,19 +129,19 @@ html[data-dark-mode='true'] {
   }
 
   &[data-id='lilpa'] {
-    background: #d8d4dd;
+    background: #ebe7f1;
   }
 
   &[data-id='jururu'] {
-    background: #f6e4e5;
+    background: #f3dddd;
   }
 
   &[data-id='gosegu'] {
-    background: #e5f6fb;
+    background: #e6f5fa;
   }
 
   &[data-id='viichan'] {
-    background: #eef1e4;
+    background: #f5f8ea;
   }
 
   padding: 48px 32px;
@@ -203,7 +207,7 @@ html[data-dark-mode='true'] {
     font-weight: bold;
     letter-spacing: -1px;
     text-align: center;
-    margin-top: 16px;
+    margin-top: 32px;
 
     @media screen and (max-width: $tablet) {
       font-size: 0.9em;
@@ -233,12 +237,11 @@ html[data-dark-mode='true'] {
     font-size: 0.9em;
   }
 
-
   letter-spacing: -0.3px;
   padding-bottom: 20vh;
 
   a {
-    color: rgb(15, 116, 218);
+    color: $link-color;
   }
 }
 

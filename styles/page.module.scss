@@ -35,6 +35,10 @@
 html[data-dark-mode='true'] {
   .footer {
     background-color: rgb(22, 28, 34);
+
+    a {
+      color: $dark-link-color;
+    }
   }
 }
 
@@ -69,7 +73,7 @@ html[data-dark-mode='true'] {
   }
 
   a {
-    color: rgb(15, 116, 218);
+    color: $link-color;
   }
 
   line-height: 120%;

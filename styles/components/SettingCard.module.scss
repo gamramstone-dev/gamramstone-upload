@@ -1,6 +1,8 @@
-html[data-dark-mode="true"] {
+@import '../constants.scss';
+
+html[data-dark-mode='true'] {
   .settingCard {
-    background-color: #1B242C;
+    background-color: $dark-shades-1;
   }
 }
 

@@ -1,3 +1,5 @@
+@import "../constants.scss";
+
 .popupWrapper {
   position: fixed;
   top: 0;
@@ -27,8 +29,14 @@ html[data-dark-mode='true'] {
   }
 
   .popup {
-    background: #1b242c;
+    background: $dark-shades-1;
     box-shadow: unset;
+  }
+
+  .statusPage {
+    a {
+      color: $dark-link-color;
+    }
   }
 }
 
@@ -306,6 +314,6 @@ html[data-dark-mode='true'] {
   }
 
   a {
-    color: rgb(15, 116, 218);
+    color: $link-color;
   }
 }

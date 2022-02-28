@@ -7,21 +7,40 @@ html[data-dark-mode='true'] {
     }
   }
 
+  .copyable {
+    color: $dark-link-color;
+    cursor: pointer;
+    user-select: none;
+  
+    &:hover {
+      color: darken($dark-link-color, 10%);
+    }
+  
+    &:active {
+      color: darken($dark-link-color, 20%);
+    }
+  }
+
   .captionCard {
-    background-color: #1b242c;
+    background-color: $dark-shades-1;
+  }
+
+  .debug {
+    a {
+      color: $dark-link-color;
+    }
   }
 
   .status {
-    background-color: #353c47;
+    background-color: #252930;
+    color: white;
 
     &[data-status='waiting'] {
-      background-color: rgb(19, 102, 51);
-      color: white;
+      background-color: rgb(10, 63, 31);
     }
 
     &[data-status='done'] {
-      background-color: rgb(8, 55, 109);
-      color: white;
+      background-color: rgb(10, 40, 75);
       opacity: 0.3;
     }
   }
@@ -72,6 +91,10 @@ html[data-dark-mode='true'] {
     display: flex;
     flex-direction: column;
 
+    h3 {
+      letter-spacing: -0.6px;
+    }
+
     .tags {
       margin-top: 10px;
       display: flex;
@@ -106,13 +129,13 @@ html[data-dark-mode='true'] {
     }
 
     &[data-status='waiting'] {
-      background-color: rgb(25, 168, 80);
-      color: white;
+      background-color: #1db658;
+      color: $dark-text-color;
     }
 
     &[data-status='done'] {
-      background-color: rgb(18, 106, 207);
-      color: white;
+      background-color: rgb(10, 85, 172);
+      color: $dark-text-color;
       opacity: 0.3;
 
       &:hover {
@@ -215,8 +238,6 @@ html[data-dark-mode='true'] {
   }
 }
 
-$link-color: #0a84e9;
-
 .copyable {
   color: $link-color;
   cursor: pointer;
@@ -258,6 +279,6 @@ $link-color: #0a84e9;
   line-height: 140%;
 
   a {
-    color: #0a84e9;
+    color: $link-color;
   }
 }
