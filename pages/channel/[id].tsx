@@ -7,7 +7,7 @@ import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
 import { classes } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
@@ -23,7 +23,7 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import { CustomUseSession } from '../../structs/setting'
 import { isUploadable } from '../../utils/client/requests'
-import { CustomStyles } from 'framer-motion/types/motion/types'
+import { CustomStyles } from '../test/colors'
 
 const { publicRuntimeConfig } = getConfig()
 
