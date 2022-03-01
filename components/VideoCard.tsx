@@ -188,7 +188,7 @@ export const CaptionCard = ({
 
   return (
     <AnimateSharedLayout>
-      <div className={styles.captionCard}>
+      <div className={styles.captionCard} data-open={open}>
         <AnimatePresence>
           {open && (
             <motion.div

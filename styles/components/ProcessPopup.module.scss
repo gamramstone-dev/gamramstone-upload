@@ -28,14 +28,14 @@ html[data-dark-mode='true'] {
     background: rgba(0, 0, 0, 0.4);
   }
 
-  .popup {
-    background: $dark-shades-1;
-    box-shadow: unset;
-  }
+  // .popup {
+  //   background: $dark-shades-1;
+  //   box-shadow: unset;
+  // }
 
   .statusPage {
     a {
-      color: $dark-link-color;
+      color: var(--color-primary, $dark-link-color);
     }
   }
 }
@@ -49,7 +49,8 @@ html[data-dark-mode='true'] {
   z-index: 1100;
   overflow: hidden;
 
-  background: #fff;
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #fff);
   border-radius: 16px;
 
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.12);
@@ -314,6 +315,6 @@ html[data-dark-mode='true'] {
   }
 
   a {
-    color: $link-color;
+    color: var(--color-primary, $link-color);
   }
 }

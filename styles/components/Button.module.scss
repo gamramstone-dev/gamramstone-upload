@@ -7,33 +7,13 @@ $dark-secondary: #353b3f;
 html[data-dark-mode='true'] {
   .button {
     &.primary {
-      background-color: $dark-primary;
-      color: white;
-
-      &:not(.disabled) {
-        &:hover {
-          background-color: darken($dark-primary, 5%);
-        }
-
-        &:active {
-          background-color: darken($dark-primary, 10%);
-        }
-      }
+      background-color: var(--color-primary, $dark-primary);
+      color: var(--color-on-primary, white);
     }
 
     &.secondary {
-      background-color: $dark-secondary;
-      color: white;
-
-      &:not(.disabled) {
-        &:hover {
-          background-color: darken($dark-secondary, 5%);
-        }
-
-        &:active {
-          background-color: darken($dark-secondary, 10%);
-        }
-      }
+      background-color: var(--color-on-secondary, $dark-secondary);
+      color: var(--color-secondary, white);
     }
   }
 }
@@ -46,7 +26,7 @@ html[data-dark-mode='true'] {
   padding: 6px 12px;
   border-radius: var(--round, 0);
   cursor: pointer;
-  transition: 0.23s background cubic-bezier(0.19, 1, 0.22, 1);
+  transition: 0.23s opacity cubic-bezier(0.19, 1, 0.22, 1);
   user-select: none;
 
   .icon {
@@ -71,31 +51,31 @@ html[data-dark-mode='true'] {
   }
 
   &.primary {
-    background-color: $primary;
-    color: #fff;
+    background-color: var(--color-primary, $primary);
+    color: var(--color-on-primary, #fff);
 
     &:not(.disabled) {
       &:hover {
-        background-color: darken($primary, 5%);
+        opacity: 0.8;
       }
 
       &:active {
-        background-color: darken($primary, 10%);
+        opacity: 0.6;
       }
     }
   }
 
   &.secondary {
-    background-color: $secondary;
-    color: black;
+    background-color: var(--color-on-secondary, $secondary);
+    color: var(--color-secondary, #000);
 
     &:not(.disabled) {
       &:hover {
-        background-color: darken($secondary, 5%);
+        opacity: 0.8;
       }
 
       &:active {
-        background-color: darken($secondary, 10%);
+        opacity: 0.6;
       }
     }
   }

@@ -3,16 +3,17 @@
 html[data-dark-mode='true'] {
   .tabButton {
     &::before {
-      border-bottom: 3px solid #fff;
+      border-bottom: 3px solid var(--color-primary, #fff);
     }
 
     &[data-active='true'] {
-      color: #fff;
+      color: var(--color-primary, #fff)
     }
   }
 
   .ghostButton {
-    background: rgba(230, 230, 230, 0.06);
+    opacity: 0.16;
+    background:var(--color-primary, rgb(230, 230, 230));
   }
 }
 
@@ -31,7 +32,7 @@ html[data-dark-mode='true'] {
     padding: 8px 24px;
   }
 
-  color: #999;
+  color: var(--color-surface-variant-on, #999);
 
   &::before {
     content: ' ';
@@ -40,14 +41,14 @@ html[data-dark-mode='true'] {
     top: 0;
     width: 100%;
     height: 100%;
-    border-bottom: 3px solid #000;
+    border-bottom: 3px solid var(--color-primary, #000);
 
     transition: 0.1s opacity cubic-bezier(0.19, 1, 0.22, 1);
     opacity: 0;
   }
 
   &[data-active='true'] {
-    color: #000;
+    color: var(--color-primary, #000);
 
     &::before {
       opacity: 1;
@@ -68,14 +69,14 @@ html[data-dark-mode='true'] {
   border-radius: 16px;
   width: var(--width, 50px);
   transform: translateX(var(--left, 0px));
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--color-primary, #000);
   pointer-events: none;
 
   transition: 0.23s opacity cubic-bezier(0.19, 1, 0.22, 1);
   opacity: 0;
 
   &[data-visible='true'] {
-    opacity: 1;
+    opacity: 0.06;
   }
 }
 

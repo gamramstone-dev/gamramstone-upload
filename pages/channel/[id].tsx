@@ -23,6 +23,7 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import { CustomUseSession } from '../../structs/setting'
 import { isUploadable } from '../../utils/client/requests'
+import { CustomStyles } from 'framer-motion/types/motion/types'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -148,8 +149,47 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     }
   }, [session?.permissionGranted])
 
+  useEffect(() => {
+    document.documentElement.dataset.memberScheme = id
+
+    return () => {
+      document.documentElement.dataset.memberScheme = ''
+    }
+  }, [id])
+
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={
+        {
+          '--color-primary': `var(--${id}-color-primary)`,
+          '--color-on-primary': `var(--${id}-color-on-primary)`,
+          '--color-primary-container': `var(--${id}-color-primary-container)`,
+          '--color-on-primary-container': `var(--${id}-color-on-primary-container)`,
+          '--color-secondary': `var(--${id}-color-secondary)`,
+          '--color-on-secondary': `var(--${id}-color-on-secondary)`,
+          '--color-secondary-container': `var(--${id}-color-secondary-container)`,
+          '--color-on-secondary-container': `var(--${id}-color-on-secondary-container)`,
+          '--color-tertiary': `var(--${id}-color-tertiary)`,
+          '--color-on-tertiary': `var(--${id}-color-on-tertiary)`,
+          '--color-tertiary-container': `var(--${id}-color-tertiary-container)`,
+          '--color-on-tertiary-container': `var(--${id}-color-on-tertiary-container)`,
+          '--color-error': `var(--${id}-color-error)`,
+          '--color-on-error': `var(--${id}-color-on-error)`,
+          '--color-error-container': `var(--${id}-color-error-container)`,
+          '--color-on-error-container': `var(--${id}-color-on-error-container)`,
+          '--color-outline': `var(--${id}-color-outline)`,
+          '--color-background': `var(--${id}-color-background)`,
+          '--color-on-background': `var(--${id}-color-on-background)`,
+          '--color-surface': `var(--${id}-color-surface)`,
+          '--color-on-surface': `var(--${id}-color-on-surface)`,
+          '--color-surface-variant': `var(--${id}-color-surface-variant)`,
+          '--color-on-surface-variant': `var(--${id}-color-on-surface-variant)`,
+          '--color-inverse-surface': `var(--${id}-color-inverse-surface)`,
+          '--color-inverse-on-surface': `var(--${id}-color-inverse-on-surface)`,
+        } as CustomStyles
+      }
+    >
       <Head>
         <title>{Channels[id].name} - 감람스톤</title>
         <meta
