@@ -183,7 +183,7 @@ export const sha256 = (data: string) =>
     .digest('hex')
 
 export const setVideosCache = async (id: string, data: string) => {
-  const result = await setCache(`videos:${sha256(id)}`, data, 60 * 60)
+  const result = await setCache(`videos:${sha256(id)}`, data, 60 * 40)
 
   if (result.error) {
     throw new Error(result.error)
