@@ -1,6 +1,7 @@
 import {
   auth,
   del,
+  get,
   hdel,
   hexists,
   hget,
@@ -12,6 +13,9 @@ import {
 import { v4 } from 'uuid'
 import { DatabaseUser } from '../../structs/user'
 import { objectToJSON } from '../string'
+
+import crypto from 'crypto'
+import { setCache } from './cache'
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
 
@@ -164,6 +168,32 @@ export const updateUser = async (id: string, data: Partial<DatabaseUser>) => {
 
 export const updateUserSettings = async (id: string, settings: string) => {
   const result = await hmset(`user:${id}`, 'settings', settings)
+
+  if (result.error) {
+    throw new Error(result.error)
+  }
+
+  return result.data
+}
+
+export const sha256 = (data: string) =>
+  crypto
+    .createHash('sha256')
+    .update(data)
+    .digest('hex')
+
+export const setVideosCache = async (id: string, data: string) => {
+  const result = await setCache(`videos:${sha256(id)}`, data, 60 * 60)
+
+  if (result.error) {
+    throw new Error(result.error)
+  }
+
+  return result.data
+}
+
+export const getVideoCache = async (id: string) => {
+  const result = await get(`videos:${sha256(id)}`)
 
   if (result.error) {
     throw new Error(result.error)

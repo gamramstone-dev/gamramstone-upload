@@ -6,17 +6,13 @@ import {
   IndividualLanguages,
   isValidLanguageName,
   LanguageNames,
-  OnWorkingLanguageCode,
 } from '../../../structs/airtable'
 import { apify } from '../../../structs/api'
 import { Channels, getChannelIDByName } from '../../../structs/channels'
 import { chunks } from '../../../utils/items'
 import discord, { DiscordEmbed } from '../../../utils/server/discord'
+import { getYouTubeLocalizedVideos, getYouTubeSubtitleList } from '../../../utils/server/youtube'
 import { getYouTubeId } from '../../../utils/string'
-import {
-  getYouTubeLocalizedVideos,
-  getYouTubeSubtitleList,
-} from '../../../utils/youtube'
 
 const base = new Airtable({
   apiKey: process.env.AIRTABLE_API_KEY,
@@ -39,11 +35,11 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     !isValidLanguageName(lang) ||
     typeof LanguageNames[lang] === 'undefined'
   ) {
-    throw new Error('invalid language code')
+    throw new Error('400: invalid language code')
   }
 
   if (typeof video === 'object') {
-    throw new Error('invalid video')
+    throw new Error('400: invalid video')
   }
 
   console.log(`[updateState] started for ${lang}.`)
@@ -113,8 +109,10 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       await getYouTubeSubtitleList(video.id, process.env.YOUTUBE_API_KEY!)
     ).filter(v => v.trackKind !== 'asr' && v.language === lang)
 
-    // CC를 작업하지 않도록 마킹이 되어 있는 경우 -> 업로드
-    // Airtable에 업로드된 자막 파일이 있고, YouTube에 자막이 있는 경우 -> 업로드
+    /**
+     * CC를 작업하지 않도록 마킹이 되어 있는 경우 -> 업로드
+     * Airtable에 업로드된 자막 파일이 있고, YouTube에 자막이 있는 경우 -> 업로드
+     */
     if (
       caption.length &&
       airtableVideos[indexes[i]].files.map(
@@ -129,6 +127,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(`[updateState] nothing to update.`)
   }
 
+  /**
+   * Discord 채널에 업로드 알림을 보내는 부분입니다.
+   */
   const discordMessages: DiscordEmbed[] = []
 
   for (let i = 0; i < results.length; i++) {

@@ -2,17 +2,14 @@ import { LanguageCode } from '../structs/airtable'
 
 import { v4 as uuid } from 'uuid'
 import { localeTimeDifference } from './string'
-import { chunks } from './items'
 
-const fields = ['localizations']
-
-interface YouTubeAPIResponse {
+export interface YouTubeAPIResponse {
   kind: string
   id: string
   etag: string
 }
 
-interface YouTubeVideo {
+export interface YouTubeVideo {
   kind: 'youtube#video'
   etag: string
   id: string
@@ -25,7 +22,7 @@ interface YouTubeVideo {
   >
 }
 
-interface YouTubeCaptionResponse extends YouTubeAPIResponse {
+export interface YouTubeCaptionResponse extends YouTubeAPIResponse {
   snippet: {
     videoId: string
     lastUpdated: string
@@ -43,48 +40,11 @@ interface YouTubeCaptionResponse extends YouTubeAPIResponse {
   }
 }
 
-interface YouTubeCaption {
+export interface YouTubeCaption {
   id: string
   lastUpdated: string
   trackKind: string
   language: LanguageCode
-}
-
-const getVideoLocalizedMetadata = (data: YouTubeVideo) =>
-  (data.localizations !== null &&
-    typeof data.localizations === 'object' &&
-    data.localizations) ||
-  undefined
-
-export const getYouTubeLocalizedVideos = async (ids: string[], key: string) => {
-  const reqs = [...chunks(ids, 50)]
-
-  const ress = await Promise.all(
-    reqs.map(v =>
-      fetch(
-        `https://www.googleapis.com/youtube/v3/videos?part=${fields.join(
-          ','
-        )}&id=${v.join(',')}&key=${key}`
-      ).then(v => v.json())
-    )
-  )
-
-  for (let i = 0; i < ress.length; i++) {
-    if (ress[i].error) {
-      throw new Error(ress[i].error.message)
-    }
-  }
-
-  const videos = [
-    ...ress.map(res =>
-      res.items.map((v: YouTubeVideo) => ({
-        id: v.id,
-        metadatas: getVideoLocalizedMetadata(v),
-      }))
-    ),
-  ].flat(2)
-
-  return videos
 }
 
 export const getMyYouTubeChannelID = async (token: string) => {
@@ -106,26 +66,6 @@ export const getMyYouTubeChannelID = async (token: string) => {
   }
 
   return result.items[0].id
-}
-
-export const getYouTubeSubtitleList = async (id: string, key: string) => {
-  const res = await fetch(
-    `https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=${id}&key=${key}`
-  )
-
-  const data = await res.json()
-
-  if (data.error) {
-    throw new Error(data.error.message)
-  }
-
-  return data.items.map((v: YouTubeCaptionResponse) => ({
-    id: v.id,
-    videoId: v.snippet.videoId,
-    lastUpdated: v.snippet.lastUpdated,
-    trackKind: v.snippet.trackKind,
-    language: v.snippet.language,
-  })) as YouTubeCaption[]
 }
 
 const checkQuotaExceedError = (error: any) => {
@@ -190,7 +130,7 @@ export const validateAccessToken = async (token: string) => {
 
   if (result.error_description) {
     throw new Error(
-      `토큰 검증 오류 : ${result.error_description}, 로그아웃 후 다시 로그인해주세요.`
+      `토큰이 만료됐어요. 로그아웃 후 다시 로그인해주세요.`
     )
   }
 
