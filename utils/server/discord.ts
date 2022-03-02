@@ -41,13 +41,13 @@ export const sendSimpleMessage = async (url: string, message: string) => {
       // content: message,
     }),
   }).then(v => {
-    console.log(v.headers)
-
     return v.json()
   })
 
-  if (result.status !== 200) {
-    throw new Error('failed to send message')
+  if (typeof result.id === 'undefined') {
+    console.error(result)
+
+    throw new Error('failed to send a message')
   }
 
   return result
@@ -63,13 +63,13 @@ export const sendEmbedMessage = async (url: string, data: DiscordEmbed[]) => {
       embeds: data,
     }),
   }).then(v => {
-    console.log(v.headers)
-
     return v.json()
   })
 
-  if (result.status !== 200) {
-    throw new Error('failed to send message')
+  if (typeof result.id === 'undefined') {
+    console.error(result)
+
+    throw new Error('failed to send a message')
   }
 
   return result
@@ -77,7 +77,7 @@ export const sendEmbedMessage = async (url: string, data: DiscordEmbed[]) => {
 
 const functions = {
   send: sendSimpleMessage,
-  sendFancy: sendEmbedMessage
+  sendFancy: sendEmbedMessage,
 }
 
 export default functions

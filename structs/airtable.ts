@@ -41,7 +41,7 @@ export interface AirtableLanguageField {
   files: CaptionFile[]
 }
 
-const getFirstItem = (items: unknown) => {
+export const getFirstItem = (items: unknown) => {
   if (Array.isArray(items)) {
     return items[0]
   }
@@ -165,28 +165,29 @@ export const extractLanguageSpecificData = (
   language: OnWorkingLanguageCode,
   data: Records<FieldSet>
 ): AirtableLanguageField[] => {
-  return data.map(v => ({
-    id: v.id,
-    url: (v.fields['URL'] as string[])[0],
-    channel: v.fields['채널'] as string,
-    noCC:
-      (v.fields[
+  return data.map(v => {
+    return {
+      id: v.id,
+      url: getFirstItem(v.fields['URL'] as string[]),
+      channel: getFirstItem(v.fields['채널']),
+      noCC:
         (checkIsIndividualLanguage(language)
-          ? ''
-          : `${LanguageNames[language]} `) + '진행 상황'
-      ] as string[])[0] === '해당 없음 (자막 필요 없는 영상)',
-    originalTitle: v.fields['제목'] as string,
-    title: v.fields[`${LanguageNames[language]} 제목`] as string,
-    description: v.fields[`${LanguageNames[language]} 세부 정보`] as string,
-    uploadDate: (v.fields['업로드 날짜'] as string[])[0],
-    editDate: v.fields['Last Modified'] as string,
-    files:
-      typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
-        ? []
-        : filterCaptionFiles(
-            v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
-          ),
-  }))
+          ? getFirstItem(v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'])
+          : getFirstItem(v.fields[`${LanguageNames[language]} 진행 상황`])) ===
+        '해당없음 (자막 필요 없는 영상)',
+      originalTitle: getFirstItem(v.fields['제목']),
+      title: getFirstItem(v.fields[`${LanguageNames[language]} 제목`]),
+      description: getFirstItem(v.fields[`${LanguageNames[language]} 세부 정보`]),
+      uploadDate: getFirstItem(v.fields['업로드 날짜']),
+      editDate: getFirstItem(v.fields['Last Modified']),
+      files:
+        typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
+          ? []
+          : filterCaptionFiles(
+              v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
+            ),
+    }
+  })
 }
 
 export const ISO639 = [

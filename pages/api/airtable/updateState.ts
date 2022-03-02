@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import {
   AirtableLanguageField,
   extractLanguageSpecificData,
+  getFirstItem,
   IndividualLanguages,
   isValidLanguageName,
   LanguageNames,
@@ -11,7 +12,10 @@ import { apify } from '../../../structs/api'
 import { Channels, getChannelIDByName } from '../../../structs/channels'
 import { chunks } from '../../../utils/items'
 import discord, { DiscordEmbed } from '../../../utils/server/discord'
-import { getYouTubeLocalizedVideos, getYouTubeSubtitleList } from '../../../utils/server/youtube'
+import {
+  getYouTubeLocalizedVideos,
+  getYouTubeSubtitleList,
+} from '../../../utils/server/youtube'
 import { getYouTubeId } from '../../../utils/string'
 
 const base = new Airtable({
@@ -73,31 +77,34 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       typeof v.metadatas[lang] !== 'undefined'
   )
 
-  const indexes = videos
-    .map(
-      (v, i) =>
-        typeof v.metadatas !== 'undefined' &&
-        typeof v.metadatas[lang] !== 'undefined' &&
-        i
-    )
-    .filter(v => typeof v === 'number') as number[]
-
   let results: AirtableLanguageField[] = []
 
   for (let i = 0; i < localizedVideos.length; i++) {
     const video = localizedVideos[i]
+    const record = airtableVideos.find(v => getYouTubeId(v.url) === video.id)
 
-    // 검증 과정은 내용이 적용한 내용이 업로더에 의해 바뀔 수 있기 때문에 보류합니다.
-    // if (
-    //   video.metadatas[lang].title !== airtableVideos[indexes[i]].title ||
-    //   video.metadatas[lang].description !==
-    //     airtableVideos[indexes[i]].description
-    // ) {
-    //   continue
-    // }
+    if (!record) {
+      continue
+    }
 
-    if (airtableVideos[indexes[i]].noCC) {
-      results.push(airtableVideos[indexes[i]])
+    console.log(
+      `[updateState] started for ${lang} - ${video.id}, isNoCC: ${record.noCC}`
+    )
+
+    /**
+     * 검증 과정은 내용이 적용한 내용이 업로더에 의해 바뀔 수 있기 때문에 보류합니다.
+     * 
+     *  if (
+     *    video.metadatas[lang].title !== record.title ||
+     *    video.metadatas[lang].description !== record.description
+     *  ) {
+     *    continue
+     *  }
+     */
+
+
+    if (record.noCC) {
+      results.push(record)
 
       continue
     }
@@ -115,11 +122,11 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
      */
     if (
       caption.length &&
-      airtableVideos[indexes[i]].files.map(
+      record.files.map(
         v => v.filename.endsWith('.ytt') || v.filename.endsWith('.srt')
       ).length > 0
     ) {
-      results.push(airtableVideos[indexes[i]])
+      results.push(record)
     }
   }
 
@@ -140,7 +147,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     const channelId = getChannelIDByName(results[i].channel)
 
     discordMessages.push({
-      title: results[i].originalTitle,
+      title: getFirstItem(results[i].originalTitle),
       color: channelId
         ? parseInt(Channels[channelId].color.replace(/#/g, ''), 16)
         : 0x118bf5,
@@ -159,6 +166,10 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
         : undefined,
     })
 
+    console.log(
+      `[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} is now marked as done (${results[i].id})`
+    )
+
     await uploadBase.update(results[i].id, {
       [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
       '진행 상황']: '유튜브 적용 완료',
@@ -175,7 +186,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const env = process.env[
-      `DISCORD_${isMajorLanguage ? item[i].toUpperCase() : 'EN'}_HOOK`
+      `DISCORD_${isMajorLanguage ? lang.toUpperCase() : 'EN'}_HOOK`
     ]!
 
     if (env) {
