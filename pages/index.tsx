@@ -22,6 +22,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
           <FadeInImage
             src={channel.image}
             alt={channel.name}
+            unoptimized
             width={200}
             height={200}
           />

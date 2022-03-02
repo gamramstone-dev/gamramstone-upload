@@ -35,7 +35,8 @@ export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
     <FadeInImage
       src={`https://i.ytimg.com/vi/${id}/${
         error ? 'hqdefault' : 'mqdefault'
-      }.jpg`}
+        }.jpg`}
+      unoptimized
       alt='YouTube 썸네일'
       onError={() => !error && setError(true)}
       layout='fill'
