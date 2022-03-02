@@ -25,7 +25,9 @@ const baseHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
-    hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true'
+    hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true',
+    gitHash: process.env.VERCEL_GIT_COMMIT_SHA,
+    gitMessage: process.env.VERCEL_GIT_COMMIT_REF,
   },
   images: {
     domains: [

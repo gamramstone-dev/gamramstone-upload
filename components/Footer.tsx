@@ -1,8 +1,11 @@
+import getConfig from 'next/config'
 import Link from 'next/link'
 import pageStyles from '../styles/page.module.scss'
 import { classes } from '../utils/string'
 
 export const Footer = () => {
+  const { publicRuntimeConfig } = getConfig()
+
   return (
     <div className={pageStyles.footer}>
       <div className={pageStyles.contents}>
@@ -22,7 +25,7 @@ export const Footer = () => {
           Build:{' '}
           {process.env.NODE_ENV === 'development'
             ? `local build`
-            : `#${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA} (${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_MESSAGE})`}
+            : `#${publicRuntimeConfig.gitHash} on ${publicRuntimeConfig.gitBranch} (${publicRuntimeConfig.gitMessage})`}
         </div>
       </div>
     </div>
