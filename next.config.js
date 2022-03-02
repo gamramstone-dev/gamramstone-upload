@@ -27,7 +27,9 @@ const nextConfig = {
   publicRuntimeConfig: {
     hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true',
     gitHash: process.env.VERCEL_GIT_COMMIT_SHA,
-    gitMessage: process.env.VERCEL_GIT_COMMIT_REF,
+    gitBranch: process.env.VERCEL_GIT_COMMIT_REF,
+    gitMessage: process.env.VERCEL_GIT_COMMIT_MESSAGE,
+    gitUser: process.env.VERCEL_GIT_COMMIT_AUTHOR_NAME
   },
   images: {
     domains: [

@@ -25,7 +25,7 @@ export const Footer = () => {
           Build:{' '}
           {process.env.NODE_ENV === 'development'
             ? `local build`
-            : `#${publicRuntimeConfig.gitHash} on ${publicRuntimeConfig.gitBranch} (${publicRuntimeConfig.gitMessage})`}
+            : `#${publicRuntimeConfig.gitHash} on ${publicRuntimeConfig.gitBranch} (${publicRuntimeConfig.gitMessage}) by ${publicRuntimeConfig.gitUser}`}
         </div>
       </div>
     </div>
