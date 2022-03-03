@@ -93,11 +93,6 @@ const Account: NextPage = () => {
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents, styles.heading)}>
           <div className={styles.inner}>
-            <span>
-              {isWakgoodHyeong(session?.user?.name)
-                ? `왁굳형!`
-                : `${session?.user?.name} 님,`}
-            </span>
             <span>안녕하세요!</span>
           </div>
         </div>
