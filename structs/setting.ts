@@ -41,9 +41,19 @@ export const Settings: Record<
   },
 }
 
+const initialSavedDarkMode =
+  typeof window === 'undefined'
+    ? null
+    : localStorage.getItem('gamram.settings.darkMode')
+
 export const darkModeAtom = atom({
   key: 'darkMode',
-  default: false,
+  default:
+    typeof window === 'undefined'
+      ? false
+      : initialSavedDarkMode === null
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : initialSavedDarkMode === '1',
 })
 
 export const SettingsAtom: Record<
@@ -66,6 +76,10 @@ export const globalSettings = selector<GamramSettings>({
     }
 
     ;(Object.keys(value) as SettingID[]).forEach(key => {
+      if ('darkMode' in SettingsAtom) {
+        localStorage.setItem(`gamram.settings.darkMode`, value[key] ? '1' : '0')
+      }
+
       set(SettingsAtom[key], value[key])
     })
   },

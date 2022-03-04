@@ -22,10 +22,6 @@ import Link from 'next/link'
 import { UserStateNames } from '../structs/user'
 import { Button } from '../components/Button'
 
-const isWakgoodHyeong = (name?: unknown) => {
-  return name === '우왁굳의 게임방송' || name === '왁타버스 WAKTAVERSE'
-}
-
 const Account: NextPage = () => {
   const router = useRouter()
   const { data: session } = useSession({
