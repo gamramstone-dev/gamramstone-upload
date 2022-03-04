@@ -31,7 +31,7 @@ const backgroundVariants: Variants = {
 const popupVariants: Variants = {
   initial: {
     opacity: 0,
-    translateY: 50,
+    translateY: 25,
   },
   visible: {
     opacity: 1,
@@ -142,7 +142,9 @@ export const ProcessPopup = ({
   token,
   noPermission,
 }: ProcessPopupProps) => {
-  useBodyLock(true)
+  const [closing, setClosing] = useState(false)
+
+  useBodyLock(!closing && true)
 
   const [step, setStep] = useState(0)
   const previousStep = usePreviousValue(step)
@@ -156,6 +158,15 @@ export const ProcessPopup = ({
   const [pause, setPause] = useState<boolean>(false)
 
   const errorStreaks = useRef(0)
+
+  const localCloseHandler = useCallback(() => {
+    if (!close) {
+      return
+    }
+
+    setClosing(true)
+    close()
+  }, [close])
 
   useEffect(() => {
     if (!currentTaskDone) {
@@ -267,7 +278,7 @@ export const ProcessPopup = ({
         {data && data.length}개의 영상에 자동으로 자막을 달까요?
       </h1>
       <div className={styles.actions}>
-        <Button theme='secondary' icon='close' onClick={close}>
+        <Button theme='secondary' icon='close' onClick={localCloseHandler}>
           닫기
         </Button>
         <Button theme='primary' onClick={() => setStep(1)}>
@@ -303,7 +314,7 @@ export const ProcessPopup = ({
             에러가 계속 발생하고 있어요. 계속 진행할까요?
           </h1>
           <div className={styles.actions}>
-            <Button theme='secondary' onClick={close}>
+            <Button theme='secondary' onClick={localCloseHandler}>
               취소
             </Button>
             <Button
@@ -364,7 +375,7 @@ export const ProcessPopup = ({
       </p>
 
       <div className={styles.actions}>
-        <Button theme='secondary' icon='close-line' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
           닫기
         </Button>
         <Button
@@ -402,7 +413,7 @@ export const ProcessPopup = ({
       </h1>
 
       <div className={styles.actions}>
-        <Button theme='secondary' icon='close-line' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
           닫기
         </Button>
         <Button
@@ -437,7 +448,7 @@ export const ProcessPopup = ({
       </div>
 
       <div className={styles.actions}>
-        <Button theme='secondary' icon='close-line' onClick={close}>
+        <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
           닫기
         </Button>
         <Button
@@ -452,7 +463,7 @@ export const ProcessPopup = ({
   )
 
   return (
-    <div className={styles.popupWrapper}>
+    <div className={styles.popupWrapper} data-closing={closing}>
       <motion.div
         className={styles.background}
         initial='initial'
@@ -466,7 +477,7 @@ export const ProcessPopup = ({
         }}
         onClick={ev => {
           ev.stopPropagation()
-          step !== 1 && close && close()
+          step !== 1 && localCloseHandler()
         }}
       ></motion.div>
       <motion.div
@@ -477,8 +488,7 @@ export const ProcessPopup = ({
         variants={popupVariants}
         transition={{
           type: 'spring',
-          stiffness: 1000,
-          damping: 100,
+          duration: 0.45
         }}
       >
         <AnimatePresence custom={step - previousStep}>

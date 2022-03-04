@@ -44,7 +44,7 @@ html[data-dark-mode='true'] {
 
   @media screen and (max-width: $mobile) {
     font-size: 0.95em;
-    padding: 8px 24px;
+    padding: 12px 24px;
   }
 
   .rippleContainer {
@@ -126,7 +126,6 @@ html[data-dark-mode='true'] {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: 16px;
 
   .buttons {
     display: flex;

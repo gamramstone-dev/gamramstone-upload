@@ -12,6 +12,14 @@ html[data-dark-mode='true'] {
   border-radius: 16px;
   padding: 32px 16px;
 
+  @media screen and (max-width: $tablet) {
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.9em;
+  }
+
   a {
     color: rgb(0, 110, 255);
   }

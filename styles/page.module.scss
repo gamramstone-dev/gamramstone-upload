@@ -76,6 +76,14 @@ html[data-dark-mode='true'] {
   display: flex;
   margin-top: 20vh;
 
+  @media screen and (max-width: $tablet) {
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.9em;
+  }
+
   .contents {
     max-width: $page;
     width: 100%;

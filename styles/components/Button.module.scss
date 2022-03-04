@@ -1,3 +1,5 @@
+@import "../constants.scss";
+
 $primary: #35a5f0;
 $dark-primary: #0c455c;
 
@@ -73,16 +75,40 @@ html[data-dark-mode='true'] {
     aspect-ratio: 1 / 1;
   }
 
+  @media screen and (max-width: $tablet) {
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.9em;
+  }
+
   .icon {
     margin-right: 6px;
   }
 
   &.large {
     padding: 12px 42px;
+
+    @media screen and (max-width: $tablet) {
+      padding: 10px 36px;
+    }
+  
+    @media screen and (max-width: $mobile) {
+      padding: 8px 30px;
+    }
   }
 
   &.medium {
     padding: 8px 32px;
+
+    @media screen and (max-width: $tablet) {
+      padding: 8px 30px;
+    }
+  
+    @media screen and (max-width: $mobile) {
+      padding: 8px 28px;
+    }
   }
 
   &.small {

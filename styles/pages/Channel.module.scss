@@ -4,10 +4,17 @@
   display: flex;
   justify-content: space-between;
 
-  // .actions {
-  //   margin-top: auto;
-  //   margin-bottom: auto;
-  // }
+  .actions {
+    display: flex;
+
+    @media screen and (max-width: $mobile) {
+      margin-left: 16px;
+    }
+
+    & > * {
+      margin: auto;
+    }
+  }
 }
 
 .channelCard {

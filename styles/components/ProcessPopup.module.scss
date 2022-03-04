@@ -8,6 +8,10 @@
   height: 100%;
   z-index: 999;
 
+  &[data-closing='true'] {
+    pointer-events: none;
+  }
+
   display: flex;
 }
 
@@ -54,6 +58,14 @@ html[data-dark-mode='true'] {
   border-radius: 16px;
 
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.12);
+
+  @media screen and (max-width: $tablet) {
+    font-size: 0.95em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 0.9em;
+  }
 }
 
 .thumbnails {
@@ -214,6 +226,11 @@ html[data-dark-mode='true'] {
 .tab {
   position: absolute;
   width: 100%;
+
+  @media screen and (max-width: $tablet) {
+    width: 80%;
+    left: 10%;
+  }
 }
 
 .contents {
@@ -226,6 +243,15 @@ html[data-dark-mode='true'] {
   letter-spacing: -1px;
   font-size: 1.5em;
   font-weight: 500;
+  word-break: keep-all;
+
+  @media screen and (max-width: $tablet) {
+    font-size: 1.3em;
+  }
+
+  @media screen and (max-width: $mobile) {
+    font-size: 1.25em;
+  }
 }
 
 @keyframes stripes {
