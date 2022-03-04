@@ -48,6 +48,8 @@
     border-radius: 50%;
     overflow: hidden;
 
+    isolation: isolate;
+
     width: 75px;
     height: 75px;
     margin-right: 16px;

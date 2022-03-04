@@ -17,6 +17,7 @@ import React, {
 import styles from '../styles/components/Tabs.module.scss'
 import { useDebouncer } from '../hooks/debouncer'
 import { RippleData } from '../structs/components/ripple'
+import { CustomStyles } from '../pages/test/colors'
 
 interface TabButtonProps {
   children: string
@@ -45,7 +46,7 @@ export const TabButton = ({
 
       setRipple({
         x: ev.nativeEvent.offsetX - rect.width / 2,
-        y: ev.nativeEvent.offsetY - rect.height / 2,
+        y: ev.nativeEvent.offsetY - rect.width / 2,
         startedAt: Date.now(),
       })
 
@@ -81,14 +82,16 @@ export const TabButton = ({
       {ripple && (
         <div
           className={styles.rippleContainer}
-          key={`ripple-${ripple.x}-${ripple.y}-${ripple.startedAt}`}
+          key={`ripple-${ripple.startedAt}`}
         >
           <span
             className={styles.ripple}
-            style={{
-              left: ripple.x,
-              top: ripple.y,
-            }}
+            style={
+              {
+                '--x': `${ripple.x}px`,
+                '--y': `${ripple.y}px`,
+              } as CustomStyles
+            }
           ></span>
         </div>
       )}

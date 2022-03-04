@@ -30,12 +30,12 @@ html[data-dark-mode='true'] {
 
 @keyframes rippleAnimation {
   0% {
-    transform: scale(0);
+    transform: translateX(var(--x, 0)) translateY(var(--y, 0)) scale(0);
     opacity: 0.5;
   }
 
   100% {
-    transform: scale(2);
+    transform: translateX(var(--x, 0)) translateY(var(--y, 0)) scale(2);
     opacity: 0;
   }
 }
@@ -59,17 +59,20 @@ html[data-dark-mode='true'] {
     top: 0;
     border-radius: 16px;
     overflow: hidden;
+
+    pointer-events: none;
   }
 
   .ripple {
     position: absolute;
-    min-width: 50px;
-    min-height: 50px;
     border-radius: 50%;
 
+    background: var(--color-primary, #fff);
     animation: rippleAnimation 900ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-origin: center;
     opacity: 0;
+
+    transform: translateX(var(--x, 0)) translateY(var(--y, 0)) scale(0);
 
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -81,6 +84,16 @@ html[data-dark-mode='true'] {
 
   @media screen and (max-width: $mobile) {
     font-size: 0.9em;
+  }
+
+  &:not(.disabled) {
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:active {
+      opacity: 0.8;
+    }
   }
 
   .icon {
@@ -124,16 +137,6 @@ html[data-dark-mode='true'] {
     background-color: var(--color-primary, $primary);
     color: var(--color-on-primary, #fff);
 
-    &:not(.disabled) {
-      &:hover {
-        opacity: 0.8;
-      }
-
-      &:active {
-        opacity: 0.6;
-      }
-    }
-
     .ripple {
       background: var(--color-primary, $primary);
     }
@@ -142,16 +145,6 @@ html[data-dark-mode='true'] {
   &.secondary {
     background-color: var(--color-on-secondary, $secondary);
     color: var(--color-secondary, #000);
-
-    &:not(.disabled) {
-      &:hover {
-        opacity: 0.8;
-      }
-
-      &:active {
-        opacity: 0.6;
-      }
-    }
 
     .ripple {
       background: var(--color-on-secondary, $secondary);

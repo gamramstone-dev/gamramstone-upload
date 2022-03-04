@@ -49,6 +49,8 @@ html[data-dark-mode="true"] {
     width: 48px;
     height: 48px;
 
+    isolation: isolate;
+
     transition: 0.23s opacity cubic-bezier(0.19, 1, 0.22, 1),
       0.23s transform cubic-bezier(0.19, 1, 0.22, 1);
 
@@ -96,6 +98,10 @@ html[data-dark-mode="true"] {
 
     @media screen and (max-width: $page) {
       width: 90%;
+    }
+
+    @media screen and (max-width: $mobile) {
+      width: 85%;
     }
 
     display: flex;

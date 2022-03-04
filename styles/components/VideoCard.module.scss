@@ -68,6 +68,8 @@ html[data-dark-mode='true'] {
     overflow: hidden;
     border-radius: 16px;
 
+    isolation: isolate;
+
     width: 250px;
     color: transparent;
 
@@ -84,6 +86,10 @@ html[data-dark-mode='true'] {
     display: flex;
     flex-direction: column;
 
+    @media screen and (max-width: $mobile) {
+      font-size: 0.9em;
+    }
+
     h3 {
       letter-spacing: -0.6px;
     }
@@ -93,10 +99,6 @@ html[data-dark-mode='true'] {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-
-      @media screen and (max-width: $mobile) {
-        font-size: 0.9em;
-      }
     }
 
     h3,
@@ -152,7 +154,7 @@ html[data-dark-mode='true'] {
 
   @media screen and (max-width: $mobile) {
     flex-direction: column;
-    padding: 24px 0px;
+    padding: 8px 0px;
 
     .thumbnail {
       width: 100%;
@@ -182,6 +184,10 @@ html[data-dark-mode='true'] {
 
   .contents {
     margin: 26px 64px;
+
+    @media screen and (max-width: $tablet) {
+      font-size: 0.95em;
+    }
 
     @media screen and (max-width: $mobile) {
       font-size: 0.9em;

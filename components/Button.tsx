@@ -37,7 +37,7 @@ export const Button = ({
   disabled = false,
   roundness = 16,
   size = 'medium',
-  useRipple = false,
+  useRipple = true,
   theme = 'primary',
   onClick,
   onContext,
@@ -51,7 +51,7 @@ export const Button = ({
 
         setRipple({
           x: ev.nativeEvent.offsetX - rect.width / 2,
-          y: ev.nativeEvent.offsetY - rect.height / 2,
+          y: ev.nativeEvent.offsetY - rect.width / 2,
           startedAt: Date.now(),
         })
       }
@@ -67,7 +67,7 @@ export const Button = ({
     if (ripple) {
       const timeout = setTimeout(() => {
         setRipple(null)
-      }, 1000)
+      }, 10000)
 
       return () => {
         clearTimeout(timeout)
