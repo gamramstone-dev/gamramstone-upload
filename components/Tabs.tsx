@@ -4,10 +4,11 @@ import {
   useMotionTemplate,
   useSpring,
 } from 'framer-motion'
-import {
+import React, {
   cloneElement,
   CSSProperties,
   ReactElement,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -15,6 +16,7 @@ import {
 } from 'react'
 import styles from '../styles/components/Tabs.module.scss'
 import { useDebouncer } from '../hooks/debouncer'
+import { RippleData } from '../structs/components/ripple'
 
 interface TabButtonProps {
   children: string
@@ -35,6 +37,37 @@ export const TabButton = ({
   onHoverEnd,
   onClick,
 }: TabButtonProps) => {
+  const [ripple, setRipple] = useState<RippleData | null>(null)
+
+  const localClickHandler = useCallback(
+    (ev: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+      const rect = ev.currentTarget.getBoundingClientRect()
+
+      setRipple({
+        x: ev.nativeEvent.offsetX - rect.width / 2,
+        y: ev.nativeEvent.offsetY - rect.height / 2,
+        startedAt: Date.now(),
+      })
+
+      if (onClick) {
+        onClick(index)
+      }
+    },
+    [onClick]
+  )
+
+  useEffect(() => {
+    if (ripple) {
+      const timeout = setTimeout(() => {
+        setRipple(null)
+      }, 1000)
+
+      return () => {
+        clearTimeout(timeout)
+      }
+    }
+  }, [ripple])
+
   return (
     <motion.div
       className={styles.tabButton}
@@ -43,8 +76,22 @@ export const TabButton = ({
       data-disabled={disabled}
       onHoverStart={() => onHoverStart && onHoverStart(index)}
       onHoverEnd={() => onHoverEnd && onHoverEnd(index)}
-      onClick={() => onClick && !disabled && onClick(index)}
+      onClick={ev => onClick && !disabled && localClickHandler(ev, index)}
     >
+      {ripple && (
+        <div
+          className={styles.rippleContainer}
+          key={`ripple-${ripple.x}-${ripple.y}-${ripple.startedAt}`}
+        >
+          <span
+            className={styles.ripple}
+            style={{
+              left: ripple.x,
+              top: ripple.y,
+            }}
+          ></span>
+        </div>
+      )}
       {children}
     </motion.div>
   )

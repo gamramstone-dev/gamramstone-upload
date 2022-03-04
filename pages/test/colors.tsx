@@ -81,6 +81,7 @@ const YouTubeTestPage: NextPage = () => {
               </div>
             ))}
           </div>
+          <Button onClick={() => void 0}>Test button is here</Button>
           <Button onClick={() => setDark(!dark)}>switch darkmode</Button>
         </div>
       </div>

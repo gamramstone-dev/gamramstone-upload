@@ -1,4 +1,11 @@
-import { CSSProperties, ReactNode } from 'react'
+import {
+  CSSProperties,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
+import { RippleData } from '../structs/components/ripple'
 
 import styles from '../styles/components/Button.module.scss'
 import { classes } from '../utils/string'
@@ -14,6 +21,7 @@ interface ButtonBaseProps {
   disabled?: boolean
   children?: ReactNode
   roundness?: number
+  useRipple?: boolean
   onClick?: () => void
   onContext?: () => void
 }
@@ -29,10 +37,44 @@ export const Button = ({
   disabled = false,
   roundness = 16,
   size = 'medium',
+  useRipple = false,
   theme = 'primary',
   onClick,
   onContext,
 }: ButtonBaseProps) => {
+  const [ripple, setRipple] = useState<RippleData | null>(null)
+
+  const localClickHandler = useCallback(
+    (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (useRipple) {
+        const rect = ev.currentTarget.getBoundingClientRect()
+
+        setRipple({
+          x: ev.nativeEvent.offsetX - rect.width / 2,
+          y: ev.nativeEvent.offsetY - rect.height / 2,
+          startedAt: Date.now(),
+        })
+      }
+
+      if (onClick) {
+        onClick()
+      }
+    },
+    [onClick, useRipple]
+  )
+
+  useEffect(() => {
+    if (ripple) {
+      const timeout = setTimeout(() => {
+        setRipple(null)
+      }, 1000)
+
+      return () => {
+        clearTimeout(timeout)
+      }
+    }
+  }, [ripple])
+
   return (
     <div
       className={classes(
@@ -42,7 +84,7 @@ export const Button = ({
         size && styles[size],
         theme && styles[theme]
       )}
-      onClick={() => onClick && !disabled && onClick()}
+      onClick={ev => onClick && !disabled && localClickHandler(ev)}
       onContextMenu={ev =>
         onContext && !disabled && (ev.preventDefault(), onContext())
       }
@@ -52,6 +94,20 @@ export const Button = ({
         } as ButtonStyles
       }
     >
+      {ripple && (
+        <div
+          className={styles.rippleContainer}
+          key={`ripple-${ripple.x}-${ripple.y}-${ripple.startedAt}`}
+        >
+          <span
+            className={styles.ripple}
+            style={{
+              left: ripple.x,
+              top: ripple.y,
+            }}
+          ></span>
+        </div>
+      )}
       {icon && <i className={classes(styles.icon, `ri-${icon}`)}></i>}
       {children}
     </div>

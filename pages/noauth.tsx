@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import Footer from '../components/Footer'
 
 import pageStyles from '../styles/page.module.scss'
@@ -19,6 +21,14 @@ const Error404: NextPage = () => {
   const router = useRouter()
 
   const error = router.query.error as string
+
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    if (session?.user) {
+      router.replace('/')
+    }
+  }, [router, session])
 
   return (
     <div className={styles.container}>

@@ -93,7 +93,7 @@ const Account: NextPage = () => {
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents, styles.heading)}>
           <div className={styles.inner}>
-            <span>안녕하세요!</span>
+            <span>계정 관리</span>
           </div>
         </div>
 
