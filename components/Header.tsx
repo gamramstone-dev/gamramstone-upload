@@ -3,8 +3,8 @@ import styles from '../styles/components/Header.module.scss'
 import { Button } from './Button'
 
 import { useSession, signIn } from 'next-auth/react'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
+import FadeInImage from './FadeInImage'
 
 export const Header = () => {
   const router = useRouter()
@@ -24,9 +24,10 @@ export const Header = () => {
             >
               <div className={styles.image}>
                 {session.user?.image && (
-                  <Image
+                  <FadeInImage
                     src={session.user?.image}
                     width={48}
+                    unoptimized
                     height={48}
                     alt='프로필 이미지'
                   />
