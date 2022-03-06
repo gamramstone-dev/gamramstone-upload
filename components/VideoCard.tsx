@@ -11,7 +11,11 @@ import {
   WorkStatusNames,
 } from '../structs/airtable'
 import styles from '../styles/components/VideoCard.module.scss'
-import { applyCaptions, isUploadable } from '../utils/client/requests'
+import {
+  applyCaptions,
+  isUploadable,
+  updateVideoState,
+} from '../utils/client/requests'
 import { useDeviceWidthLimiter } from '../hooks/styles'
 import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
@@ -37,7 +41,7 @@ export const YouTubeThumbnail = ({ id }: YouTubeThumbnailProps) => {
     <FadeInImage
       src={`https://i.ytimg.com/vi/${id}/${
         error ? 'hqdefault' : 'mqdefault'
-        }.jpg`}
+      }.jpg`}
       unoptimized
       alt='YouTube 썸네일'
       onError={() => !error && setError(true)}
@@ -95,6 +99,7 @@ interface CaptionCardProps {
   defaultTabIndex?: number
   open?: boolean
   onUploadAuth?: () => void
+  onUpload?: (id: [string, LanguageCode][]) => void
 }
 
 const ToastOption = {
@@ -107,7 +112,7 @@ const ErrorToastOption = {
   style: {
     background: 'var(--color-error-container, #f00)',
     color: 'var(--color-error, #fff)',
-  }
+  },
 }
 
 export const CaptionCard = ({
@@ -116,6 +121,7 @@ export const CaptionCard = ({
   open,
   defaultTabIndex = 0,
   onUploadAuth,
+  onUpload,
 }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(defaultTabIndex || 0)
 
@@ -173,26 +179,35 @@ export const CaptionCard = ({
       }
 
       const loadingToast = toast.loading('업로드 중...', ToastOption)
+      const isTest = window.location.href.indexOf('devMode') > -1
 
       try {
-        await applyCaptions(
-          session.accessToken,
-          language,
-          id,
-          title,
-          description,
-          captions
-        )
+        await (isTest
+          ? (async () => new Promise(resolve => setTimeout(resolve, 2000)))()
+          : applyCaptions(
+              session.accessToken,
+              language,
+              id,
+              title,
+              description,
+              captions
+            ))
+
+        await updateVideoState(language, [id], isTest)
 
         toast.success('성공적으로 적용했어요!')
-        confetties.fireworks(1000)
+        confetties.fireworks(750)
+
+        if (onUpload) {
+          onUpload([[id, language]])
+        }
       } catch (e) {
         toast.error((e as Error).message, ErrorToastOption)
       }
 
       toast.dismiss(loadingToast)
     },
-    [session]
+    [onUpload, session]
   )
 
   const narrow = useDeviceWidthLimiter(768)
@@ -285,6 +300,9 @@ export const CaptionCard = ({
                             {session === null ? '(로그인 필요)' : ''}
                           </Button>
                         )}
+                        <a href={video.url} target='_blank' rel='noreferrer'>
+                          <Button icon='youtube-fill'>YouTube 열기</Button>
+                        </a>
                       </div>
                     </div>
                     <div className={styles.row}>
@@ -371,11 +389,13 @@ export const CaptionCard = ({
 interface VideoProjectCardProps {
   video: VideoWithCaption
   onUploadAuth?: () => void
+  onUpload?: (id: [string, LanguageCode][]) => void
 }
 
 export const VideoProjectCard = ({
   video,
   onUploadAuth,
+  onUpload,
 }: VideoProjectCardProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const [tagIndex, setTagIndex] = useState<number>(0)
@@ -396,6 +416,7 @@ export const VideoProjectCard = ({
         video={video}
         languages={video.captions}
         onUploadAuth={onUploadAuth}
+        onUpload={onUpload}
       ></CaptionCard>
     </>
   )

@@ -241,6 +241,8 @@ html[data-dark-mode='true'] {
   .value {
     display: flex;
     gap: 16px;
+
+    overflow-x: auto;
   }
 }
 

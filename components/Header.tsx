@@ -5,10 +5,11 @@ import { Button } from './Button'
 import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import FadeInImage from './FadeInImage'
+import { LoadSpinner } from './Loading'
 
 export const Header = () => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   return (
     <header className={styles.header}>
@@ -17,15 +18,19 @@ export const Header = () => {
           <Link href={'/'}>GAMRAMSTONE</Link>
         </div>
         <div className={styles.actions}>
-          {session ? (
+          {status === 'loading' ? (
+            <div className={styles.loading}>
+              <LoadSpinner></LoadSpinner>
+            </div>
+          ) : session ? (
             <div
               className={styles.user}
               onClick={() => router.push('/account')}
             >
               <div className={styles.image}>
-                {session.user?.image && (
+                {session!.user?.image && (
                   <FadeInImage
-                    src={session.user?.image}
+                    src={session!.user!.image!}
                     width={48}
                     unoptimized
                     height={48}

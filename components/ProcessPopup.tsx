@@ -4,22 +4,21 @@ import Link from 'next/link'
 import { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import {
-  CaptionFile,
   LanguageCode,
   LanguageNames,
-  OnWorkingLanguageCode,
   VideoWithCaption,
+  VideoWorks,
 } from '../structs/airtable'
 import styles from '../styles/components/ProcessPopup.module.scss'
-import { applyCaptions } from '../utils/client/requests'
+import { applyCaptions, updateVideoState } from '../utils/client/requests'
 import { useBodyLock } from '../hooks/styles'
 import { classes, getYouTubeId } from '../utils/string'
 import { Button } from './Button'
 import { LoadSpinner } from './Loading'
 import { YouTubeThumbnail } from './VideoCard'
-import { groupBy } from '../utils/commmon'
 
 import confetties from '../utils/confetties'
+import { extractFinishedVideosByLanguage } from '../utils/client/airtable'
 
 const backgroundVariants: Variants = {
   initial: {
@@ -99,74 +98,7 @@ const usePreviousValue = (num: number) => {
   return previousValue[0]
 }
 
-/**
- * 영상의 업로드 상태를 변경합니다. 로그인 상태여야 하고, 관리자 권한이나 크리에이터 권한이 있어야 작동합니다.
- * @param lang 영상 언어
- * @param videos 영상 ID 목록
- * @param isTest 테스트 여부
- * @returns
- */
-const updateVideoState = (
-  lang: LanguageCode,
-  videos: string[],
-  isTest?: boolean
-) => {
-  return fetch(
-    `/api/airtable/updateVideo?lang=${lang}&videos=${videos.join(
-      ','
-    )}&isTest=${isTest}`,
-    {
-      method: 'PATCH',
-    }
-  )
-}
-
-/**
- * failed에 있지 않은 영상들을 'lang'으로 묶어 반환합니다. (works-failed)
- *
- * ```
- * const videos = extractFinishedVideosByLanguage(
- *   [
- *     {id: 'a', lang: 'ko'},
- *     {id: 'b', lang: 'ko'},
- *     {id: 'c', lang: 'en'},
- *   ],
- *   [
- *     {id: 'b', lang: 'ko'},
- *   ]
- * ) // => {'ko': [{id: 'a', lang: 'ko'}], 'en': [{id: 'c', lang: 'en'}]}
- * ```
- *
- * @param works
- * @param failed
- */
-const extractFinishedVideosByLanguage = (
-  works: VideoWorks[],
-  failed: VideoWorks[]
-) => {
-  const done = works.filter(v => {
-    for (let i = 0; i < failed.length; i++) {
-      if (failed[i].id === v.id) {
-        return false
-      }
-    }
-
-    return true
-  })
-
-  return groupBy(done, video => video.lang)
-}
-
-export interface VideoWorks {
-  id: string
-  dataIndex: number
-  lang: OnWorkingLanguageCode
-  title: string
-  description: string
-  captions: CaptionFile[]
-}
-
-const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
+export const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
   return datas
     .map((data, dataIndex) => {
       const id = getYouTubeId(data.url)
@@ -196,6 +128,7 @@ interface ProcessPopupProps {
   token: string
   close?: () => void
   noPermission?: boolean
+  onUpload?: (videos: [string, LanguageCode][]) => void
 }
 
 export const ProcessPopup = ({
@@ -203,6 +136,7 @@ export const ProcessPopup = ({
   close,
   token,
   noPermission,
+  onUpload,
 }: ProcessPopupProps) => {
   const [closing, setClosing] = useState(false)
 
@@ -243,28 +177,47 @@ export const ProcessPopup = ({
     const videos = extractFinishedVideosByLanguage(tasks, errorTasks)
     const works = Array.from(videos, ([name, value]) => ({ name, value }))
 
-    Promise.all(
-      works.map(({ name, value }) =>
-        updateVideoState(
-          name,
-          value.map(v => v.id),
-          window.location.href.indexOf('devMode') > -1
-        )
+    let queue = works.map(({ name, value }) => () =>
+      updateVideoState(
+        name,
+        value.map(v => v.id),
+        window.location.href.indexOf('devMode') > -1
       )
     )
-      .catch(e =>
-        toast.error(`업로드 상태 변경 중 오류가 발생했습니다: ${e.message}`)
-      )
-      .finally(() => {
-        toast.dismiss(loading)
+    ;(async () => {
+      let results: boolean[] = []
 
-        if (!errorTasks.length) {
-          setStep(2)
-        } else {
-          setStep(3)
-        }
-      })
-  }, [currentTaskDone, errorTasks, errorTasks.length, tasks])
+      for (let i = 0; i < queue.length; i++) {
+        const data = await (await queue[i]()).json()
+        results.push(data.status === 'success')
+      }
+
+      const succeed = results.every(v => v === true)
+
+      if (!succeed) {
+        toast.error(`업로드 상태 변경 중 오류가 발생했습니다.`)
+      }
+
+      onUpload &&
+        onUpload(
+          works
+            .map(({ value }) =>
+              value.map(v => [v.id, v.lang] as [string, LanguageCode])
+            )
+            .flat()
+        )
+
+      toast.dismiss(loading)
+
+      if (!errorTasks.length) {
+        setStep(2)
+      } else {
+        setStep(3)
+      }
+
+      setTaskIndex(0)
+    })()
+  }, [currentTaskDone, errorTasks, errorTasks.length, onUpload, tasks])
 
   useEffect(() => {
     if (step !== 2) {

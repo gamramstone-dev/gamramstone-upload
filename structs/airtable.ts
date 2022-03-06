@@ -41,6 +41,15 @@ export interface AirtableLanguageField {
   files: CaptionFile[]
 }
 
+export interface VideoWorks {
+  id: string
+  dataIndex: number
+  lang: OnWorkingLanguageCode
+  title: string
+  description: string
+  captions: CaptionFile[]
+}
+
 export const getFirstItem = (items: unknown) => {
   if (Array.isArray(items)) {
     return items[0]

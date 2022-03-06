@@ -5,16 +5,21 @@ import useSWR from 'swr'
 
 import pageStyles from '../../styles/page.module.scss'
 import styles from '../../styles/pages/Channel.module.scss'
-import { classes } from '../../utils/string'
+import { classes, getYouTubeId } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { APIResponse } from '../../structs/api'
-import { VideoWithCaption, WorkStatus } from '../../structs/airtable'
+import {
+  LanguageCode,
+  TranslatedVideoMetadata,
+  VideoWithCaption,
+  WorkStatus,
+} from '../../structs/airtable'
 import { LoadSpinner } from '../../components/Loading'
 import VideoProjectCard from '../../components/VideoCard'
 import FadeInImage from '../../components/FadeInImage'
 import { Button } from '../../components/Button'
-import ProcessPopup from '../../components/ProcessPopup'
+import ProcessPopup, { getVideoWorks } from '../../components/ProcessPopup'
 import toast from 'react-hot-toast'
 import { AnimatePresence } from 'framer-motion'
 import { useSession } from 'next-auth/react'
@@ -173,7 +178,7 @@ const EmptyTexts: Record<ChannelID, ReactNode[]> = {
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchList
   )
@@ -203,6 +208,40 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     }
   }, [id])
 
+  const onUpload = useCallback(
+    (videos: [string, LanguageCode][]) => {
+      if (!data) {
+        return
+      }
+
+      mutate(
+        data.map(v => {
+          const filtered = videos.filter(
+            data => data[0] === getYouTubeId(v.url)
+          )
+
+          if (filtered.length > 0) {
+            return {
+              ...v,
+              captions: v.captions.map((c: TranslatedVideoMetadata) =>
+                filtered.filter(d => d[1] === c.language)
+                  ? {
+                      ...c,
+                      status: 'done',
+                    }
+                  : c
+              ),
+            } as VideoWithCaption
+          }
+
+          return v
+        }),
+        false
+      )
+    },
+    [data, mutate]
+  )
+
   return (
     <div className={styles.container}>
       <Head>
@@ -222,6 +261,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
               setOpenProcessPopup(false)
               setNeedPermission(false)
             }}
+            onUpload={onUpload}
           ></ProcessPopup>
         )}
       </AnimatePresence>
@@ -250,9 +290,21 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                         ? isUploadable(
                             session,
                             () => {
+                              if (!getVideoWorks(data).length) {
+                                toast.error('모든 영상이 작업되었어요.')
+
+                                return
+                              }
+
                               setOpenProcessPopup(true)
                             },
                             () => {
+                              if (!getVideoWorks(data).length) {
+                                toast.error('모든 영상이 작업되었어요.')
+
+                                return
+                              }
+
                               window.location.hash = 'apply'
                               setOpenProcessPopup(true)
                               setNeedPermission(true)
@@ -271,7 +323,9 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
           {error instanceof Error ? (
             <div className={styles.error}>오류 : {error.message}</div>
           ) : !data ? (
-            <LoadSpinner></LoadSpinner>
+            <div className={styles.spinner}>
+              <LoadSpinner></LoadSpinner>
+            </div>
           ) : data.length ? (
             data.map(video => (
               <VideoProjectCard
@@ -281,6 +335,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                   setOpenProcessPopup(true)
                   setNeedPermission(true)
                 }}
+                onUpload={onUpload}
               ></VideoProjectCard>
             ))
           ) : (

@@ -14,12 +14,8 @@ import { apify } from '../../../structs/api'
 import { Channels, getChannelIDByName } from '../../../structs/channels'
 import { hasCreatorPermission } from '../../../structs/user'
 import { chunks } from '../../../utils/items'
-import { getUser } from '../../../utils/server/database'
+import { markAsDoneVideos } from '../../../utils/server/cache'
 import discord, { DiscordEmbed } from '../../../utils/server/discord'
-import {
-  getYouTubeLocalizedVideos,
-  getYouTubeSubtitleList,
-} from '../../../utils/server/youtube'
 import { getYouTubeId } from '../../../utils/string'
 
 const base = new Airtable({
@@ -110,7 +106,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!results.length) {
     console.log(`[updateVideo] nothing to update.`)
+    return []
   }
+
+  await markAsDoneVideos(
+    `${getChannelIDByName(results[0].channel)}-waiting`,
+    lang,
+    results.map(v => v.url)
+  )
 
   /**
    * Discord 채널에 업로드 알림을 보내는 부분입니다.
@@ -129,7 +132,11 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       color: channelId
         ? parseInt(Channels[channelId].color.replace(/#/g, ''), 16)
         : 0x118bf5,
-      description: `${LanguageNames[lang]} 자막이 크리에이터에 의해 적용됐습니다! 🎉 ${isTest ? ' (테스트 메세지입니다. 실제 적용은 아닙니다.)' : ''}`,
+      description: `${
+        LanguageNames[lang]
+      } 자막이 크리에이터에 의해 적용됐습니다! 🎉 ${
+        isTest ? ' (테스트 메세지입니다. 실제 적용은 아닙니다.)' : ''
+      }`,
       url: results[i].url,
       thumbnail: {
         url: `https://i.ytimg.com/vi/${getYouTubeId(
@@ -170,9 +177,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     ]!
 
     if (isTest) {
-      console.log(
-        `[updateVideo] test sending ${item.length} discord messages.`
-      )
+      console.log(`[updateVideo] test sending ${item.length} discord messages.`)
     } else if (env) {
       await discord.sendFancy(env, item)
     }

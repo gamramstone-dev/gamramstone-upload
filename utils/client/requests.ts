@@ -38,11 +38,7 @@ export const applyCaptions = async (
       throw new Error('영상 메타데이터 업로드 결과가 없어요.')
     }
   } catch (e) {
-    throw new Error(
-      `제목 업데이트 오류 : ${
-        (e as Error).message
-      }`
-    )
+    throw new Error(`제목 업데이트 오류 : ${(e as Error).message}`)
   }
 
   if (!captions) {
@@ -75,11 +71,7 @@ export const applyCaptions = async (
       }
     }
   } catch (e) {
-    throw new Error(
-      `자막 파일 업로드 오류 : ${
-        (e as Error).message
-      }`
-    )
+    throw new Error(`자막 파일 업로드 오류 : ${(e as Error).message}`)
   }
 }
 
@@ -109,4 +101,26 @@ export const isUploadable = (
   }
 
   func()
+}
+
+/**
+ * 영상의 업로드 상태를 변경합니다. 로그인 상태여야 하고, 관리자 권한이나 크리에이터 권한이 있어야 작동합니다.
+ * @param lang 영상 언어
+ * @param videos 영상 ID 목록
+ * @param isTest 테스트 여부
+ * @returns
+ */
+export const updateVideoState = (
+  lang: LanguageCode,
+  videos: string[],
+  isTest?: boolean
+) => {
+  return fetch(
+    `/api/airtable/updateVideo?lang=${lang}&videos=${videos.join(
+      ','
+    )}&isTest=${isTest}`,
+    {
+      method: 'PATCH',
+    }
+  )
 }
