@@ -17,7 +17,7 @@ export interface DatabaseUser {
   settings: SettingTypes
 }
 
-export const hasCreatorPermission = (state: UserState) => {
+export const hasCreatorPermission = (state: string) => {
   return state === 'creator' || state === 'admin'
 }
 
