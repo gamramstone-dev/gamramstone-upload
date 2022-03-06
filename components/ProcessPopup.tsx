@@ -19,6 +19,8 @@ import { LoadSpinner } from './Loading'
 import { YouTubeThumbnail } from './VideoCard'
 import { groupBy } from '../utils/commmon'
 
+import confetties from '../utils/confetties'
+
 const backgroundVariants: Variants = {
   initial: {
     opacity: 0,
@@ -263,6 +265,14 @@ export const ProcessPopup = ({
         }
       })
   }, [currentTaskDone, errorTasks, errorTasks.length, tasks])
+
+  useEffect(() => {
+    if (step !== 2) {
+      return
+    }
+
+    confetties.fireworks()
+  }, [step])
 
   /**
    * 업로드 탭 Effect. 자막 업로드를 여기서 담당합니다.

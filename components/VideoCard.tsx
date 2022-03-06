@@ -18,6 +18,8 @@ import { Button } from './Button'
 import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
 
+import confetties from '../utils/confetties'
+
 import getConfig from 'next/config'
 import { CustomUseSession } from '../structs/setting'
 import Link from 'next/link'
@@ -183,11 +185,12 @@ export const CaptionCard = ({
         )
 
         toast.success('성공적으로 적용했어요!')
+        confetties.fireworks(1000)
       } catch (e) {
         toast.error((e as Error).message, ErrorToastOption)
       }
 
-      toast.remove(loadingToast)
+      toast.dismiss(loadingToast)
     },
     [session]
   )

@@ -37,7 +37,6 @@ export const Header = () => {
           ) : (
             <Button
               size='medium'
-              icon='login-box-line'
               onClick={() =>
                 signIn('google', undefined, {
                   scope: 'profile openid',

@@ -12,6 +12,8 @@ import { darkModeAtom } from '../../structs/setting'
 import { Button } from '../../components/Button'
 import toast from 'react-hot-toast'
 
+import confetties from '../../utils/confetties'
+
 export interface CustomStyles extends CSSProperties {
   [key: string]: unknown
 }
@@ -82,11 +84,21 @@ const YouTubeTestPage: NextPage = () => {
               </div>
             ))}
           </div>
-          <Button onClick={() => toast('Test message is here')}>Test button is here</Button>
-          <Button onClick={() => toast.success('Success message is here')}>Success button is here</Button>
-          <Button onClick={() => toast.loading('Loading message is here')}>Loadding button is here</Button>
-          <Button onClick={() => toast.error('Error message is here')}>Error button is here</Button>
+          <Button onClick={() => toast('Test message is here')}>
+            Test button is here
+          </Button>
+          <Button onClick={() => toast.success('Success message is here')}>
+            Success button is here
+          </Button>
+          <Button onClick={() => toast.loading('Loading message is here')}>
+            Loadding button is here
+          </Button>
+          <Button onClick={() => toast.error('Error message is here')}>
+            Error button is here
+          </Button>
           <Button onClick={() => setDark(!dark)}>switch darkmode</Button>
+          <br></br>
+          <Button onClick={() => confetties.fireworks()}>party</Button>
         </div>
       </div>
     </div>

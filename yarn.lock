@@ -243,6 +243,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/canvas-confetti@npm:^1.4.2":
+  version: 1.4.2
+  resolution: "@types/canvas-confetti@npm:1.4.2"
+  checksum: 68327c85bec9f507a8002bf7bc57d8e1850816e91460c8d0c340ae7a06a782839c016b82e5b4adf5ff52fe96af94853c9a25e17bd317524d377ccdc0e00e8d9c
+  languageName: node
+  linkType: hard
+
 "@types/json5@npm:^0.0.29":
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
@@ -718,6 +725,13 @@ __metadata:
   version: 1.0.30001311
   resolution: "caniuse-lite@npm:1.0.30001311"
   checksum: a96a2724db91f7d820d7c83d98d6d80f71f4ef5542fd9af49478e6f5057a92d61fbb6c2a2c151e13323c760c7d9f046f422a9b1ac77ab08dc2cacc62bd22f941
+  languageName: node
+  linkType: hard
+
+"canvas-confetti@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "canvas-confetti@npm:1.5.1"
+  checksum: e5932e34261615d629aac24aebad0472dd01c6cc3a3d6460ef37ab81eb533a2fdcec1cd842fcad6275f907fe378fc71cc90c91e1f997df63b0865ec2d5783ad8
   languageName: node
   linkType: hard
 
@@ -1536,11 +1550,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "gamramstone@workspace:."
   dependencies:
+    "@types/canvas-confetti": ^1.4.2
     "@types/node": 17.0.21
     "@types/react": 17.0.39
     "@types/uuid": ^8.3.4
     "@upstash/redis": ^0.2.1
     airtable: ^0.11.2
+    canvas-confetti: ^1.5.1
     eslint: 8.10.0
     eslint-config-next: 12.1.0
     framer-motion: ^6.2.8

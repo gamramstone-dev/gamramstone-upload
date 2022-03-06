@@ -87,8 +87,8 @@ function MyApp ({
             },
             success: {
               iconTheme: {
-                primary: 'var(--color-primary, green)',
-                secondary: 'var(--color-on-primary, white)',
+                primary: 'var(--color-on-primary-container, green)',
+                secondary: 'var(--color-primary-container, white)',
               },
             },
             error: {
