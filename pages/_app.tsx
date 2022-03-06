@@ -64,7 +64,10 @@ function MyApp ({
     <SessionProvider session={session}>
       <RecoilRoot>
         <Head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta
+            name='viewport'
+            content='width=device-width, initial-scale=1.0'
+          />
         </Head>
         <Script
           src='https://static.cloudflareinsights.com/beacon.min.js'
@@ -72,7 +75,34 @@ function MyApp ({
         ></Script>
         <ConsoleWarning></ConsoleWarning>
         <Header></Header>
-        <Toaster position='top-center'></Toaster>
+        <Toaster
+          position='top-center'
+          toastOptions={{
+            style: {
+              borderRadius: '32px',
+              padding: '12px 28px',
+              boxShadow: '0px 0px 16px rgba(0,0,0,0.16)',
+              background: 'var(--color-primary-container, #fff)',
+              color: 'var(--color-on-primary-container, #000)',
+            },
+            success: {
+              iconTheme: {
+                primary: 'var(--color-primary, green)',
+                secondary: 'var(--color-on-primary, white)',
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: 'var(--color-error, red)',
+                secondary: 'var(--color-on-error, white)',
+              },
+              style: {
+                background: 'var(--color-error-container, #fff)',
+                color: 'var(--color-on-error-container, #000)',
+              },
+            },
+          }}
+        ></Toaster>
         <ContextUser></ContextUser>
         <motion.div
           key={router.route}

@@ -101,6 +101,13 @@ const ToastOption = {
   },
 }
 
+const ErrorToastOption = {
+  style: {
+    background: 'var(--color-error-container, #f00)',
+    color: 'var(--color-error, #fff)',
+  }
+}
+
 export const CaptionCard = ({
   languages,
   video,
@@ -127,7 +134,7 @@ export const CaptionCard = ({
 
     toast.error(
       '이 브라우저는 복사를 지원하지 않아요. 크롬에서 실행해주세요.',
-      ToastOption
+      ErrorToastOption
     )
   }, [])
 
@@ -159,7 +166,7 @@ export const CaptionCard = ({
       captions?: CaptionFile[] | null
     ) => {
       if (!session || typeof session.accessToken !== 'string') {
-        toast.error('로그인 해주세요.', ToastOption)
+        toast.error('로그인 해주세요.', ErrorToastOption)
         return
       }
 
@@ -177,7 +184,7 @@ export const CaptionCard = ({
 
         toast.success('성공적으로 적용했어요!')
       } catch (e) {
-        toast.error((e as Error).message, ToastOption)
+        toast.error((e as Error).message, ErrorToastOption)
       }
 
       toast.remove(loadingToast)

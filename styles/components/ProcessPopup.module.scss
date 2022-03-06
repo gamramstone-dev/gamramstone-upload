@@ -122,12 +122,12 @@ html[data-dark-mode='true'] {
   &[data-size='4'] {
     .thumbnail {
       &:nth-child(1) {
-        transform: translateX(50%) scale(1.75);
+        transform: translateX(75%) scale(1.5);
         z-index: 100;
       }
 
       &:nth-child(2) {
-        transform: translateX(50%) scale(1.5);
+        transform: translateX(50%) scale(1.35);
         z-index: 99;
 
         img {
@@ -136,7 +136,7 @@ html[data-dark-mode='true'] {
       }
 
       &:nth-child(3) {
-        transform: translateX(25%) scale(1.25);
+        transform: translateX(15%) scale(1.15);
         z-index: 98;
 
         img {
@@ -145,7 +145,7 @@ html[data-dark-mode='true'] {
       }
 
       &:nth-child(4) {
-        transform: translateX(0%) scale(1);
+        transform: translateX(-45%) scale(1);
         z-index: 97;
 
         img {
