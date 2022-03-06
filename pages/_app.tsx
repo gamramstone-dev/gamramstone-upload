@@ -81,7 +81,7 @@ function MyApp ({
             style: {
               borderRadius: '32px',
               padding: '12px 28px',
-              boxShadow: '0px 0px 16px rgba(0,0,0,0.16)',
+              boxShadow: 'unset',
               background: 'var(--color-primary-container, #fff)',
               color: 'var(--color-on-primary-container, #000)',
             },
