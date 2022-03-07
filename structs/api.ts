@@ -46,7 +46,7 @@ export const apify = (
       const result = await callback(req, res)
 
       if (cache) {
-        res.setHeader('Cache-Control', `public, max-age=${cache}`)
+        res.setHeader('Cache-Control', `private, max-age=${cache}`)
       }
 
       res.status(200).json({

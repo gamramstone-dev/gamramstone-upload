@@ -55,4 +55,4 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   )
 }
 
-export default apify(func, 60)
+export default apify(func)

@@ -1,11 +1,8 @@
 import { auth, get, set } from '@upstash/redis'
 import { NextApiResponse } from 'next'
 import {
-  LanguageCode,
   TranslatedVideoMetadata,
-  VideoWithCaption,
 } from '../../structs/airtable'
-import { getYouTubeId } from '../string'
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
 
