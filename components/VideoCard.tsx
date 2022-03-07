@@ -27,6 +27,8 @@ import confetties from '../utils/confetties'
 import getConfig from 'next/config'
 import { CustomUseSession } from '../structs/setting'
 import Link from 'next/link'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { uploadInProgressAtom } from '../structs/uploadState'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -165,6 +167,8 @@ export const CaptionCard = ({
       })
   }, [])
 
+  const [isUploading, setUploading] = useRecoilState(uploadInProgressAtom)
+
   const applyTitleDescription = useCallback(
     async (
       language: LanguageCode,
@@ -177,6 +181,13 @@ export const CaptionCard = ({
         toast.error('로그인 해주세요.', ErrorToastOption)
         return
       }
+
+      if (isUploading) {
+        toast.error('다른 자막이 업로드 중입니다.', ErrorToastOption)
+        return
+      }
+
+      setUploading(true)
 
       const loadingToast = toast.loading('업로드 중...', ToastOption)
       const isTest = window.location.href.indexOf('devMode') > -1
@@ -206,8 +217,10 @@ export const CaptionCard = ({
       }
 
       toast.dismiss(loadingToast)
+
+      setUploading(false)
     },
-    [onUpload, session]
+    [isUploading, onUpload, session, setUploading]
   )
 
   const narrow = useDeviceWidthLimiter(768)
