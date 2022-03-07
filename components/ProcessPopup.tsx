@@ -172,6 +172,8 @@ export const ProcessPopup = ({
       return
     }
 
+    setCurrentTaskDone(false)
+
     const loading = toast.loading('업로드 상태를 변경하는 중...')
 
     const videos = extractFinishedVideosByLanguage(tasks, errorTasks)
