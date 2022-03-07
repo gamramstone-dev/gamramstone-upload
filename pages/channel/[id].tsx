@@ -224,7 +224,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
             return {
               ...v,
               captions: v.captions.map((c: TranslatedVideoMetadata) =>
-                filtered.filter(d => d[1] === c.language)
+                filtered.filter(d => d[1] === c.language).length > 0
                   ? {
                       ...c,
                       status: 'done',
