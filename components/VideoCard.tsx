@@ -322,6 +322,27 @@ export const CaptionCard = ({
                       <h3 className={styles.title}>상태</h3>
                       <p>{WorkStatusNames[languages[tabIndex].status]}</p>
                     </div>
+                    {
+                      <div className={styles.row}>
+                        <h3 className={styles.title}>자막 파일</h3>
+                        <div className={styles.value}>
+                          {languages[tabIndex].captions &&
+                          languages[tabIndex].captions.length ? (
+                            languages[tabIndex].captions.map(v => (
+                              <Button
+                                icon='download-line'
+                                key={`file-${v.filename}`}
+                                onClick={() => download(v.url, v.filename)}
+                              >
+                                {v.filename}
+                              </Button>
+                            ))
+                          ) : (
+                            <span className={styles.muted}>자막 파일 없음</span>
+                          )}
+                        </div>
+                      </div>
+                    }
                     <div className={styles.row}>
                       <h3 className={styles.title}>제목</h3>
                       <p
@@ -346,27 +367,6 @@ export const CaptionCard = ({
                           ))}
                       </div>
                     </div>
-                    {
-                      <div className={styles.row}>
-                        <h3 className={styles.title}>자막</h3>
-                        <div className={styles.value}>
-                          {languages[tabIndex].captions &&
-                          languages[tabIndex].captions.length ? (
-                            languages[tabIndex].captions.map(v => (
-                              <Button
-                                icon='download-line'
-                                key={`file-${v.filename}`}
-                                onClick={() => download(v.url, v.filename)}
-                              >
-                                {v.filename}
-                              </Button>
-                            ))
-                          ) : (
-                            <span className={styles.muted}>자막 파일 없음</span>
-                          )}
-                        </div>
-                      </div>
-                    }
                     {session?.userState === 'admin' ||
                     session?.userState === 'translator' ? (
                       <div className={styles.row}>
