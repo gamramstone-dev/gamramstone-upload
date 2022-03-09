@@ -14,7 +14,6 @@ import {
 import VideoProjectCard from '../../components/VideoCard'
 import { useState } from 'react'
 import { LanguageCode, OnWorkingLanguageCode } from '../../structs/airtable'
-import { CustomUseSession } from '../../structs/setting'
 import { useRouter } from 'next/router'
 
 const YouTubeTestPage: NextPage = props => {
@@ -25,7 +24,7 @@ const YouTubeTestPage: NextPage = props => {
     onUnauthenticated: () => {
       router.push('/')
     },
-  }) as CustomUseSession
+  })
 
   const [youtubeId, setYouTubeID] = useState('')
   const [lang, setLang] = useState('')

@@ -7,7 +7,6 @@ import { classes } from '../utils/string'
 import { getSession, signIn, signOut, useSession } from 'next-auth/react'
 import SettingCard from '../components/SettingCard'
 import {
-  CustomUseSession,
   globalSettings,
   SettingID,
   Settings,
@@ -29,7 +28,7 @@ const Account: NextPage = () => {
     onUnauthenticated: () => {
       router.push('/')
     },
-  }) as CustomUseSession
+  })
 
   const [settings, setSettings] = useRecoilState(globalSettings)
 

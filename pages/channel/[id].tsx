@@ -26,9 +26,7 @@ import { useSession } from 'next-auth/react'
 import Footer from '../../components/Footer'
 
 import getConfig from 'next/config'
-import { CustomUseSession } from '../../structs/setting'
 import { isUploadable } from '../../utils/client/requests'
-import { CustomStyles } from '../test/colors'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -183,7 +181,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     fetchList
   )
 
-  const { data: session } = useSession() as CustomUseSession
+  const { data: session } = useSession()
   const [openProcessPopup, setOpenProcessPopup] = useState<boolean>(false)
   const [needPermission, setNeedPermission] = useState<boolean>(false)
 

@@ -25,7 +25,6 @@ import { TabButton, TabGroup } from './Tabs'
 import confetties from '../utils/client/confetties'
 
 import getConfig from 'next/config'
-import { CustomUseSession } from '../structs/setting'
 import Link from 'next/link'
 import { useRecoilState } from 'recoil'
 import { uploadInProgressAtom } from '../structs/uploadState'
@@ -131,7 +130,7 @@ export const CaptionCard = ({
     setTabIndex(defaultTabIndex)
   }, [defaultTabIndex])
 
-  const { data: session } = useSession() as CustomUseSession
+  const { data: session } = useSession()
 
   const copy = useCallback((text: string, label: string) => {
     if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {

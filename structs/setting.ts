@@ -1,19 +1,5 @@
-import { Session } from 'next-auth'
 import { ReactNode } from 'react'
 import { atom, DefaultValue, RecoilState, selector } from 'recoil'
-import { UserState } from './user'
-
-export interface SessionData extends Session {
-  accessToken: string
-  id: string
-  userState: UserState
-  permissionGranted: boolean
-}
-
-export interface CustomUseSession {
-  data: SessionData | null
-  status: 'authenticated' | 'loading'
-}
 
 interface GamramSettings {
   darkMode: boolean

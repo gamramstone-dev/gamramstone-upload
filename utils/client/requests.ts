@@ -6,7 +6,7 @@ import {
 } from '../youtube'
 
 import toast from 'react-hot-toast'
-import { SessionData } from '../../structs/setting'
+import { Session } from 'next-auth'
 
 /**
  * YouTube API를 활용하여 영상 제목, 세부 정보, 자막을 모두 업로드 합니다.
@@ -96,7 +96,7 @@ export const applyCaptions = async (
  * @returns 
  */
 export const isUploadable = (
-  session: SessionData | null,
+  session: Session | null,
   func: () => void,
   authFunc?: () => void
 ) => {

@@ -5,7 +5,6 @@ import pageStyles from '../styles/page.module.scss'
 import styles from '../styles/pages/Administration.module.scss'
 import { classes } from '../utils/string'
 import { getSession, useSession } from 'next-auth/react'
-import { CustomUseSession } from '../structs/setting'
 import { useRouter } from 'next/router'
 import Footer from '../components/Footer'
 import useSWR from 'swr'
@@ -29,12 +28,12 @@ const fetchList = async (url: string) =>
 const Account: NextPage = () => {
   const router = useRouter()
 
-  const { data: session } = useSession({
+  useSession({
     required: true,
     onUnauthenticated: () => {
       router.replace('/')
     },
-  }) as CustomUseSession
+  })
 
   const { data: users, error } = useSWR(`/api/user/admin/list`, fetchList)
 
