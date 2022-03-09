@@ -80,7 +80,7 @@ const parseCaptionResponse = (items: any) => {
 /**
  * YouTube에서 자막 CC 파일을 가져옵니다. API Quota 초과 방지를 위해 캐시를 1시간 저장합니다.
  *
- * @cost 400
+ * @cost 50
  * @param id YouTube 영상 ID
  * @param key YouTube API 키
  * @returns

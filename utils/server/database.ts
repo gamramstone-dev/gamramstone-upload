@@ -31,6 +31,11 @@ const hashesToObject = <T>(arr: string[]): T => {
   return (r as unknown) as T
 }
 
+/**
+ * 서버에서 주어진 UUID를 가진 유저의 ID를 가져옵니다.
+ * @param uuid 유저 UUID
+ * @returns 
+ */
 export const getUUIDUser = async (uuid: string) => {
   const result = await hget('usersUUID', uuid)
 
@@ -41,6 +46,11 @@ export const getUUIDUser = async (uuid: string) => {
   return result.data
 }
 
+/**
+ * 서버에서 주어진 ID를 가진 유저를 가져옵니다.
+ * @param id 유저 ID
+ * @returns 
+ */
 export const getUser = async (id: string) => {
   const user = await hgetall(`user:${id}`)
 
@@ -74,6 +84,12 @@ const DefaultUserTemplate = () =>
     },
   } as DatabaseUser)
 
+/**
+ * 데이터베이스에 유저를 만듭니다.
+ * @param id 유저 ID
+ * @param fields 유저 필드 (생략 가능)
+ * @returns 
+ */
 export const createUser = async (
   id: string,
   fields: Partial<DatabaseUser> = DefaultUserTemplate()
@@ -110,6 +126,11 @@ export const createUser = async (
   return data
 }
 
+/**
+ * 데이터베이스에 유저 UUID가 존재하는지 확인하여 반환합니다.
+ * @param uuid 유저 UUID
+ * @returns 
+ */
 export const checkUUIDExists = async (uuid: string) => {
   const result = await hexists('usersUUID', uuid)
 
@@ -120,6 +141,11 @@ export const checkUUIDExists = async (uuid: string) => {
   return result.data === 1
 }
 
+/**
+ * 데이터베이스에서 유저를 삭제합니다.
+ * @param id 유저 ID
+ * @returns 
+ */
 export const deleteUser = async (id: string) => {
   const user = await getUser(id)
 
@@ -142,6 +168,12 @@ export const deleteUser = async (id: string) => {
   return result.data
 }
 
+/**
+ * 유저 정보 필드를 업데이트합니다. 
+ * @param id 유저 ID
+ * @param data 유저 필드
+ * @returns 
+ */
 export const updateUser = async (id: string, data: Partial<DatabaseUser>) => {
   const user = await getUser(id)
 
@@ -166,6 +198,12 @@ export const updateUser = async (id: string, data: Partial<DatabaseUser>) => {
   return result.data
 }
 
+/**
+ * 유저의 설정을 업데이트합니다. 기존에 존재하는 설정은 모두 덮어 씌워지니 미리 값을 받아오세요.
+ * @param id 유저 ID
+ * @param settings 설정
+ * @returns 
+ */
 export const updateUserSettings = async (id: string, settings: string) => {
   const result = await hmset(`user:${id}`, 'settings', settings)
 

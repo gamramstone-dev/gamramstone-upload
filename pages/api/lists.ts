@@ -21,6 +21,13 @@ const base = new Airtable({
 
 const uploadBase = base('업로드 준비')
 
+/**
+ * Airtable에서 멤버의 뷰를 가져옵니다.
+ * 
+ * @param member 멤버
+ * @param viewName 뷰 이름
+ * @returns 
+ */
 const fetchViewByMember = async (
   member: AirtableViewNameTypes,
   viewName: WorkStatusNameTypes

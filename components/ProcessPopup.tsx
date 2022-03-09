@@ -17,7 +17,7 @@ import { Button } from './Button'
 import { LoadSpinner } from './Loading'
 import { YouTubeThumbnail } from './VideoCard'
 
-import confetties from '../utils/confetties'
+import confetties from '../utils/client/confetties'
 import { extractFinishedVideosByLanguage } from '../utils/client/airtable'
 
 const backgroundVariants: Variants = {
@@ -176,9 +176,13 @@ export const ProcessPopup = ({
 
     const loading = toast.loading('업로드 상태를 변경하는 중...')
 
+    // 오류가 난 항목을 제외한 나머지 항목을 반환합니다.
     const videos = extractFinishedVideosByLanguage(tasks, errorTasks)
     const works = Array.from(videos, ([name, value]) => ({ name, value }))
 
+    // works에 있는 작업들을 요청으로 만들어 queue라는 배열에 저장합니다.
+    // Promise.all을 쓰지 않는 이유는 서버 DB 처리 과정에서 race condition이 발생할 수 있어서
+    // 요청을 blocking 방식으로 처리하게 만들었습니다.
     let queue = works.map(({ name, value }) => () =>
       updateVideoState(
         name,
@@ -186,6 +190,10 @@ export const ProcessPopup = ({
         window.location.href.indexOf('devMode') > -1
       )
     )
+      
+    /**
+     * 위에서 나눈 요청들을 순서대로 실행합니다.
+     */
     ;(async () => {
       let results: boolean[] = []
 
@@ -241,6 +249,9 @@ export const ProcessPopup = ({
       return
     }
 
+    /**
+     * URL에 ?devMode가 있는 경우에는 YouTube API를 호출하지 않고 테스트로 작업을 수행합니다.
+     */
     if (window.location.href.indexOf('devMode') > -1) {
       const timeout = setTimeout(() => {
         if (taskIndex + 1 >= tasks.length) {
@@ -280,7 +291,7 @@ export const ProcessPopup = ({
           }
 
           setTaskIndex(taskIndex + 1)
-        }, 1000)
+        }, 300)
       })
       .catch(e => {
         toast.error((e as Error).message)

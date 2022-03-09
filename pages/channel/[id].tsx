@@ -189,6 +189,9 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
 
   useColor(id)
 
+  /**
+   * URL에 #apply가 존재하면 이전에 진행하던 팝업을 뛰웁니다.
+   */
   useEffect(() => {
     if (
       typeof window !== 'undefined' &&

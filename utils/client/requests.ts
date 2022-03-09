@@ -8,6 +8,16 @@ import {
 import toast from 'react-hot-toast'
 import { SessionData } from '../../structs/setting'
 
+/**
+ * YouTube API를 활용하여 영상 제목, 세부 정보, 자막을 모두 업로드 합니다.
+ * @param token API Token
+ * @param language 자막 언어
+ * @param id YouTube 영상 ID
+ * @param title 영상 제목
+ * @param description 영상 세부 정보
+ * @param captions 자막 파일 목록
+ * @returns
+ */
 export const applyCaptions = async (
   token: string | undefined,
   language: LanguageCode,
@@ -15,15 +25,15 @@ export const applyCaptions = async (
   title: string,
   description: string,
   captions?: CaptionFile[] | null
-) => {
+): Promise<void> => {
   if (typeof token !== 'string') {
-    throw new Error('로그인이 안되어 있어요. ')
+    throw new Error('로그인이 안되어 있어요.')
   }
 
   const tokenResult = await validateAccessToken(token)
 
   if (!tokenResult) {
-    throw new Error()
+    throw new Error('토큰이 올바르지 않습니다.')
   }
 
   try {
@@ -49,6 +59,8 @@ export const applyCaptions = async (
     for (let i = 0; i < captions.length; i++) {
       // TODO : 여러 파일이 있을 경우 업로드할 파일 선택할 수 있도록 만들기
       // 현재는 첫 번째 캡션만 업로드할 수 있도록 지정했습니다.
+      //
+      // Update 2022-03-09: 아직까지는 여러 파일이 있는 경우가 없어서 무기한 보류합니다.
       if (captions.length > 1 && i >= 1) {
         break
       }
@@ -75,6 +87,14 @@ export const applyCaptions = async (
   }
 }
 
+/**
+ * session 정보를 가져와서 업로드 가능한 상태인지 판별합니다.
+ * 업로드가 가능하면 func를, 불가능하면 authFunc를 실행합니다.
+ * @param session 
+ * @param func 
+ * @param authFunc 
+ * @returns 
+ */
 export const isUploadable = (
   session: SessionData | null,
   func: () => void,

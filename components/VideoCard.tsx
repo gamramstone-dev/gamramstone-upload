@@ -22,12 +22,12 @@ import { Button } from './Button'
 import FadeInImage from './FadeInImage'
 import { TabButton, TabGroup } from './Tabs'
 
-import confetties from '../utils/confetties'
+import confetties from '../utils/client/confetties'
 
 import getConfig from 'next/config'
 import { CustomUseSession } from '../structs/setting'
 import Link from 'next/link'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { uploadInProgressAtom } from '../structs/uploadState'
 
 const { publicRuntimeConfig } = getConfig()

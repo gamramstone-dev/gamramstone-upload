@@ -12,7 +12,7 @@ import { darkModeAtom } from '../../structs/setting'
 import { Button } from '../../components/Button'
 import toast from 'react-hot-toast'
 
-import confetties from '../../utils/confetties'
+import confetties from '../../utils/client/confetties'
 
 export interface CustomStyles extends CSSProperties {
   [key: string]: unknown

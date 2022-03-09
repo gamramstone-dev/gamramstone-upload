@@ -48,6 +48,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   console.log(`[updateState] started for ${lang}.`)
 
+  /**
+   * 개별 탭이 있는 언어인지 (영어, 일본어, 중국어) 확인합니다.
+   */
   const isMajorLanguage = (Object.values(
     IndividualLanguages
   ) as string[]).includes(lang)

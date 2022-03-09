@@ -12,8 +12,7 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope:
-            'openid profile',
+          scope: 'openid profile',
         },
       },
     }),
@@ -29,6 +28,9 @@ export default NextAuth({
     async signIn ({ user, account }) {
       console.log(`${user.name} (${user.id}) tried to sign in!`)
 
+      /**
+       * 로그인 기능이 준비되지 않는 경우 환경 변수 설정을 통해 모든 로그인을 시도를 막을 수 있습니다.
+       */
       if (process.env.GOOGLE_NOT_READY === 'true') {
         return false
       }
@@ -38,13 +40,19 @@ export default NextAuth({
       const hasYouTubeScope =
         account.scope && account.scope.indexOf('auth/youtube') > -1
 
+      /**
+       * YouTube 권한이 부여는 되었지만 저장된 유저 정보가 없거나 크리에이터 권한이 없는 경우 오류를 표시합니다.
+       */
       if (
-        (!savedUser || !hasCreatorPermission(savedUser.state)) &&
-        hasYouTubeScope
+        hasYouTubeScope &&
+        (!savedUser || !hasCreatorPermission(savedUser.state))
       ) {
         return '/noauth?error=NoYouTubePermission'
       }
 
+      /**
+       * 저장된 유저 정보가 없으면 새로 생성합니다.
+       */
       if (savedUser === null) {
         try {
           await createUser(user.id)
@@ -55,6 +63,9 @@ export default NextAuth({
         return true
       }
 
+      /**
+       * 유저가 차단된 상태면 오류를 표시합니다.
+       */
       if (savedUser.state === 'banned') {
         return '/noauth?error=Banned'
       }
@@ -63,9 +74,12 @@ export default NextAuth({
         lastLogin: new Date().toISOString(),
       }
 
+      /**
+       * 크리에이터 권한이 없는데 YouTube 권한이 부여되었다면 계정 소유 확인 후 크리에이터 권한을 부여합니다.
+       */
       if (
-        !hasCreatorPermission(savedUser.state) &&
         hasYouTubeScope &&
+        !hasCreatorPermission(savedUser.state) &&
         typeof account.access_token === 'string'
       ) {
         try {
@@ -78,6 +92,8 @@ export default NextAuth({
             return '/noauth?error=NoYouTubePermission'
           }
         } catch (e) {
+          console.error(e)
+
           return '/noauth?error=NoYouTubePermission'
         }
 

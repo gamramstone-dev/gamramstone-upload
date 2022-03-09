@@ -47,6 +47,11 @@ export interface YouTubeCaption {
   language: LanguageCode
 }
 
+/**
+ * 내 유튜브 채널의 ID를 가져옵니다.
+ * @param token Google API 접근 토큰
+ * @returns 
+ */
 export const getMyYouTubeChannelID = async (token: string) => {
   const result = await fetch(
     'https://www.googleapis.com/youtube/v3/channels?part=id&mine=true',
