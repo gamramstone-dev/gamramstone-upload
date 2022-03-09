@@ -8,6 +8,7 @@ import {
 } from '../../structs/channels'
 import {
   extractVideoDataFields,
+  VideoWithCaption,
   WorkStatus,
   WorkStatusNames,
   WorkStatusNameTypes,
@@ -23,10 +24,10 @@ const uploadBase = base('업로드 준비')
 
 /**
  * Airtable에서 멤버의 뷰를 가져옵니다.
- * 
+ *
  * @param member 멤버
  * @param viewName 뷰 이름
- * @returns 
+ * @returns
  */
 const fetchViewByMember = async (
   member: AirtableViewNameTypes,
@@ -52,7 +53,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('400: tabs is not supplied or invalid')
   }
 
-  return cachify(`${id}-${tabs}`, res, async () =>
+  return cachify<VideoWithCaption[]>(`${id}-${tabs}`, res, async () =>
     extractVideoDataFields(
       await fetchViewByMember(
         Channels[id as ChannelID].airtableViewName,

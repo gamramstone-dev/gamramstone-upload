@@ -141,14 +141,20 @@ const Account: NextPage = () => {
                 type: 'button',
               }}
               onChange={() =>
-                signIn('google', undefined, {
-                  scope:
-                    'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
-                  prompt:
-                    window.location.href.indexOf('?wak') > -1
-                      ? 'select_account'
-                      : 'none',
-                })
+                signIn(
+                  'google',
+                  undefined,
+                  window.location.href.indexOf('?wak') > -1
+                    ? {
+                        scope:
+                          'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+                        prompt: 'select_account',
+                      }
+                    : {
+                        scope:
+                          'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+                      }
+                )
               }
             />
           ) : (

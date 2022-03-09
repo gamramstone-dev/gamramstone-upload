@@ -12,22 +12,15 @@ const redis = Redis.fromEnv()
  * @param uuid 유저 UUID
  * @returns
  */
-export const getUUIDUser = async (uuid: string) => redis.hget('usersUUID', uuid)
+export const getUUIDUser = async (uuid: string) => redis.hget<string>('usersUUID', uuid)
 
 /**
  * 서버에서 주어진 ID를 가진 유저를 가져옵니다.
  * @param id 유저 ID
  * @returns
  */
-export const getUser = async (id: string): Promise<DatabaseUser | null> => {
-  const user = await redis.hgetall<
-    Record<keyof DatabaseUser, DatabaseUser[keyof DatabaseUser]>
-  >(`user:${id}`)
-
-  console.log(user)
-
-  return (user as unknown) as DatabaseUser | null
-}
+export const getUser = async (id: string): Promise<DatabaseUser | null> =>
+  redis.hgetall<DatabaseUser>(`user:${id}`)
 
 export const listUsersUUID = async () => redis.hkeys('usersUUID')
 
@@ -92,7 +85,7 @@ export const deleteUser = async (id: string) => {
   }
 
   try {
-    await redis.hdel('usersUUID', user.uuid as string)
+    await redis.hdel('usersUUID', user.uuid)
   } catch (e) {
     throw new Error(`failed to delete user uuid: ${(e as Error).message}`)
   }

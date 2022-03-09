@@ -89,7 +89,7 @@ export const getYouTubeSubtitleList = async (id: string, key: string) => {
   const cache = await getVideoCache(`subtitle:${id}`)
 
   if (cache) {
-    return parseCaptionResponse(cache.items)
+    return parseCaptionResponse((cache as { items: any }).items)
   }
 
   const res = await fetch(

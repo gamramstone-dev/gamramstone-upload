@@ -25,8 +25,6 @@ export const markAsDoneVideos = async (
 ) => {
   const cache = await getCache(key)
 
-  console.log(cache)
-
   if (!Array.isArray(cache)) {
     return
   }
@@ -56,10 +54,10 @@ export const markAsDoneVideos = async (
   )
 }
 
-export const cachify = async <T>(
+export const cachify = async <T = unknown>(
   scope: string,
   res: NextApiResponse,
-  func: (...args: any[]) => T
+  func: (...args: any[]) => Promise<T>
 ): Promise<T> => {
   const data = await getCache<T>(scope)
 
