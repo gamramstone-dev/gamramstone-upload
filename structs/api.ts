@@ -37,8 +37,8 @@ const parseError = (error: unknown): [number, string] => {
   return [500, error.message]
 }
 
-export const apify = (
-  callback: (req: NextApiRequest, res: NextApiResponse) => Promise<unknown>,
+export const apify = <T = unknown>(
+  callback: (req: NextApiRequest, res: NextApiResponse) => Promise<T>,
   cache?: number
 ) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
@@ -52,7 +52,7 @@ export const apify = (
       res.status(200).json({
         status: 'success',
         data: result,
-      } as APIResponseSuccess<unknown>)
+      } as APIResponseSuccess<T>)
     } catch (error) {
       const [status, message] = parseError(error)
 

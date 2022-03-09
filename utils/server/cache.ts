@@ -1,22 +1,22 @@
-import { auth, get, set } from '@upstash/redis'
+import { Redis } from '@upstash/redis'
 import { NextApiResponse } from 'next'
-import {
-  TranslatedVideoMetadata,
-} from '../../structs/airtable'
+import { TranslatedVideoMetadata } from '../../structs/airtable'
 
-auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN)
+const redis = Redis.fromEnv()
 
 export const setCache = (key: string, value: string, ttl: number) =>
-  set(key, value, 'EX', ttl)
-export const getCache = (key: string) => get(key)
+  redis.set(key, value, {
+    ex: ttl,
+  })
+export const getCache = <T = unknown>(key: string) => redis.get<T>(key)
 
 /**
  * 영상 목록 캐시를 받아와 해당 영상의 상태를 업로드 완료 처리로 바꿉니다.
  * 이 값을 바꾼다고 AirTable에 있는 값이 변경되지는 않습니다.
- * @param key 
- * @param lang 
- * @param videos 
- * @returns 
+ * @param key
+ * @param lang
+ * @param videos
+ * @returns
  */
 export const markAsDoneVideos = async (
   key: string,
@@ -25,20 +25,16 @@ export const markAsDoneVideos = async (
 ) => {
   const cache = await getCache(key)
 
-  if (cache.error || !cache.data) {
-    return
-  }
+  console.log(cache)
 
-  const lists = JSON.parse(cache.data)
-
-  if (!Array.isArray(lists)) {
+  if (!Array.isArray(cache)) {
     return
   }
 
   await setCache(
     key,
     JSON.stringify(
-      lists.map(v => {
+      cache.map(v => {
         if (videos.includes(v.url)) {
           return {
             ...v,
@@ -60,17 +56,17 @@ export const markAsDoneVideos = async (
   )
 }
 
-export const cachify = async (
+export const cachify = async <T>(
   scope: string,
   res: NextApiResponse,
-  func: (...args: any[]) => unknown
-) => {
-  const { error, data } = await getCache(scope)
+  func: (...args: any[]) => T
+): Promise<T> => {
+  const data = await getCache<T>(scope)
 
-  if (error === null && data !== null) {
+  if (data !== null) {
     res.setHeader('X-Cache-Hit', 'true')
 
-    return JSON.parse(data)
+    return data
   }
 
   const result = await func()
