@@ -118,17 +118,15 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   /**
    * Discord 채널에 업로드 알림을 보내는 부분입니다.
    */
-  const discordMessages: DiscordEmbed[] = []
-
-  for (let i = 0; i < results.length; i++) {
+  const discordMessages: DiscordEmbed[] = results.map(result => {
     console.log(
-      `[updateVideo] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
+      `[updateVideo] ${result.originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
     )
 
-    const channelId = getChannelIDByName(results[i].channel)
+    const channelId = getChannelIDByName(result.channel)
 
-    discordMessages.push({
-      title: getFirstItem(results[i].originalTitle),
+    return {
+      title: getFirstItem(result.originalTitle),
       color: channelId
         ? parseInt(Channels[channelId].color.replace(/#/g, ''), 16)
         : 0x118bf5,
@@ -137,11 +135,9 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       } 자막이 크리에이터에 의해 적용됐습니다! 🎉 ${
         isTest ? ' (테스트 메세지입니다. 실제 적용은 아닙니다.)' : ''
       }`,
-      url: results[i].url,
+      url: result.url,
       thumbnail: {
-        url: `https://i.ytimg.com/vi/${getYouTubeId(
-          results[i].url
-        )}/hqdefault.jpg`,
+        url: `https://i.ytimg.com/vi/${getYouTubeId(result.url)}/hqdefault.jpg`,
       },
       footer: channelId
         ? {
@@ -149,38 +145,35 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
             icon_url: Channels[channelId].image,
           }
         : undefined,
-    })
+    }
+  })
 
-    console.log(
-      `[updateVideo] ${results[i].originalTitle} - ${LanguageNames[lang]} is now marked as done (${results[i].id})`
+  if (!isTest) {
+    await Promise.all(
+      results.map(result => {
+        console.log(
+          `[updateVideo] ${result.originalTitle} - ${LanguageNames[lang]} is now marked as done (${result.id})`
+        )
+
+        return uploadBase.update(result.id, {
+          [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
+          '진행 상황']: '유튜브 적용 완료',
+        })
+      })
     )
 
-    if (!isTest) {
-      await uploadBase.update(results[i].id, {
-        [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
-        '진행 상황']: '유튜브 적용 완료',
-      })
-    }
-  }
+    const chunked = chunks(discordMessages, 10)
 
-  const chunked = chunks(discordMessages, 10)
-
-  for (let i = 0; i < chunked.length; i++) {
-    const item = chunked[i]
-
-    if (!item) {
-      continue
-    }
-
-    const env = process.env[
-      `DISCORD_${isMajorLanguage ? lang.toUpperCase() : 'EN'}_HOOK`
-    ]!
-
-    if (isTest) {
-      console.log(`[updateVideo] test sending ${item.length} discord messages.`)
-    } else if (env) {
-      await discord.sendFancy(env, item)
-    }
+    await Promise.all(
+      chunked.map((chunk: DiscordEmbed[]) =>
+        discord.sendFancy(
+          process.env[
+            `DISCORD_${isMajorLanguage ? lang.toUpperCase() : 'EN'}_HOOK`
+          ]!,
+          chunk
+        )
+      )
+    )
   }
 
   return results
