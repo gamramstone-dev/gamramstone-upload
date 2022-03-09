@@ -83,20 +83,20 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   let results: AirtableLanguageField[] = []
 
   for (let i = 0; i < localizedVideos.length; i++) {
-    const video = localizedVideos[i]
-    const record = airtableVideos.find(v => getYouTubeId(v.url) === video.id)
+    const { id } = localizedVideos[i]
+    const record = airtableVideos.find(v => getYouTubeId(v.url) === id)
 
     if (!record) {
       continue
     }
 
     console.log(
-      `[updateState] started for ${lang} - ${video.id}, isNoCC: ${record.noCC}`
+      `[updateState] started for ${lang} - ${id}, isNoCC: ${record.noCC}`
     )
 
     /**
      * 검증 과정은 내용이 적용한 내용이 업로더에 의해 바뀔 수 있기 때문에 보류합니다.
-     * 
+     *
      *  if (
      *    video.metadatas[lang].title !== record.title ||
      *    video.metadatas[lang].description !== record.description
@@ -104,7 +104,6 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
      *    continue
      *  }
      */
-
 
     if (record.noCC) {
       results.push(record)
@@ -116,7 +115,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
      * 영상에 등록된 자동 생성된 자막 및 다른 언어 자막을 제외한 자막 트랙을 가져옵니다.
      */
     const caption = (
-      await getYouTubeSubtitleList(video.id, process.env.YOUTUBE_API_KEY!)
+      await getYouTubeSubtitleList(id, process.env.YOUTUBE_API_KEY!)
     ).filter(v => v.trackKind !== 'asr' && v.language === lang)
 
     /**
@@ -140,26 +139,22 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   /**
    * Discord 채널에 업로드 알림을 보내는 부분입니다.
    */
-  const discordMessages: DiscordEmbed[] = []
-
-  for (let i = 0; i < results.length; i++) {
+  const discordMessages: DiscordEmbed[] = results.map(result => {
     console.log(
-      `[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
+      `[updateState] ${result.originalTitle} - ${LanguageNames[lang]} caption is being uploaded.`
     )
 
-    const channelId = getChannelIDByName(results[i].channel)
+    const channelId = getChannelIDByName(result.channel)
 
-    discordMessages.push({
-      title: getFirstItem(results[i].originalTitle),
+    return {
+      title: getFirstItem(result.originalTitle),
       color: channelId
         ? parseInt(Channels[channelId].color.replace(/#/g, ''), 16)
         : 0x118bf5,
       description: `${LanguageNames[lang]} 자막이 적용됐습니다! 🎉`,
-      url: results[i].url,
+      url: result.url,
       thumbnail: {
-        url: `https://i.ytimg.com/vi/${getYouTubeId(
-          results[i].url
-        )}/hqdefault.jpg`,
+        url: `https://i.ytimg.com/vi/${getYouTubeId(result.url)}/hqdefault.jpg`,
       },
       footer: channelId
         ? {
@@ -167,35 +162,34 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
             icon_url: Channels[channelId].image,
           }
         : undefined,
-    })
+    }
+  })
 
-    console.log(
-      `[updateState] ${results[i].originalTitle} - ${LanguageNames[lang]} is now marked as done (${results[i].id})`
-    )
+  await Promise.all(
+    results.map(result => {
+      console.log(
+        `[updateState] ${result.originalTitle} - ${LanguageNames[lang]} is now marked as done (${result.id})`
+      )
 
-    await uploadBase.update(results[i].id, {
-      [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
-      '진행 상황']: '유튜브 적용 완료',
+      return uploadBase.update(result.id, {
+        [(isMajorLanguage ? '' : `${LanguageNames[lang]} `) +
+        '진행 상황']: '유튜브 적용 완료',
+      })
     })
-  }
+  )
 
   const chunked = chunks(discordMessages, 10)
 
-  for (let i = 0; i < chunked.length; i++) {
-    const item = chunked[i]
-
-    if (!item) {
-      continue
-    }
-
-    const env = process.env[
-      `DISCORD_${isMajorLanguage ? lang.toUpperCase() : 'EN'}_HOOK`
-    ]!
-
-    if (env) {
-      await discord.sendFancy(env, item)
-    }
-  }
+  await Promise.all(
+    chunked.map((chunk: DiscordEmbed[]) =>
+      discord.sendFancy(
+        process.env[
+          `DISCORD_${isMajorLanguage ? lang.toUpperCase() : 'EN'}_HOOK`
+        ]!,
+        chunk
+      )
+    )
+  )
 
   return results
 }
