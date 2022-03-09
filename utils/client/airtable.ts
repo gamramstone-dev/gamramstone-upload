@@ -26,7 +26,7 @@ export const extractFinishedVideosByLanguage = (
 ) => {
   const done = works.filter(v => {
     for (let i = 0; i < failed.length; i++) {
-      if (failed[i].id === v.id) {
+      if (failed[i].id === v.id && failed[i].lang === v.lang) {
         return false
       }
     }
