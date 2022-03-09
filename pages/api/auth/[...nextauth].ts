@@ -13,7 +13,7 @@ export default NextAuth({
       authorization: {
         params: {
           scope:
-            'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+            'openid profile',
         },
       },
     }),

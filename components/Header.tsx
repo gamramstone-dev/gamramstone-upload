@@ -44,7 +44,10 @@ export const Header = () => {
               size='medium'
               onClick={() =>
                 signIn('google', undefined, {
-                  scope: 'profile openid',
+                  prompt:
+                    window.location.href.indexOf('?wak') > -1
+                      ? 'select_account'
+                      : 'none',
                 })
               }
             >

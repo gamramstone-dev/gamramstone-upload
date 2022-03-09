@@ -288,7 +288,6 @@ export const CaptionCard = ({
                         {(!publicRuntimeConfig.hideApplyButton ||
                           session?.userState === 'admin') && (
                           <Button
-                            disabled={session === null}
                             icon='file-upload-line'
                             onClick={() =>
                               isUploadable(
@@ -309,8 +308,7 @@ export const CaptionCard = ({
                               )
                             }
                           >
-                            자막 자동 적용{' '}
-                            {session === null ? '(로그인 필요)' : ''}
+                            자막 자동 적용
                           </Button>
                         )}
                         <a href={video.url} target='_blank' rel='noreferrer'>

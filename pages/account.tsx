@@ -121,11 +121,11 @@ const Account: NextPage = () => {
           session?.userState === 'admin' ? (
             <SettingCard
               setting={{
-                title: '권한 부여',
+                title: '연동하기',
                 description:
                   (session && session.permissionGranted) || false ? (
                     <>
-                      이미 권한이 부여되었습니다.<br></br>사용하는 정보 내용은{' '}
+                      이미 연동되었습니다.<br></br>사용하는 정보 내용은{' '}
                       <Link href='/privacy'>개인정보 처리방침</Link>을
                       확인하세요.
                     </>
@@ -140,7 +140,16 @@ const Account: NextPage = () => {
                 disabled: (session && session.permissionGranted) || false,
                 type: 'button',
               }}
-              onChange={() => signIn('google')}
+              onChange={() =>
+                signIn('google', undefined, {
+                  scope:
+                    'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+                  prompt:
+                    window.location.href.indexOf('?wak') > -1
+                      ? 'select_account'
+                      : 'none',
+                })
+              }
             />
           ) : (
             undefined

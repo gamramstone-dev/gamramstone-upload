@@ -125,7 +125,7 @@ export const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
 
 interface ProcessPopupProps {
   data: VideoWithCaption[]
-  token: string
+  token?: string
   close?: () => void
   noPermission?: boolean
   onUpload?: (videos: [string, LanguageCode][]) => void
@@ -486,9 +486,7 @@ export const ProcessPopup = ({
       custom={step - previousStep}
     >
       <div className={styles.center}>
-        <h1 className={styles.title}>
-          업로드하려면 YouTube 계정 권한이 필요해요.
-        </h1>
+        <h1 className={styles.title}>업로드하려면 YouTube 연동이 필요해요.</h1>
 
         <p className={styles.description}>
           계속하기 전에, 감람스톤에서 어떤 정보를 사용하고 처리하는지{' '}
@@ -506,9 +504,18 @@ export const ProcessPopup = ({
         <Button
           theme='primary'
           icon='login-box-line'
-          onClick={() => signIn('google')}
+          onClick={() =>
+            signIn('google', undefined, {
+              scope:
+                'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+              prompt:
+                window.location.href.indexOf('?wak') > -1
+                  ? 'select_account'
+                  : 'none',
+            })
+          }
         >
-          권한 부여
+          연동하기
         </Button>
       </div>
     </PopupTab>

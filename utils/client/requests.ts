@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 import { SessionData } from '../../structs/setting'
 
 export const applyCaptions = async (
-  token: string,
+  token: string | undefined,
   language: LanguageCode,
   id: string,
   title: string,
@@ -81,7 +81,9 @@ export const isUploadable = (
   authFunc?: () => void
 ) => {
   if (!session) {
-    toast.error('로그인 해주세요.')
+    if (authFunc) {
+      authFunc()
+    }
 
     return
   }
@@ -94,7 +96,7 @@ export const isUploadable = (
     }
 
     toast.error(
-      'YouTube 계정 권한이 필요해요. 프로필 페이지에서 권한 부여 버튼을 클릭해주세요.'
+      'YouTube 연동이 필요해요. 프로필 페이지에서 연동하기 버튼을 클릭해주세요.'
     )
 
     return

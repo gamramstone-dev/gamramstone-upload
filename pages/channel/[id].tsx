@@ -252,9 +252,9 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         />
       </Head>
       <AnimatePresence>
-        {openProcessPopup && data && session && (
+        {openProcessPopup && data && (
           <ProcessPopup
-            token={session.accessToken}
+            token={session?.accessToken}
             data={data}
             noPermission={needPermission}
             close={() => {
@@ -283,7 +283,6 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                   session?.userState === 'admin') && (
                   <Button
                     size='large'
-                    disabled={!session}
                     icon='upload-line'
                     onClick={() =>
                       data && data.length
@@ -313,7 +312,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                         : toast('업로드 대기 중인 영상이 없어요.')
                     }
                   >
-                    전체 적용 {!session ? '(로그인 필요)' : undefined}
+                    전체 적용
                   </Button>
                 )}
             </div>
