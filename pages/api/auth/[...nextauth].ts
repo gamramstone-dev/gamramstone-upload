@@ -122,19 +122,19 @@ export default NextAuth({
       return token
     },
     async session ({ session, token }) {
-      session.id = token.id
+      session.id = token.id as string
       session.permissionGranted =
         typeof token.scope === 'string' &&
         token.scope.indexOf('auth/youtube.force-ssl') !== -1
 
       const user = await getUser(token.id as string)
 
-      session.userState = user?.state
+      session.userState = user?.state || 'guest'
       session.lastLogin = token.lastLogin
       session.uuid = token.uuid
 
       if (hasCreatorPermission(user!.state!)) {
-        session.accessToken = token.accessToken
+        session.accessToken = token.accessToken as string | undefined
       }
 
       return session
