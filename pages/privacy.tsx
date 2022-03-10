@@ -29,7 +29,7 @@ const Privacy: NextPage = () => {
           <p>
             <b>
               {' '}
-              발효일: 2021년 3월 4일 (KST), 마지막 수정 : 2021년 3월 4일 (KST)
+              발효일: 2021년 3월 10일 (KST), 마지막 수정 : 2021년 3월 10일 (KST)
             </b>
           </p>
           <br></br>
@@ -119,9 +119,9 @@ const Privacy: NextPage = () => {
             에서 권한을 취소할 때 즉시 효력을 잃습니다.
             <br></br>
             <br></br>
-            토큰의 사용 : 토큰 정보는 YouTube API에 접근하여 YouTube 영상 제목, 설명
-            번역 추가 및 자막 파일 업로드를 하기 위한 용도로 사용되며 그 이외의
-            용도로는 절대 사용되지 않습니다.
+            토큰의 사용 : 토큰 정보는 YouTube API에 접근하여 YouTube 영상 제목,
+            설명 번역 추가 및 자막 파일 업로드를 하기 위한 용도로 사용되며 그
+            이외의 용도로는 절대 사용되지 않습니다.
             <br></br>
             토큰의 저장 : 토큰 정보는 서버 데이터베이스에 저장되지 않으며,
             사용자 브라우저의 &quot;쿠키&quot;라고 불리는 저장소에 암호화된
@@ -129,16 +129,17 @@ const Privacy: NextPage = () => {
             가지고 있는 서버만 읽을 수 있습니다.
             <br></br>
             토큰의 범위 : 계정 페이지 및 권한 요청 팝업에서 권한 부여를 하지
-            않는 한 사이트에서 YouTube 계정에 접근할 수 없습니다. 단, 사용자가 계정 페이지 및 권한 요청 팝업에서 권한 부여를 할 경우
-            YouTube 계정에 대한 접근 권한이 생깁니다.<br></br>
+            않는 한 사이트에서 YouTube 계정에 접근할 수 없습니다. 단, 사용자가
+            계정 페이지 및 권한 요청 팝업에서 권한 부여를 할 경우 YouTube 계정에
+            대한 접근 권한이 생깁니다.<br></br>
             <b>
               주의: 토큰 권한 자체에는 영상을 업로드하고, 삭제하는 등의 계정
               관리 권한이 포함되지만, 본 서비스는 번역 서비스 제공 이외의
               용도로는 절대 사용하지 않음을 맹세합니다.
             </b>
             <br></br>
-            어떤 YouTube API에 접근하는지 투명하게 공개하기 위하여 사이트 소스 코드를 공개하고 있으며
-            사이트 하단의 링크에서 확인할 수 있습니다.
+            어떤 YouTube API에 접근하는지 투명하게 공개하기 위하여 사이트 소스
+            코드를 공개하고 있으며 사이트 하단의 링크에서 확인할 수 있습니다.
             <br></br>
           </p>
           <br></br>
@@ -155,6 +156,21 @@ const Privacy: NextPage = () => {
               Google API 서비스 사용자 데이터 정책 (Google API Services User
               Data Policy)
             </Link>
+            을 준수합니다.
+          </p>
+          <br></br>
+          <br></br>
+          <h2>YouTube API 정책 준수</h2>
+          <p>
+            본 서비스를 이용함으로써 사용자는{' '}
+            <Link href='https://developers.google.com/youtube/terms/api-services-terms-of-service'>
+              YouTube 서비스 정책 (YouTube Terms of Service)
+            </Link>{' '}
+            에 동의하는 것으로 간주됩니다.
+            <br></br>본 사이트에서는 상기 정책과{' '}
+            <Link href='https://developers.google.com/youtube/terms/developer-policies'>
+              YouTube API 개발자 정책 (YouTube API Developer Policy)
+            </Link>{' '}
             을 준수합니다.
           </p>
         </div>
