@@ -32,7 +32,7 @@ export const getYouTubeLocalizedVideos = async (ids: string[], key: string) => {
       const cache = await getVideoCache(id)
 
       if (cache) {
-        return JSON.parse(cache)
+        return cache
       }
 
       const data = await fetch(
@@ -89,7 +89,7 @@ export const getYouTubeSubtitleList = async (id: string, key: string) => {
   const cache = await getVideoCache(`subtitle:${id}`)
 
   if (cache) {
-    return parseCaptionResponse(JSON.parse(cache).items)
+    return parseCaptionResponse((cache as { items: any }).items)
   }
 
   const res = await fetch(

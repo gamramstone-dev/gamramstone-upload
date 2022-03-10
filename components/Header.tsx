@@ -43,12 +43,15 @@ export const Header = () => {
             <Button
               size='medium'
               onClick={() =>
-                signIn('google', undefined, {
-                  prompt:
-                    window.location.href.indexOf('?wak') > -1
-                      ? 'select_account'
-                      : 'none',
-                })
+                signIn(
+                  'google',
+                  undefined,
+                  window.location.href.indexOf('?wak') > -1
+                    ? {
+                        prompt: 'select_account',
+                      }
+                    : undefined
+                )
               }
             >
               로그인

@@ -11,6 +11,7 @@ export const UserStateNames: Record<UserState, string> = {
 }
 
 export interface DatabaseUser {
+  [index: string]: unknown
   uuid: string
   lastLogin: string
   state: UserState

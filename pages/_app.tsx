@@ -38,9 +38,7 @@ const useSettingSync = () => {
       const result = await fetch('/api/settings').then(v => v.json())
 
       if (result.status === 'success') {
-        const data = JSON.parse(result.data)
-
-        setSettings(data)
+        setSettings(result.data)
       }
     }
 

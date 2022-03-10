@@ -184,16 +184,16 @@ export const ProcessPopup = ({
     // Promise.all을 쓰지 않는 이유는 서버 DB 처리 과정에서 race condition이 발생할 수 있어서
     // 요청을 blocking 방식으로 처리하게 만들었습니다.
     let queue = works.map(({ name, value }) => () =>
-      updateVideoState(
-        name,
-        value.map(v => v.id),
-        window.location.href.indexOf('devMode') > -1
+        updateVideoState(
+          name,
+          value.map(v => v.id),
+          window.location.href.indexOf('devMode') > -1
+        )
       )
-    )
-      
-    /**
-     * 위에서 나눈 요청들을 순서대로 실행합니다.
-     */
+
+      /**
+       * 위에서 나눈 요청들을 순서대로 실행합니다.
+       */
     ;(async () => {
       let results: boolean[] = []
 
@@ -516,14 +516,20 @@ export const ProcessPopup = ({
           theme='primary'
           icon='login-box-line'
           onClick={() =>
-            signIn('google', undefined, {
-              scope:
-                'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
-              prompt:
-                window.location.href.indexOf('?wak') > -1
-                  ? 'select_account'
-                  : 'none',
-            })
+            signIn(
+              'google',
+              undefined,
+              window.location.href.indexOf('?wak') > -1
+                ? {
+                    scope:
+                      'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+                    prompt: 'select_account',
+                  }
+                : {
+                    scope:
+                      'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
+                  }
+            )
           }
         >
           연동하기
