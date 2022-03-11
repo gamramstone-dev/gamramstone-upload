@@ -26,8 +26,12 @@ import confetties from '../utils/client/confetties'
 
 import getConfig from 'next/config'
 import Link from 'next/link'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { uploadInProgressAtom } from '../structs/uploadState'
+import {
+  captionPreviewDetailsAtom,
+  openCaptionPreviewAtom,
+} from '../structs/captionPreview'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -101,6 +105,7 @@ interface CaptionCardProps {
   open?: boolean
   onUploadAuth?: () => void
   onUpload?: (id: [string, LanguageCode][]) => void
+  onCaptionPreview?: (url: string, label: string) => void
 }
 
 const ToastOption = {
@@ -165,6 +170,22 @@ export const CaptionCard = ({
         document.body.removeChild(link)
       })
   }, [])
+
+  const setOpenPreview = useSetRecoilState(openCaptionPreviewAtom)
+  const setPreviewDetails = useSetRecoilState(captionPreviewDetailsAtom)
+
+  const preview = useCallback(
+    (url: string, label: string, lang: LanguageCode) => {
+      setOpenPreview(true)
+      setPreviewDetails({
+        title: label,
+        file: url,
+        video: getYouTubeId(video.url),
+        lang,
+      })
+    },
+    [setOpenPreview, setPreviewDetails, video.url]
+  )
 
   const [isUploading, setUploading] = useRecoilState(uploadInProgressAtom)
 
@@ -328,8 +349,16 @@ export const CaptionCard = ({
                             languages[tabIndex].captions.map(v => (
                               <Button
                                 icon='download-line'
+                                title='오른쪽 클릭 시 자막을 미리봅니다.'
                                 key={`file-${v.filename}`}
                                 onClick={() => download(v.url, v.filename)}
+                                onContext={() =>
+                                  preview(
+                                    v.url,
+                                    v.filename,
+                                    languages[tabIndex].language
+                                  )
+                                }
                               >
                                 {v.filename}
                               </Button>

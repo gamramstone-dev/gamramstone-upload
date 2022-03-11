@@ -27,6 +27,7 @@ import Footer from '../../components/Footer'
 
 import getConfig from 'next/config'
 import { isUploadable } from '../../utils/client/requests'
+import CaptionPreview from '../../components/CaptionPreview'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -266,6 +267,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
           ></ProcessPopup>
         )}
       </AnimatePresence>
+      <CaptionPreview></CaptionPreview>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
           <ChannelCard channel={Channels[id]}></ChannelCard>

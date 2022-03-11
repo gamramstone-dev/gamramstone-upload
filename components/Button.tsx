@@ -17,6 +17,7 @@ interface ButtonBaseProps {
   className?: string
   theme?: ButtonTheme
   size?: ButtonSize
+  title?: string
   icon?: string
   disabled?: boolean
   children?: ReactNode
@@ -34,6 +35,7 @@ export const Button = ({
   children,
   className,
   icon,
+  title,
   disabled = false,
   roundness = 16,
   size = 'medium',
@@ -84,6 +86,7 @@ export const Button = ({
         size && styles[size],
         theme && styles[theme]
       )}
+      title={title}
       onClick={ev => onClick && !disabled && localClickHandler(ev)}
       onContextMenu={ev =>
         onContext && !disabled && (ev.preventDefault(), onContext())
