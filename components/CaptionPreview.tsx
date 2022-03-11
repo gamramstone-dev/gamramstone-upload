@@ -45,14 +45,14 @@ const useTimeSync = (caption: CaptionLine[] | null, target: any) => {
       return
     }
 
-    const interval = setInterval(() => {
+    const func = () => {
       if (!target) {
         return
       }
 
       const time = target.getCurrentTime()
 
-      if (time < caption[0].start) {
+      if (time < caption[0].start && index !== -1) {
         setIndex(-1)
         return
       }
@@ -70,7 +70,11 @@ const useTimeSync = (caption: CaptionLine[] | null, target: any) => {
           break
         }
       }
-    }, 100)
+    }
+
+    const interval = setInterval(func, 33)
+
+    func()
 
     return () => {
       clearInterval(interval)
