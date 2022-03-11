@@ -46,7 +46,7 @@ const useTimeSync = (caption: CaptionLine[] | null, target: any) => {
     }
 
     const func = () => {
-      if (!target) {
+      if (!target || !caption || !caption.length) {
         return
       }
 
@@ -85,6 +85,7 @@ const useTimeSync = (caption: CaptionLine[] | null, target: any) => {
 }
 
 const useCaptionData = (filename: string, url: string) => {
+  const [rawData, setRawData] = useState<string | null>(null)
   const [caption, setCaption] = useState<CaptionLine[] | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
@@ -94,17 +95,20 @@ const useCaptionData = (filename: string, url: string) => {
       try {
         setIsLoading(true)
         setError('')
+        setRawData('')
 
         const response = await fetch(url)
         const data = await response.text()
 
         const parsedData = captionParser.parse(filename, data)
 
+        setRawData(data)
         setCaption(parsedData)
         setError('')
         setIsLoading(false)
       } catch (error) {
         setCaption(null)
+        setRawData('')
         setError((error as Error).message)
         setIsLoading(false)
       }
@@ -113,7 +117,7 @@ const useCaptionData = (filename: string, url: string) => {
     fetchCaption()
   }, [filename, url])
 
-  return { caption, isLoading, error }
+  return { caption, isLoading, error, rawData }
 }
 
 export const CaptionPreview = () => {
@@ -123,7 +127,7 @@ export const CaptionPreview = () => {
   const [closing, setClosing] = useState(false)
   const [player, setPlayer] = useState<any>(null)
 
-  const { caption, isLoading, error } = useCaptionData(
+  const { caption, isLoading, error, rawData } = useCaptionData(
     preview.details.title,
     preview.details.file
   )

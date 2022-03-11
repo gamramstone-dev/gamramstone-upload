@@ -12,15 +12,19 @@ const parseTimestamp = (str: string) => {
 
 const SRTParse = (data: string): CaptionLine[] => {
   return data
-    .split(/\r\n\r\n/gi)
+    .split(/\r\n\r\n+/gi)
     .map(v => {
-      const line = v.split(/\r/g).map(v => v.trim())
+      const line = v.split(/\r/g).map(v => v.trim()).filter(v => v !== '')
 
-      if (line.length === 1) {
+      if (line.length < 2) {
         return null
       }
 
       const split = line[1].split(' --> ')
+
+      if (!split[0] || !split[1]) {
+        throw new Error(`Invalid Timestamp Data. Got : ${v}`)
+      }
 
       return {
         index: Number(line[0]),
