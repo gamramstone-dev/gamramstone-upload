@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { apify } from '../../../structs/api'
 import { checkIsValidUserState } from '../../../structs/user'
-import { updateUser } from '../../../utils/server/database'
+import { getUUIDUser, updateUser } from '../../../utils/server/database'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { authorization } = req.headers
@@ -12,8 +12,19 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     )
   }
 
-  const id = req.query.id
+  let id = req.query.id
+  const uuid = req.query.uuid
   const state = req.query.state
+
+  if (uuid && typeof uuid === 'string') {
+    const result = await getUUIDUser(uuid)
+
+    if (!result) {
+      throw new Error('400: Bad Request. Given UUID is not defined.')
+    }
+
+    id = result
+  }
 
   if (typeof id !== 'string' || !id) {
     throw new Error('400: Invalid ID.')
