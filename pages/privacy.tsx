@@ -29,7 +29,7 @@ const Privacy: NextPage = () => {
           <p>
             <b>
               {' '}
-              발효일: 2021년 3월 10일 (KST), 마지막 수정 : 2021년 3월 10일 (KST)
+              발효일: 2021년 3월 11일 (KST), 마지막 수정 : 2021년 3월 11일 (KST)
             </b>
           </p>
           <br></br>
@@ -166,6 +166,10 @@ const Privacy: NextPage = () => {
             <Link href='https://developers.google.com/youtube/terms/api-services-terms-of-service'>
               YouTube 서비스 정책 (YouTube Terms of Service)
             </Link>{' '}
+            및{' '}
+            <Link href='https://policies.google.com/privacy'>
+              Google 개인정보 처리방침 (Google Privacy Policy)
+            </Link>
             에 동의하는 것으로 간주됩니다.
             <br></br>본 사이트에서는 상기 정책과{' '}
             <Link href='https://developers.google.com/youtube/terms/developer-policies'>
