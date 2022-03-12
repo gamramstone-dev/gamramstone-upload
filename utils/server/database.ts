@@ -4,6 +4,8 @@ import { DatabaseUser } from '../../structs/user'
 
 import crypto from 'crypto'
 import { setCache } from './cache'
+import { HttpClient } from '@upstash/redis/http'
+import { GetCommand, HGetCommand } from '@upstash/redis/commands'
 
 const redis = Redis.fromEnv()
 
@@ -12,7 +14,21 @@ const redis = Redis.fromEnv()
  * @param uuid 유저 UUID
  * @returns
  */
-export const getUUIDUser = async (uuid: string) => redis.hget<string>('usersUUID', uuid)
+export const getUUIDUser = async (uuid: string) =>
+  fetch(`${process.env.UPSTASH_REDIS_REST_URL!}/hget/usersUUID/${uuid}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+    },
+  })
+    .then(v => v.json()).then(v => {
+      if (v.error) {
+        throw new Error('Error occurred while fetching UUID.')
+      }
+
+      if (v.result) {
+        return v.result
+      }
+    })
 
 /**
  * 서버에서 주어진 ID를 가진 유저를 가져옵니다.

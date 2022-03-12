@@ -1,7 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { apify } from '../../../structs/api'
-import { checkIsValidUserState } from '../../../structs/user'
-import { getUUIDUser, updateUser } from '../../../utils/server/database'
+import {
+  checkIsValidUserState,
+  hasCreatorPermission,
+} from '../../../structs/user'
+import {
+  getUser,
+  getUUIDUser,
+  updateUser,
+} from '../../../utils/server/database'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { authorization } = req.headers
@@ -15,6 +22,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   let id = req.query.id
   const uuid = req.query.uuid
   const state = req.query.state
+  const noDowngrade = req.query.noDowngrade === 'true'
 
   if (uuid && typeof uuid === 'string') {
     const result = await getUUIDUser(uuid)
@@ -23,7 +31,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       throw new Error('400: Bad Request. Given UUID is not defined.')
     }
 
-    id = result
+    id = `${result}`
   }
 
   if (typeof id !== 'string' || !id) {
@@ -36,6 +44,24 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (req.method !== 'POST') {
     throw new Error('405: Method Not Allowed. Only POST is allowed.')
+  }
+
+  if (noDowngrade) {
+    const user = await getUser(id)
+
+    if (!user) {
+      throw new Error('400: Bad Request. User not exists.')
+    }
+
+    if (user.state === state) {
+      throw new Error('400: Bad Request. Same user state.')
+    }
+
+    if (hasCreatorPermission(user.state)) {
+      throw new Error(
+        `400: Bad Request. Cannot downgrade to ${state}. (currently ${user.state})`
+      )
+    }
   }
 
   const result = await updateUser(id, {

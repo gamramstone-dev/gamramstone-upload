@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/canvas-confetti": "^1.4.2",
     "@types/uuid": "^8.3.4",
-    "@upstash/redis": "^1.0.0-alpha.1",
+    "@upstash/redis": "^1.0.0-alpha.4",
     "airtable": "^0.11.2",
     "canvas-confetti": "^1.5.1",
     "framer-motion": "^6.2.8",
@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@types/node": "17.0.21",
-    "@types/react": "17.0.39",
-    "eslint": "8.10.0",
+    "@types/react": "17.0.40",
+    "eslint": "8.11.0",
     "eslint-config-next": "12.1.0",
     "typescript": "4.6.2"
   },
