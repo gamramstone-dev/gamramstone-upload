@@ -148,6 +148,30 @@ export const extractNationalValue = (
     }
   }
 
+  /**
+   * 한국어 처리
+   */
+  if (`제목` in data.fields && `세부 정보` in data.fields && '한국어 자막 업로드' in data.fields) {
+    const title = (data.fields[`제목`] as string[])[0]
+    const description = (data.fields[`세부 정보`] as string[])[0]
+
+    let files: CaptionFile[] = []
+
+    if (`한국어 자막 파일` in data.fields) {
+      files = filterCaptionFiles(data.fields[`한국어 자막 파일`] as Attachment[])
+    }
+
+    const caption: TranslatedVideoMetadata = {
+      language: 'ko',
+      title,
+      description,
+      status: 'waiting',
+      captions: files,
+    }
+
+    captions.push(caption)
+  }
+
   const langs = Object.keys(LanguageNames)
   for (let i = 0; i < langs.length; i++) {
     fetchLanguages(langs[i] as OnWorkingLanguageCode)
@@ -186,7 +210,9 @@ export const extractLanguageSpecificData = (
         '해당없음 (자막 필요 없는 영상)',
       originalTitle: getFirstItem(v.fields['제목']),
       title: getFirstItem(v.fields[`${LanguageNames[language]} 제목`]),
-      description: getFirstItem(v.fields[`${LanguageNames[language]} 세부 정보`]),
+      description: getFirstItem(
+        v.fields[`${LanguageNames[language]} 세부 정보`]
+      ),
       uploadDate: getFirstItem(v.fields['업로드 날짜']),
       editDate: getFirstItem(v.fields['Last Modified']),
       files:
