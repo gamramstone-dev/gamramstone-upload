@@ -110,6 +110,14 @@ export const Channels: Record<ChannelID, Channel> = {
   },
 }
 
+export const getChannelByID = (channelId: string) =>
+  Object.entries(Channels)
+    .map(
+      ([key, value]) =>
+        Channels[key as ChannelID].channelId === channelId && value
+    )
+    .filter(v => v !== false)[0]
+
 export const getChannelIDByName = (name: string): ChannelID | null => {
   if (name.indexOf('비챤') > -1) {
     return 'viichan'

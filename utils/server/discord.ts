@@ -31,14 +31,15 @@ export interface DiscordEmbed {
   }[]
 }
 
-export const sendSimpleMessage = async (url: string, message: string) => {
+export const sendSimpleMessage = async (url: string, message: string, extra?: Record<string, unknown>) => {
   const result = await fetch(url + '?wait=true', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      // content: message,
+      content: message,
+      ...extra
     }),
   }).then(v => {
     return v.json()
@@ -53,7 +54,7 @@ export const sendSimpleMessage = async (url: string, message: string) => {
   return result
 }
 
-export const sendEmbedMessage = async (url: string, data: DiscordEmbed[]) => {
+export const sendEmbedMessage = async (url: string, data: DiscordEmbed[], extra?: Record<string, unknown>) => {
   const result = await fetch(url + '?wait=true', {
     method: 'POST',
     headers: {
@@ -61,6 +62,7 @@ export const sendEmbedMessage = async (url: string, data: DiscordEmbed[]) => {
     },
     body: JSON.stringify({
       embeds: data,
+      ...extra
     }),
   }).then(v => {
     return v.json()

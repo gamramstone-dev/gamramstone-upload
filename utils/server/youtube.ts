@@ -106,3 +106,19 @@ export const getYouTubeSubtitleList = async (id: string, key: string) => {
 
   return parseCaptionResponse(data.items)
 }
+
+export const getYouTubeVideoSnippetDetails = async (id: string, key: string) => {
+  const result = await fetch(
+    `https://www.googleapis.com/youtube/v3/videos?id=${id}&part=snippet,contentDetails&key=${key}`
+  ).then(v => v.json())
+
+  if (result.error) {
+    throw new Error('영상 snippet을 가져올 수 없습니다.')
+  }
+
+  if (result.items.length === 0) {
+    throw new Error('영상을 찾을 수 없습니다.')
+  }
+
+  return [result.items[0].snippet, result.items[0].contentDetails]
+}
