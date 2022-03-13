@@ -110,10 +110,12 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const table = base('영상 정보 (자동 업데이트)')
 
+    console.log(`[youtube] ${title} uploading...`)
+
     await table.create([
       {
         fields: {
-          제목: [title],
+          제목: title,
           채널: channelObject.name,
           '세부 정보': description,
           URL: `https://www.youtube.com/watch?v=${id}`,
@@ -125,12 +127,12 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return
   } catch (e) {
-    console.log(e)
-
     discord.sendSimpleMessage(
       process.env.DISCORD_YOUTUBE_HOOK!,
       `https://youtube.com/watch?v=${id} - 영상을 가져오는 도중에 오류가 발생했어요. 수동으로 등록해주세요.`
     )
+
+    throw e
   }
 }
 
