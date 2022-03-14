@@ -253,3 +253,12 @@ html[data-dark-mode='true'] {
     margin-bottom: 2em;
   }
 }
+
+.privacyLanguages {
+  display: flex;
+  gap: 16px;
+
+  & > * {
+    justify-self: center;
+  }
+}
