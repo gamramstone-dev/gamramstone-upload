@@ -315,7 +315,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                         : toast('업로드 대기 중인 영상이 없어요.')
                     }
                   >
-                    전체 적용
+                    전체 자동 적용
                   </Button>
                 )}
             </div>
