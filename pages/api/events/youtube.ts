@@ -225,7 +225,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       ])
 
-      discord.sendSimpleMessage(
+      await discord.sendSimpleMessage(
         process.env.DISCORD_YOUTUBE_HOOK!,
         `${ChannelMessages[channelObject.id as ChannelID][
           Math.floor(
@@ -242,7 +242,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
     return
   } catch (e) {
-    discord.sendSimpleMessage(
+    await discord.sendSimpleMessage(
       process.env.DISCORD_YOUTUBE_HOOK!,
       `https://youtube.com/watch?v=${id} - 영상을 가져오는 도중에 오류가 발생했어요. 수동으로 등록해주세요.`
     )
