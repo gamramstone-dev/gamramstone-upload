@@ -43,6 +43,9 @@ export const Header = () => {
             <Button
               size='medium'
               onClick={() =>
+                confirm(
+                  'Google 계정으로 로그인합니다. 로그인 시 이메일이 노출될 수 있으니 잠시 방송 화면을 가려주세요.'
+                ) &&
                 signIn(
                   'google',
                   undefined,

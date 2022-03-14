@@ -326,7 +326,7 @@ html[data-dark-mode='true'] {
 
 .statusTab {
   .center {
-    margin-top: 60px;
+    margin-top: 100px;
     display: flex;
     flex-direction: column;
   }
@@ -355,10 +355,12 @@ html[data-dark-mode='true'] {
     color: var(--color-on-tertiary, $link-color);
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 32px;
-    padding: 16px 32px;
+    padding: 42px 32px;
     text-align: center;
     letter-spacing: -0.5px;
-    border-radius: 16px;
+    height: 150px;
+    width: 100%;
+
+    margin-top: 48px;
   }
 }
