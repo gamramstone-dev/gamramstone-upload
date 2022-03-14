@@ -147,7 +147,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (update.title || update.description) {
-        discord.sendEmbedMessage(
+        await discord.sendEmbedMessage(
           process.env.DISCORD_YOUTUBE_HOOK!,
           [
             {
@@ -194,7 +194,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
         )
       }
     } else if (field.length > 1) {
-      discord.sendEmbedMessage(
+      await discord.sendEmbedMessage(
         process.env.DISCORD_YOUTUBE_HOOK!,
         [
           {
