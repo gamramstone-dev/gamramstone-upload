@@ -165,19 +165,209 @@ const Korean = (
     <br></br>
     <h2>사용자의 데이터가 YouTube에서 사용되는 방법</h2>
     <p>
-      본 서비스에서는 YouTube에 자막을 업로드하기 위해 사용자 데이터의 일부를
+      본 서비스에서는 YouTube에 자막을 업로드하기 위해 일부 사용자 인증 정보를
       수집하여 YouTube API에 전송하고 있습니다.<br></br>
-      YouTube API에 전송하는 데이터는 영상 제목, 영상 세부 정보, 영상 자막 파일
-      및 계정 인증을 위한 사용자 토큰이 있습니다.<br></br>
       <br></br>
-      전송된 데이터는 YouTube 내 자막 처리 및 인증 처리를 위해 사용되며, 위에서
-      언급된 이외의 데이터는 절대 전송하지 않습니다.
+      <p>수집하는 정보: 사용자 토큰 정보</p>
+      <br></br>이 데이터는 YouTube 내 자막 처리 및 인증 처리를 위해 사용되며,
+      위에서 언급된 이외의 데이터는 절대 전송하지 않습니다. 또한 제3자에게 절대
+      어떤 YouTube 계정 관련 데이터도 제공하지 않습니다.
+      <br></br>
+      토큰은 발급 1시간 이후에 자동으로 소멸되지만, 그 이전에 소멸시키고 싶으신
+      경우{' '}
+      <Link href='https://security.google.com/settings/security/permissions'>
+        Google 보안 설정 페이지
+      </Link>
+      에서 앱 권한을 해제하세요.
+      <br></br>
+      이렇게 전송하고 수신받은 YouTube API 정보는 절대 어디로도 저장되지 않으며
+      브라우저를 닫을 경우 사라집니다.
     </p>
   </div>
 )
 
 const English = (
-  <div className={classes(pageStyles.contents, styles.privacy)}></div>
+  <div className={classes(pageStyles.contents, styles.privacy)}>
+    <p>
+      <b> Effective Date: 3/14/2022 (KST), Last Edit : 3/14/2022 (KST)</b>
+    </p>
+    <br></br>
+    <p>
+      Welcome to the gamramstone website!
+      <br />
+      This page has been created to transparently disclose the list of personal
+      information collected by using the GamramStone website (&quot;Site&quot;
+      or &quot;Service&quot;) and to inform all users of this service how such
+      information is used and stored in the service.
+    </p>
+    <br></br>
+    <br></br>
+    <h2>Contact</h2>
+    <p>
+      If you have any kind of inquiries or requests, please contact us at{' '}
+      <a href='mailto:gamramstone@wesub.io'>gamramstone@wesub.io</a>.
+    </p>
+    <br></br>
+    <br></br>
+    <h2>Personal Information Collection</h2>
+    <p>We collects the following personal information to provide services. </p>
+    <br></br>
+    <h3>Profile information and unique ID of Google account</h3>
+    <p>
+      This information is collected for purposes such as identifying users who
+      can use the service and displaying information on the site (profile
+      image), and it is not used for any other purpose. User data such as
+      profiles are not stored in the database, and IDs used for user
+      identification are stored in the database managed by Upstash, and are
+      deleted at the time of account deletion.
+    </p>
+    <br></br>
+    <h3>IP Addresses</h3>
+    <p>
+      This information is collected for the purpose of preventing illegal use
+      (acts that interfere with site operation, such as denial of service
+      attacks) and reporting to the relevant authorities when it occurs, and is
+      not used for any other purpose. This information is collected at each page
+      visit and API request, and is deleted after 7 days or, if necessary, after
+      the purpose is achieved.
+      <br></br>These datas are collected and managed by Vercel Inc. and Better
+      Stack. To check the privacy policy of Vercel Inc. and Better Stack, please
+      visit{' '}
+      <a href='https://vercel.com/legal/privacy-policy'>
+        https://vercel.com/legal/privacy-policy
+      </a>{' '}
+      and{' '}
+      <a href='https://betterstack.com/privacy'>
+        https://betterstack.com/privacy
+      </a>
+      .
+    </p>
+    <br></br>
+    <h2>개인정보 국외이전 (To Korean Users)</h2>
+    <p>
+      본 서비스는 전 세계 각지에 서버를 두고 있어 Vercel (홈페이지 호스팅 제공)
+      및 Upstash (데이터베이스 서비스 제공), Better Stack (로그 서비스 제공) 에
+      데이터가 이관될 수 있음을 알리며, 본 서비스 이용 시 이에 동의하는 것으로
+      간주합니다.
+    </p>
+    <br></br>
+    <h2>Deletion of Personal Information</h2>
+    <p>
+      If you no longer wish to use the Service, you can delete your account at
+      any time by clicking the &quot;계정 삭제&quot; button on the Account
+      Management page. When you delete account, all stored Google-related
+      information will be deleted immediately, and IP address-related
+      information will be deleted after a certain period of time.
+      <br></br>
+      If you are unable to log in to this service, please send us an email with
+      information proving account ownership. After the validation, we will
+      remove your account data on our database.
+    </p>
+    <br></br>
+    <h2>Usage of Google Account Data (Token)</h2>
+    <p>
+      This service provides a feature that automatically uploads
+      community-created subtitles by clicking one button so that creators do not
+      have to click a button on the YouTube page to add subtitles one by one.
+    </p>
+    <p>
+      For this feature, token information will be obtained from your Google
+      Account upon login. Token information is a character used in place of a
+      Google account password. To learn more about token information, please
+      visit{' '}
+      <Link href='https://developers.google.com/identity/protocols/oauth2#2.-obtain-an-access-token-from-the-google-authorization-server.'>
+        here
+      </Link>
+      .<br></br>
+      <br></br>
+      By default, tokens automatically expire 1 hour after issuance and lose
+      their effect immediately when you delete account from the site or revoke
+      your permission from the{' '}
+      <Link href='https://myaccount.google.com/permissions'>
+        Google account permission page
+      </Link>{' '}
+      page.
+      <br></br>
+      <br></br>
+      Usage of token : Token information is used to access the YouTube API to
+      add translated titles, description, and upload subtitle files. It will
+      never be used for any other purpose.
+      <br></br>
+      Storation of token : Token information is never stored in the server
+      database, and exists in an encrypted state in a storage called
+      &quot;cookie&quot; in your browser. Data before the encryption state can
+      only be read by the server with the encryption key.
+      <br></br>
+      Scope of token : The site will not be able to access your YouTube account
+      unless you grant permission on the account page and in the permission
+      request popup. <br></br>
+      <b>
+        Note: TOKEN ITSELF HAS THE PERMISSION TO UPLOAD, DELETE VIDEOS ON YOUR
+        YOUTUBE ACCOUNT BUT WE ENSURE THAT WE WON&apos;T USE ANY OTHER PURPOSE
+        THAN UPLOADING SUBTITLES.
+      </b>
+      <br></br>
+      In order to transparently disclose which YouTube API is accessed, the site
+      source code is disclosed, and you can check it from the link at the bottom
+      of the site.
+      <br></br>
+    </p>
+    <br></br>
+    <br></br>
+    <h2>Google API Services User Data Policy Compliance</h2>
+    <p>
+      GamramStone complies with the{' '}
+      <Link href='https://developers.google.com/terms/api-services-user-data-policy'>
+        Google API Services User Data Policy
+      </Link>
+      , including{' '}
+      <Link href='https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes'>
+        Limited Use requirements
+      </Link>
+      , for all actions that use data provided from Google API and transmit it
+      to other applications.
+    </p>
+    <br></br>
+    <br></br>
+    <h2>YouTube API Policy Compliance</h2>
+    <p>
+      This service uses YouTube API to upload subtitles to YouTube. By using the
+      feature, you are agreeing to the{' '}
+      <Link href='https://developers.google.com/youtube/terms/api-services-terms-of-service'>
+        YouTube Terms of Service
+      </Link>{' '}
+      and{' '}
+      <Link href='https://policies.google.com/privacy'>
+        Google Privacy Policy
+      </Link>
+      .<br></br>GamramStone complies with the{' '}
+      <Link href='https://developers.google.com/youtube/terms/developer-policies'>
+        YouTube API Developer Policy
+      </Link>
+      .
+    </p>
+    <br></br>
+    <br></br>
+    <h2>How user-provided data used on YouTube</h2>
+    <p>
+      This service collects following user authentication information and sends
+      it to the YouTube API in order to upload subtitles to YouTube:
+      <p>- YouTube Access Token</p>
+      <br></br>This data is used for caption uploading and processing
+      authentication within YouTube, and we never transmit any data other than
+      those mentioned above. We also never provide any YouTube account related
+      data to third parties.
+      <br></br>
+      Tokens are automatically expired one hour after issuance, but if you want
+      to revoke immediately, revoke the app permission in{' '}
+      <Link href='https://security.google.com/settings/security/permissions'>
+        here
+      </Link>
+      .<br></br>
+      The YouTube API information sent and received in this way is never saved
+      anywhere and removed when you close your browser.
+    </p>
+  </div>
 )
 
 const Privacy: NextPage = () => {
