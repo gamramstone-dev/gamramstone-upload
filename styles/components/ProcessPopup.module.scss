@@ -325,11 +325,14 @@ html[data-dark-mode='true'] {
 }
 
 .statusTab {
-  position: relative;
-
   .center {
-    margin-top: 170px;
-    margin-bottom: 30px;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    margin-bottom: 0px;
   }
 
   .description {
@@ -341,5 +344,21 @@ html[data-dark-mode='true'] {
 
   a {
     color: var(--color-primary, $link-color);
+  }
+
+  .actions {
+    margin-top: 10px;
+  }
+
+  .warn {
+    background-color: var(--color-tertiary, $link-color);
+    color: var(--color-on-tertiary, $link-color);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 32px;
+    padding: 16px 32px;
+    text-align: center;
+    letter-spacing: -0.5px;
+    border-radius: 16px;
   }
 }

@@ -504,8 +504,13 @@ export const ProcessPopup = ({
           <Link href={'/privacy'} passHref>
             <a target='_blank'>개인정보 처리방침</a>
           </Link>
-          에서 알아보세요.
+          에서 알아보세요.<br></br>연동은 로그아웃 시 끊어집니다.
         </p>
+
+        <div className={styles.warn}>
+          로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송
+          화면을 잠시 가려주세요.
+        </div>
       </div>
 
       <div className={styles.actions}>
