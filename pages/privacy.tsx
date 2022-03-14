@@ -210,7 +210,7 @@ const English = (
     <br></br>
     <br></br>
     <h2>Personal Information Collection</h2>
-    <p>We collects the following personal information to provide services. </p>
+    <p>We collect the following personal information to provide services. </p>
     <br></br>
     <h3>Profile information and unique ID of Google account</h3>
     <p>
@@ -230,7 +230,7 @@ const English = (
       not used for any other purpose. This information is collected at each page
       visit and API request, and is deleted after 7 days or, if necessary, after
       the purpose is achieved.
-      <br></br>These datas are collected and managed by Vercel Inc. and Better
+      <br></br>These data are collected and managed by Vercel Inc. and Better
       Stack. To check the privacy policy of Vercel Inc. and Better Stack, please
       visit{' '}
       <a href='https://vercel.com/legal/privacy-policy'>
@@ -281,29 +281,28 @@ const English = (
       .<br></br>
       <br></br>
       By default, tokens automatically expire 1 hour after issuance and lose
-      their effect immediately when you delete account from the site or revoke
+      their effect immediately when you delete the account from the site or revoke
       your permission from the{' '}
       <Link href='https://myaccount.google.com/permissions'>
         Google account permission page
       </Link>{' '}
-      page.
-      <br></br>
+      .<br></br>
       <br></br>
       Usage of token : Token information is used to access the YouTube API to
       add translated titles, description, and upload subtitle files. It will
       never be used for any other purpose.
       <br></br>
-      Storation of token : Token information is never stored in the server
-      database, and exists in an encrypted state in a storage called
-      &quot;cookie&quot; in your browser. Data before the encryption state can
-      only be read by the server with the encryption key.
+      Store of token : Token information is never stored in the server database,
+      and exists in an encrypted state in a storage called &quot;cookie&quot; in
+      your browser. Data before the encryption state can only be read by the
+      server with the encryption key.
       <br></br>
       Scope of token : The site will not be able to access your YouTube account
       unless you grant permission on the account page and in the permission
       request popup. <br></br>
       <b>
         Note: TOKEN ITSELF HAS THE PERMISSION TO UPLOAD, DELETE VIDEOS ON YOUR
-        YOUTUBE ACCOUNT BUT WE ENSURE THAT WE WON&apos;T USE ANY OTHER PURPOSE
+        YOUTUBE ACCOUNT, BUT WE ENSURE THAT WE WON&apos;T USE ANY OTHER PURPOSE
         THAN UPLOADING SUBTITLES.
       </b>
       <br></br>
@@ -350,7 +349,7 @@ const English = (
     <br></br>
     <h2>How user-provided data used on YouTube</h2>
     <p>
-      This service collects following user authentication information and sends
+      This service collects the following user authentication information and sends
       it to the YouTube API in order to upload subtitles to YouTube:
       <p>- YouTube Access Token</p>
       <br></br>This data is used for caption uploading and processing
