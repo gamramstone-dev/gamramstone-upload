@@ -537,7 +537,7 @@ export const ProcessPopup = ({
       </div>
 
       <div className={styles.warn}>
-        로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을 잠시
+        처음 로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을 잠시
         가려주세요.
       </div>
     </PopupTab>
