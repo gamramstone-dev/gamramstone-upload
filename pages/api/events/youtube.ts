@@ -154,7 +154,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
       if (
         recordDescription !== description &&
-        diffChars(recordDescription, description).filter(
+        diffChars(recordDescription.replace(/\\/g, ''), description).filter(
           v => v.added || v.removed
         ).length > 0
       ) {
