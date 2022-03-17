@@ -7,6 +7,8 @@ import { ChannelID, getChannelByID } from '../../../structs/channels'
 import * as discord from '../../../utils/server/discord'
 import { getYouTubeVideoSnippetDetails } from '../../../utils/server/youtube'
 
+import { diffChars, diffLines } from 'diff'
+
 const base = new Airtable({
   apiKey: process.env.AIRTABLE_API_KEY,
 }).base(process.env.AIRTABLE_BASE_ID!)
@@ -19,6 +21,18 @@ const cutMessage = (str: unknown, maxLength: number): string | boolean => {
   return str.length - 3 > maxLength
     ? str.substring(0, maxLength - 3) + '...'
     : str
+}
+
+const generateDiffField = (oldString: string, newString: string): string => {
+  let result = '```diff\n'
+
+  const diff = diffLines(oldString, newString)
+
+  result += diff
+    .map(v => `${v.added ? '+ ' : v.removed ? '- ' : ''}${v.value}`)
+    .join('\n')
+
+  return result + '\n```'
 }
 
 const ChannelMessages: Record<ChannelID, string[]> = {
@@ -138,7 +152,12 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
         update.title = true
       }
 
-      if (recordDescription !== description) {
+      if (
+        recordDescription !== description &&
+        diffChars(recordDescription, description).filter(
+          v => v.added || v.removed
+        ).length > 0
+      ) {
         await table.update(field[0].id, {
           '세부 정보': description,
         })
@@ -162,25 +181,22 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
                 ...(update.title
                   ? [
                       {
-                        name: '변경 전 제목',
-                        value: (cutMessage(recordTitle, 1020) || '-') as string,
-                      },
-                      {
-                        name: '변경 후 제목',
-                        value: (cutMessage(title, 1020) || '-') as string,
+                        name: '제목',
+                        value: (cutMessage(
+                          generateDiffField(recordTitle, title),
+                          1020
+                        ) || '-') as string,
                       },
                     ]
                   : []),
                 ...(update.description
                   ? [
                       {
-                        name: '변경 전 세부 정보',
-                        value: (cutMessage(recordDescription, 1020) ||
-                          '-') as string,
-                      },
-                      {
-                        name: '변경 후 세부 정보',
-                        value: (cutMessage(description, 1020) || '-') as string,
+                        name: '세부 정보',
+                        value: (cutMessage(
+                          generateDiffField(recordDescription, description),
+                          1020
+                        ) || '-') as string,
                       },
                     ]
                   : []),
