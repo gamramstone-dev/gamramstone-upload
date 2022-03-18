@@ -194,7 +194,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
                       {
                         name: '세부 정보',
                         value: (cutMessage(
-                          generateDiffField(recordDescription, description),
+                          generateDiffField(recordDescription.replace(/\\/g, ''), description),
                           1020
                         ) || '-') as string,
                       },
