@@ -20,13 +20,13 @@
 
   .logo {
     display: flex;
-    color: #73a30e;
+    color: #147e6b;
 
     margin-top: 4px;
     margin-bottom: 4px;
 
-    svg {
-      margin-right: 8px;
+    & > span:first-child {
+      margin-right: 8px !important;
     }
 
     span {
