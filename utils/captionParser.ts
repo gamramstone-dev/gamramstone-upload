@@ -12,12 +12,16 @@ const parseTimestamp = (str: string) => {
 
 const SRTParse = (data: string): CaptionLine[] => {
   return data
-    .split(/\r\n\r\n+/gi)
+    .split(/\r?\n\r?\n+/gi)
     .map(v => {
-      const line = v.split(/\r/g).map(v => v.trim()).filter(v => v !== '')
+      const line = v.split(/\r|\n/g).map(v => v.trim()).filter(v => v !== '')
+
+      if (!line.length) {
+        return null
+      }
 
       if (line.length < 2) {
-        return null
+        throw new Error(`Line length is less than 2. Got : ${line}`)
       }
 
       const split = line[1].split(' --> ')
