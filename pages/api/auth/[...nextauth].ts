@@ -41,6 +41,39 @@ export default NextAuth({
         account.scope && account.scope.indexOf('auth/youtube') > -1
 
       /**
+       * 크리에이터 권한이 없는데 YouTube 권한이 부여되었다면 계정 소유 확인 후 크리에이터 권한을 부여합니다. (처음 계정 생성 때 확인되지 않았다면)
+       */
+      if (
+        hasYouTubeScope &&
+        savedUser &&
+        !hasCreatorPermission(savedUser.state) &&
+        typeof account.access_token === 'string'
+      ) {
+        try {
+          const id = await getMyYouTubeChannelID(account.access_token)
+
+          console.log(`YouTubeScope access happen with channel ${id}`)
+
+          const hasRegisteredID =
+            Object.values(Channels).filter(v => v.channelId === id).length > 0
+
+          if (!hasRegisteredID) {
+            return '/noauth?error=NoYouTubePermission'
+          }
+        } catch (e) {
+          console.error(e)
+
+          return '/noauth?error=NoYouTubePermission'
+        }
+
+        await updateUser(user.id, {
+          state: 'creator',
+        })
+
+        savedUser.state = 'creator'
+      }
+
+      /**
        * YouTube 권한이 부여는 되었지만 저장된 유저 정보가 없거나 크리에이터 권한이 없는 경우 오류를 표시합니다.
        */
       if (
@@ -84,6 +117,8 @@ export default NextAuth({
       ) {
         try {
           const id = await getMyYouTubeChannelID(account.access_token)
+
+          console.log(`YouTubeScope access happen with channel ${id}`)
 
           const hasRegisteredID =
             Object.values(Channels).filter(v => v.channelId === id).length > 0
