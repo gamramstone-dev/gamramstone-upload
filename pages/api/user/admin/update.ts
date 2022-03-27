@@ -59,7 +59,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('400: You cannot change your own permission.')
   }
 
-  const result = await updateUser(uuid, {
+  const result = await updateUser(id, {
     state: permission,
   })
 
