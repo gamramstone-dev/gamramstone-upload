@@ -4,8 +4,6 @@ import { DatabaseUser } from '../../structs/user'
 
 import crypto from 'crypto'
 import { setCache } from './cache'
-import { HttpClient } from '@upstash/redis/http'
-import { GetCommand, HGetCommand } from '@upstash/redis/commands'
 
 const redis = Redis.fromEnv()
 
@@ -20,7 +18,8 @@ export const getUUIDUser = async (uuid: string) =>
       Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
     },
   })
-    .then(v => v.json()).then(v => {
+    .then(v => v.json())
+    .then(v => {
       if (v.error) {
         throw new Error('Error occurred while fetching UUID.')
       }
@@ -72,7 +71,9 @@ export const createUser = async (
   }
 
   await redis.hmset(`user:${id}`, data)
-  await redis.hset('usersUUID', uuid, id)
+  await redis.hset('usersUUID', {
+    [uuid]: id,
+  })
 
   return data
 }
