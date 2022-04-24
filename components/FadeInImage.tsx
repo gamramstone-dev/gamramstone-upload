@@ -17,7 +17,7 @@ export const FadeInImage = (props: Omit<ImageProps, 'onLoad'>) => {
         load && styles.loaded
       )}
       alt={props.alt}
-      onLoad={() => setLoaded(true)}
+      onLoadingComplete={() => setLoaded(true)}
     ></Image>
   )
 }
