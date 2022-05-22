@@ -1,6 +1,7 @@
-import { CSSProperties } from 'react'
 import styles from '../styles/components/ProgressBar.module.scss'
 import { classes } from '../utils/string'
+
+import { motion } from 'framer-motion'
 
 type BarStyle = 'primary' | 'secondary' | 'danger' | 'warning'
 
@@ -9,20 +10,28 @@ interface ProgressBarProps {
   barStyle?: BarStyle
 }
 
-interface BarStyles extends CSSProperties {
-  '--progress'?: number
-}
-
 export const ProgressBar = ({
   progress,
   barStyle = 'primary',
 }: ProgressBarProps) => {
   return (
     <div className={styles.progress}>
-      <div
+      <motion.div
         className={classes(styles.bar, barStyle && styles[barStyle])}
-        style={{ '--progress': progress } as BarStyles}
-      ></div>
+        initial={{
+          scaleX: 0,
+        }}
+        animate={{
+          scaleX: progress,
+        }}
+        exit={{
+          scaleX: 0,
+        }}
+        transition={{
+          type: 'spring',
+          duration: 1,
+        }}
+      ></motion.div>
     </div>
   )
 }

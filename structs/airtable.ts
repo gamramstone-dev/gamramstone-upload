@@ -29,6 +29,12 @@ export interface VideoWithCaption {
   captions: TranslatedVideoMetadata[]
 }
 
+export interface ChannelStat {
+  videos: number
+  waiting: number
+  uploaded: number
+}
+
 export interface AirtableLanguageField {
   id: string
   url: string
@@ -447,6 +453,8 @@ export type WorkStatusNameTypes =
   | '자막 작업 안함'
   | '업로드 대기'
   | '번역 진행 중'
+  | '전체'
+
 export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
 
 export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {

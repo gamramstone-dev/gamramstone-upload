@@ -10,6 +10,7 @@ import { TabButton, TabGroup } from '../../components/Tabs'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { APIResponse } from '../../structs/api'
 import {
+  ChannelStat,
   LanguageCode,
   TranslatedVideoMetadata,
   VideoWithCaption,
@@ -28,14 +29,16 @@ import Footer from '../../components/Footer'
 import getConfig from 'next/config'
 import { isUploadable } from '../../utils/client/requests'
 import CaptionPreview from '../../components/CaptionPreview'
+import ProgressBar from '../../components/ProgressBar'
 
 const { publicRuntimeConfig } = getConfig()
 
 interface ChannelCardProps {
   channel: Channel
+  stat?: ChannelStat
 }
 
-const ChannelCard = ({ channel }: ChannelCardProps) => {
+const ChannelCard = ({ channel, stat }: ChannelCardProps) => {
   return (
     <div className={styles.channelCard}>
       <div className={styles.contents}>
@@ -45,9 +48,25 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
           </div>
           <h1 className={styles.name}>{channel.name}</h1>
         </div>
-        {/* <div className={styles.progress}>
-          <ProgressBar barStyle='primary' progress={0.46}></ProgressBar>
-        </div> */}
+        {(stat && (
+          <div className={styles.progress}>
+            <ProgressBar
+              barStyle='primary'
+              progress={stat.uploaded / (stat.uploaded + stat.waiting)}
+            ></ProgressBar>
+            <div className={styles.text}>
+              <p>{stat.uploaded}개 트랙 업로드 완료</p>
+              <p>{stat.waiting}개 트랙 업로드 대기 중</p>
+            </div>
+          </div>
+        )) || (
+          <div className={styles.progress}>
+            <ProgressBar barStyle='primary' progress={0}></ProgressBar>
+            <div className={styles.text}>
+              <p>로딩 중이에요... 꽉 잡아요!</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -97,15 +116,15 @@ const useColor = (id: string) => {
   }, [id])
 }
 
-const fetchList = async (url: string) =>
+const fetchData = async <T extends unknown>(url: string): Promise<T> =>
   fetch(url)
-    .then(res => (res.json() as unknown) as APIResponse<VideoWithCaption[]>)
+    .then(res => res.json())
     .then(v => {
       if (v.status === 'error') {
         throw new Error(v.message)
       }
 
-      return v.data
+      return v.data as T
     })
 
 interface ChannelPageProps {
@@ -177,9 +196,14 @@ const EmptyTexts: Record<ChannelID, ReactNode[]> = {
 
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
-  const { data, error, mutate } = useSWR(
+  const { data, error, mutate } = useSWR<VideoWithCaption[]>(
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
-    fetchList
+    fetchData
+  )
+
+  const { data: statData, error: statError } = useSWR<ChannelStat>(
+    `/api/stats?id=${id}`,
+    fetchData
   )
 
   const { data: session } = useSession()
@@ -189,7 +213,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   useColor(id)
 
   /**
-   * URL에 #apply가 존재하면 이전에 진행하던 팝업을 뛰웁니다.
+   * URL에 #apply가 존재하면 이전에 진행하던 팝업을 띄웁니다.
    */
   useEffect(() => {
     if (
@@ -270,7 +294,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
       <CaptionPreview></CaptionPreview>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents)}>
-          <ChannelCard channel={Channels[id]}></ChannelCard>
+          <ChannelCard channel={Channels[id]} stat={statData}></ChannelCard>
         </div>
         <div className={classes(pageStyles.contents, pageStyles.overflowX)}>
           <div className={styles.tabHeader}>
