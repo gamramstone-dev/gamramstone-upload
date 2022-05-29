@@ -1,4 +1,4 @@
-import { LanguageCode } from '../structs/airtable'
+import { LanguageCode } from '../structs/common'
 
 import { v4 as uuid } from 'uuid'
 import { localeTimeDifference } from './string'

@@ -4,11 +4,12 @@ import Link from 'next/link'
 import { useEffect, useState, useRef, ReactNode, useCallback } from 'react'
 import toast from 'react-hot-toast'
 import {
+  extractFinishedVideosByLanguage,
   LanguageCode,
   LanguageNames,
   VideoWithCaption,
   VideoWorks,
-} from '../structs/airtable'
+} from '../structs/common'
 import styles from '../styles/components/ProcessPopup.module.scss'
 import { applyCaptions, updateVideoState } from '../utils/client/requests'
 import { useBodyLock } from '../hooks/styles'
@@ -18,7 +19,6 @@ import { LoadSpinner } from './Loading'
 import { YouTubeThumbnail } from './VideoCard'
 
 import confetties from '../utils/client/confetties'
-import { extractFinishedVideosByLanguage } from '../utils/client/airtable'
 
 const backgroundVariants: Variants = {
   initial: {

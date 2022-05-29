@@ -9,7 +9,7 @@ import {
   TranslatedVideoMetadata,
   VideoWithCaption,
   WorkStatusNames,
-} from '../structs/airtable'
+} from '../structs/common'
 import styles from '../styles/components/VideoCard.module.scss'
 import {
   applyCaptions,
@@ -398,7 +398,7 @@ export const CaptionCard = ({
                       <div className={styles.row}>
                         <h3 className={styles.title}>Details</h3>
                         <p className={styles.debug}>
-                          Airtable ID : {video.id}
+                          Video ID : {video.id}
                           <br></br>
                           YouTube Link :{' '}
                           <Link href={video.url}>{video.url}</Link>

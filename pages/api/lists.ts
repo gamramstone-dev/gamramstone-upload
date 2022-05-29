@@ -5,7 +5,7 @@ import {
   filterCaptionFiles,
   VideoWithCaption,
   WorkStatusNames,
-} from '../../structs/airtable'
+} from '../../structs/common'
 import { apify, APIResponse } from '../../structs/api'
 import { cachify } from '../../utils/server/cache'
 

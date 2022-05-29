@@ -13,7 +13,7 @@ import {
 } from '../../utils/youtube'
 import VideoProjectCard from '../../components/VideoCard'
 import { useState } from 'react'
-import { LanguageCode, OnWorkingLanguageCode } from '../../structs/airtable'
+import { LanguageCode, OnWorkingLanguageCode } from '../../structs/common'
 import { useRouter } from 'next/router'
 
 const YouTubeTestPage: NextPage = props => {

@@ -15,7 +15,7 @@ import {
   TranslatedVideoMetadata,
   VideoWithCaption,
   WorkStatus,
-} from '../../structs/airtable'
+} from '../../structs/common'
 import { LoadSpinner } from '../../components/Loading'
 import VideoProjectCard from '../../components/VideoCard'
 import FadeInImage from '../../components/FadeInImage'

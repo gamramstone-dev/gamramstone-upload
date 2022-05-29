@@ -1,4 +1,4 @@
-import { LanguageCode } from './airtable'
+import { LanguageCode } from './common'
 
 export interface Video {
   id: string

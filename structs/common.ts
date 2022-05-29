@@ -5,6 +5,8 @@
 //   Records,
 // } from 'airtable'
 
+import { groupBy } from "../utils/commmon"
+
 export interface CaptionFile {
   filename: string
   size: number
@@ -466,4 +468,41 @@ export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
   none: '자막 작업 안함',
   waiting: '업로드 대기',
   wip: '번역 진행 중',
+}
+
+
+/**
+ * failed에 있지 않은 영상들을 'lang'으로 묶어 반환합니다. (works-failed)
+ *
+ * ```
+ * const videos = extractFinishedVideosByLanguage(
+ *   [
+ *     {id: 'a', lang: 'ko'},
+ *     {id: 'b', lang: 'ko'},
+ *     {id: 'c', lang: 'en'},
+ *   ],
+ *   [
+ *     {id: 'b', lang: 'ko'},
+ *   ]
+ * ) // => {'ko': [{id: 'a', lang: 'ko'}], 'en': [{id: 'c', lang: 'en'}]}
+ * ```
+ *
+ * @param works
+ * @param failed
+ */
+ export const extractFinishedVideosByLanguage = (
+  works: VideoWorks[],
+  failed: VideoWorks[]
+) => {
+  const done = works.filter(v => {
+    for (let i = 0; i < failed.length; i++) {
+      if (failed[i].id === v.id && failed[i].lang === v.lang) {
+        return false
+      }
+    }
+
+    return true
+  })
+
+  return groupBy(done, video => video.lang)
 }

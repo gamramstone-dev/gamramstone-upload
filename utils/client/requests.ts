@@ -1,4 +1,4 @@
-import { CaptionFile, LanguageCode } from '../../structs/airtable'
+import { CaptionFile, LanguageCode } from '../../structs/common'
 import {
   updateYouTubeTitleMetadata,
   uploadYouTubeCaption,
@@ -138,7 +138,7 @@ export const updateVideoState = (
   isTest?: boolean
 ) => {
   return fetch(
-    `/api/airtable/updateVideo?lang=${lang}&videos=${videos.join(
+    `/api/workspace/updateVideo?lang=${lang}&videos=${videos.join(
       ','
     )}&isTest=${isTest}`,
     {

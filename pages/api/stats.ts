@@ -5,7 +5,7 @@ import {
   Channels,
 } from '../../structs/channels'
 import { apify, APIResponse } from '../../structs/api'
-import { ChannelStat, VideoWithCaption } from '../../structs/airtable'
+import { ChannelStat, VideoWithCaption } from '../../structs/common'
 import { cachify } from '../../utils/server/cache'
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {

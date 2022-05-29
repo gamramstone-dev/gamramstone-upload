@@ -10,12 +10,12 @@ const cspHashOf = (text: string) => {
 
 class MyDocument extends Document {
   render () {
-    let csp = `default-src 'self' https://dl.airtable.com/ https://cloudflareinsights.com/cdn-cgi/rum https://vitals.vercel-insights.com/v1/vitals https://*.googleapis.com; frame-src https://www.youtube.com/embed/; form-action 'none'; img-src * data:; font-src *; object-src 'none'; style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.2.1/static/pretendard-dynamic-subset.css 'unsafe-inline'; script-src 'self' http://www.youtube.com/iframe_api https://www.youtube.com/s/player/ https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+    let csp = `default-src 'self' https://gamramstone-api.wesub.io/ https://cloudflareinsights.com/cdn-cgi/rum https://vitals.vercel-insights.com/v1/vitals https://*.googleapis.com; frame-src https://www.youtube.com/embed/; form-action 'none'; img-src * data:; font-src *; object-src 'none'; style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.2.1/static/pretendard-dynamic-subset.css 'unsafe-inline'; script-src 'self' http://www.youtube.com/iframe_api https://www.youtube.com/s/player/ https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
       NextScript.getInlineScriptSource(this.props)
     )}`
 
     if (process.env.NODE_ENV !== 'production') {
-      csp = `style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.2.1/static/pretendard-dynamic-subset.css 'unsafe-inline'; frame-src https://www.youtube.com/embed/; font-src *; connect-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/ https://dl.airtable.com/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' http://www.youtube.com/iframe_api https://www.youtube.com/s/player/ https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
+      csp = `style-src 'self' https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.2.1/static/pretendard-dynamic-subset.css 'unsafe-inline'; frame-src https://www.youtube.com/embed/; font-src *; connect-src *; form-action 'none'; default-src 'self' https://*.googleapis.com/ https://gamramstone-api.wesub.io/; img-src * data:; object-src 'none'; script-src 'unsafe-eval' 'self' http://www.youtube.com/iframe_api https://www.youtube.com/s/player/ https://static.cloudflareinsights.com/beacon.min.js ${cspHashOf(
         NextScript.getInlineScriptSource(this.props)
       )}`
     }

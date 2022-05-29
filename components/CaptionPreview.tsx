@@ -13,7 +13,7 @@ import { useBodyLock } from '../hooks/styles'
 
 import captionParser, { CaptionLine } from '../utils/captionParser'
 import { LoadSpinner } from './Loading'
-import { LanguageNames, OnWorkingLanguageCode } from '../structs/airtable'
+import { LanguageNames, OnWorkingLanguageCode } from '../structs/common'
 
 const backgroundVariants: Variants = {
   initial: {

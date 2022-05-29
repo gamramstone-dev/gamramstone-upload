@@ -2,7 +2,7 @@ import {
   CaptionFile,
   LanguageNames,
   OnWorkingLanguageCode,
-} from '../structs/airtable'
+} from '../structs/common'
 
 /**
  * 여러 className을 하나의 CSS className으로 묶어주는 함수.
