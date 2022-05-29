@@ -1,46 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import Airtable from 'airtable'
+import { ChannelID, Channels } from '../../structs/channels'
 import {
-  AirtableViewNameTypes,
-  ChannelID,
-  Channels,
-} from '../../structs/channels'
-import {
-  extractVideoDataFields,
+  filterCaptionFiles,
   VideoWithCaption,
-  WorkStatus,
   WorkStatusNames,
-  WorkStatusNameTypes,
 } from '../../structs/airtable'
-import { apify } from '../../structs/api'
+import { apify, APIResponse } from '../../structs/api'
 import { cachify } from '../../utils/server/cache'
-
-const base = new Airtable({
-  apiKey: process.env.AIRTABLE_API_KEY,
-}).base(process.env.AIRTABLE_BASE_ID!)
-
-const uploadBase = base('업로드 준비')
-
-/**
- * Airtable에서 멤버의 뷰를 가져옵니다.
- *
- * @param member 멤버
- * @param viewName 뷰 이름
- * @returns
- */
-const fetchViewByMember = async (
-  member: AirtableViewNameTypes,
-  viewName: WorkStatusNameTypes
-) => {
-  const view = uploadBase
-    .select({
-      view: `${member} - ${viewName}`,
-    })
-    .all()
-
-  return view
-}
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, tabs } = req.query
@@ -53,14 +20,31 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('400: tabs is not supplied or invalid')
   }
 
-  return cachify<VideoWithCaption[]>(`${id}-${tabs}`, res, async () =>
-    extractVideoDataFields(
-      await fetchViewByMember(
-        Channels[id as ChannelID].airtableViewName,
-        WorkStatusNames[tabs as WorkStatus]
+  return cachify<VideoWithCaption[]>(`${id}-${tabs}`, res, async () => {
+    const channel = Channels[id as ChannelID]
+
+    const result = (await (
+      await fetch(
+        `${process.env.API_ENDPOINT}/v0/videos?channel=${channel.channelId}&tabs=${tabs}`
       )
-    )
-  )
+    ).json()) as APIResponse<VideoWithCaption[]>
+
+    if (result.status === 'error') {
+      throw new Error(result.message)
+    }
+
+    if (!result.data) {
+      return []
+    }
+
+    return result.data.map(v => ({
+      ...v,
+      captions: v.captions.map(a => ({
+        ...a,
+        captions: filterCaptionFiles(a.captions),
+      })),
+    }))
+  })
 }
 
 export default apify(func)

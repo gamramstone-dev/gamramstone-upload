@@ -1,44 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import Airtable from 'airtable'
 import {
-  AirtableViewNameTypes,
   ChannelID,
   Channels,
 } from '../../structs/channels'
-import {
-  ChannelStat,
-  extractVideoDataFields,
-  WorkStatusNameTypes,
-} from '../../structs/airtable'
-import { apify } from '../../structs/api'
+import { apify, APIResponse } from '../../structs/api'
+import { ChannelStat, VideoWithCaption } from '../../structs/airtable'
 import { cachify } from '../../utils/server/cache'
-
-const base = new Airtable({
-  apiKey: process.env.AIRTABLE_API_KEY,
-}).base(process.env.AIRTABLE_BASE_ID!)
-
-const uploadBase = base('업로드 준비')
-
-/**
- * Airtable에서 멤버의 뷰를 가져옵니다.
- *
- * @param member 멤버
- * @param viewName 뷰 이름
- * @returns
- */
-const fetchViewByMember = async (
-  member: AirtableViewNameTypes,
-  viewName: WorkStatusNameTypes
-) => {
-  const view = uploadBase
-    .select({
-      view: `${member} - ${viewName}`,
-    })
-    .all()
-
-  return view
-}
 
 const func = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query
@@ -48,21 +16,34 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   return cachify<ChannelStat>(`stats-${id}`, res, async () => {
-    const data = extractVideoDataFields(
-      await fetchViewByMember(
-        Channels[id as ChannelID].airtableViewName,
-        '전체'
-      )
-    )
+    const channel = Channels[id as ChannelID]
 
-    const waitingTracks = data.reduce(
+    const result = (await (
+      await fetch(
+        `${process.env.API_ENDPOINT}/v0/videos?channel=${channel.channelId}`
+      )
+    ).json()) as APIResponse<VideoWithCaption[]>
+
+    if (result.status === 'error') {
+      throw new Error(result.message)
+    }
+
+    if (!result.data) {
+      return {
+        videos: 0,
+        waiting: 0,
+        uploaded: 0,
+      }
+    }
+
+    const waitingTracks = result.data.reduce(
       (dp, dc) =>
         dp +
         dc.captions.reduce((p, c) => p + (c.status === 'waiting' ? 1 : 0), 0),
       0
     )
 
-    const appliedTracks = data.reduce(
+    const appliedTracks = result.data.reduce(
       (dp, dc) =>
         dp +
         dc.captions.reduce((p, c) => p + (c.status === 'done' ? 1 : 0), 0),
@@ -70,7 +51,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     )
 
     return {
-      videos: data.length,
+      videos: result.data.length,
       waiting: waitingTracks,
       uploaded: appliedTracks,
     }

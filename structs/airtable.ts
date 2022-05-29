@@ -1,9 +1,9 @@
-import {
-  Attachment,
-  FieldSet,
-  Record as AirtableRecord,
-  Records,
-} from 'airtable'
+// import {
+//   Attachment,
+//   FieldSet,
+//   Record as AirtableRecord,
+//   Records,
+// } from 'airtable'
 
 export interface CaptionFile {
   filename: string
@@ -64,39 +64,37 @@ export const getFirstItem = (items: unknown) => {
   return items
 }
 
-export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
-  const syncName = `${name} 진행 상황`
-  if (
-    typeof fields[syncName] !== 'undefined' &&
-    (fields[syncName] as string[])[0] === '자막 제작 완료'
-  ) {
-    return 'waiting'
-  }
+// export const extractStatus = (fields: FieldSet, name: string): WorkStatus => {
+//   const syncName = `${name} 진행 상황`
+//   if (
+//     typeof fields[syncName] !== 'undefined' &&
+//     (fields[syncName] as string[])[0] === '자막 제작 완료'
+//   ) {
+//     return 'waiting'
+//   }
 
-  if (
-    typeof fields[syncName] !== 'undefined' &&
-    (fields[syncName] as string[])[0] === '유튜브 적용 완료'
-  ) {
-    return 'done'
-  }
+//   if (
+//     typeof fields[syncName] !== 'undefined' &&
+//     (fields[syncName] as string[])[0] === '유튜브 적용 완료'
+//   ) {
+//     return 'done'
+//   }
 
-  if (
-    typeof fields[syncName] !== 'undefined' &&
-    ((fields[syncName] as string[])[0] === '번역' ||
-      (fields[syncName] as string[])[0] === '받아쓰기' ||
-      (fields[syncName] as string[])[0] === '자막 싱크' ||
-      (fields[syncName] as string[])[0] === '검수' ||
-      (fields[syncName] as string[])[0] === '최종 확인 대기')
-  ) {
-    return 'wip'
-  }
+//   if (
+//     typeof fields[syncName] !== 'undefined' &&
+//     ((fields[syncName] as string[])[0] === '번역' ||
+//       (fields[syncName] as string[])[0] === '받아쓰기' ||
+//       (fields[syncName] as string[])[0] === '자막 싱크' ||
+//       (fields[syncName] as string[])[0] === '검수' ||
+//       (fields[syncName] as string[])[0] === '최종 확인 대기')
+//   ) {
+//     return 'wip'
+//   }
 
-  return 'none'
-}
+//   return 'none'
+// }
 
-export const filterCaptionFiles = (
-  response: (Attachment | CaptionFile)[]
-): CaptionFile[] => {
+export const filterCaptionFiles = (response: CaptionFile[]): CaptionFile[] => {
   const files = response.map(v => ({
     filename: v.filename,
     size: v.size,
@@ -118,118 +116,124 @@ export const filterCaptionFiles = (
   return []
 }
 
-export const extractNationalValue = (
-  data: AirtableRecord<FieldSet>
-): TranslatedVideoMetadata[] => {
-  const captions: TranslatedVideoMetadata[] = []
+// export const extractNationalValue = (
+//   data: AirtableRecord<FieldSet>
+// ): TranslatedVideoMetadata[] => {
+//   const captions: TranslatedVideoMetadata[] = []
 
-  const fetchLanguages = (lang: OnWorkingLanguageCode) => {
-    if (
-      `${LanguageNames[lang]} 제목` in data.fields &&
-      `${LanguageNames[lang]} 세부 정보` in data.fields
-    ) {
-      const title = (data.fields[`${LanguageNames[lang]} 제목`] as string[])[0]
-      const description = (data.fields[
-        `${LanguageNames[lang]} 세부 정보`
-      ] as string[])[0]
-      const status = extractStatus(data.fields, LanguageNames[lang])
+//   const fetchLanguages = (lang: OnWorkingLanguageCode) => {
+//     if (
+//       `${LanguageNames[lang]} 제목` in data.fields &&
+//       `${LanguageNames[lang]} 세부 정보` in data.fields
+//     ) {
+//       const title = (data.fields[`${LanguageNames[lang]} 제목`] as string[])[0]
+//       const description = (data.fields[
+//         `${LanguageNames[lang]} 세부 정보`
+//       ] as string[])[0]
+//       const status = extractStatus(data.fields, LanguageNames[lang])
 
-      let files: CaptionFile[] = []
+//       let files: CaptionFile[] = []
 
-      if (`${LanguageNames[lang]} 자막 파일` in data.fields) {
-        files = filterCaptionFiles(
-          data.fields[`${LanguageNames[lang]} 자막 파일`] as Attachment[]
-        )
-      }
+//       if (`${LanguageNames[lang]} 자막 파일` in data.fields) {
+//         files = filterCaptionFiles(
+//           data.fields[`${LanguageNames[lang]} 자막 파일`] as Attachment[]
+//         )
+//       }
 
-      const caption: TranslatedVideoMetadata = {
-        language: lang,
-        title,
-        description,
-        status,
-        captions: files,
-      }
+//       const caption: TranslatedVideoMetadata = {
+//         language: lang,
+//         title,
+//         description,
+//         status,
+//         captions: files,
+//       }
 
-      captions.push(caption)
-    }
-  }
+//       captions.push(caption)
+//     }
+//   }
 
-  /**
-   * 한국어 처리
-   */
-  if (`제목` in data.fields && `세부 정보` in data.fields && '한국어 자막 업로드' in data.fields) {
-    const title = (data.fields[`제목`] as string[])[0]
-    const description = (data.fields[`세부 정보`] as string[])[0]
+//   /**
+//    * 한국어 처리
+//    */
+//   if (
+//     `제목` in data.fields &&
+//     `세부 정보` in data.fields &&
+//     '한국어 자막 업로드' in data.fields
+//   ) {
+//     const title = (data.fields[`제목`] as string[])[0]
+//     const description = (data.fields[`세부 정보`] as string[])[0]
 
-    let files: CaptionFile[] = []
+//     let files: CaptionFile[] = []
 
-    if (`한국어 자막 파일` in data.fields) {
-      files = filterCaptionFiles(data.fields[`한국어 자막 파일`] as Attachment[])
-    }
+//     if (`한국어 자막 파일` in data.fields) {
+//       files = filterCaptionFiles(
+//         data.fields[`한국어 자막 파일`] as Attachment[]
+//       )
+//     }
 
-    const caption: TranslatedVideoMetadata = {
-      language: 'ko',
-      title,
-      description,
-      status: 'waiting',
-      captions: files,
-    }
+//     const caption: TranslatedVideoMetadata = {
+//       language: 'ko',
+//       title,
+//       description,
+//       status: 'waiting',
+//       captions: files,
+//     }
 
-    captions.push(caption)
-  }
+//     captions.push(caption)
+//   }
 
-  const langs = Object.keys(LanguageNames)
-  for (let i = 0; i < langs.length; i++) {
-    fetchLanguages(langs[i] as OnWorkingLanguageCode)
-  }
+//   const langs = Object.keys(LanguageNames)
+//   for (let i = 0; i < langs.length; i++) {
+//     fetchLanguages(langs[i] as OnWorkingLanguageCode)
+//   }
 
-  return captions
-}
+//   return captions
+// }
 
-export const extractVideoDataFields = (
-  data: Records<FieldSet>
-): VideoWithCaption[] => {
-  return data.map(v => ({
-    id: v.id,
-    url: getFirstItem(v.fields['URL']),
-    title: getFirstItem(v.fields['제목']),
-    description: getFirstItem(v.fields['세부 정보']),
-    uploadDate: getFirstItem(v.fields['업로드 날짜']),
-    editDate: getFirstItem(v.fields['최근 수정']),
-    captions: extractNationalValue(v),
-  }))
-}
+// export const extractVideoDataFields = (
+//   data: Records<FieldSet>
+// ): VideoWithCaption[] => {
+//   return data.map(v => ({
+//     id: v.id,
+//     url: getFirstItem(v.fields['URL']),
+//     title: getFirstItem(v.fields['제목']),
+//     description: getFirstItem(v.fields['세부 정보']),
+//     uploadDate: getFirstItem(v.fields['업로드 날짜']),
+//     editDate: getFirstItem(v.fields['최근 수정']),
+//     captions: extractNationalValue(v),
+//   }))
+// }
 
-export const extractLanguageSpecificData = (
-  language: OnWorkingLanguageCode,
-  data: Records<FieldSet>
-): AirtableLanguageField[] => {
-  return data.map(v => {
-    return {
-      id: v.id,
-      url: getFirstItem(v.fields['URL'] as string[]),
-      channel: getFirstItem(v.fields['채널']),
-      noCC:
-        (checkIsIndividualLanguage(language)
-          ? getFirstItem(v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'])
-          : getFirstItem(v.fields[`${LanguageNames[language]} 진행 상황`])) ===
-        '해당없음 (자막 필요 없는 영상)',
-      originalTitle: getFirstItem(v.fields['제목']),
-      title: getFirstItem(v.fields[`${LanguageNames[language]} 제목`]),
-      description: getFirstItem(
-        v.fields[`${LanguageNames[language]} 세부 정보`]
-      ),
-      uploadDate: getFirstItem(v.fields['업로드 날짜']),
-      editDate: getFirstItem(v.fields['Last Modified']),
-      files:
-        typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
-          ? []
-          : filterCaptionFiles(
-              v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
-            ),
-    }
-  })
-}
+// export const extractLanguageSpecificData = (
+//   language: OnWorkingLanguageCode,
+//   data: Records<FieldSet>
+// ): AirtableLanguageField[] => {
+//   return data.map(v => {
+//     return {
+//       id: v.id,
+//       url: getFirstItem(v.fields['URL'] as string[]),
+//       channel: getFirstItem(v.fields['채널']),
+//       noCC:
+//         (checkIsIndividualLanguage(language)
+//           ? getFirstItem(v.fields['진행 상황 (from 받아쓰기 + 자막 싱크)'])
+//           : getFirstItem(v.fields[`${LanguageNames[language]} 진행 상황`])) ===
+//         '해당없음 (자막 필요 없는 영상)',
+//       originalTitle: getFirstItem(v.fields['제목']),
+//       title: getFirstItem(v.fields[`${LanguageNames[language]} 제목`]),
+//       description: getFirstItem(
+//         v.fields[`${LanguageNames[language]} 세부 정보`]
+//       ),
+//       uploadDate: getFirstItem(v.fields['업로드 날짜']),
+//       editDate: getFirstItem(v.fields['Last Modified']),
+//       files:
+//         typeof v.fields[`${LanguageNames[language]} 자막 파일`] === 'undefined'
+//           ? []
+//           : filterCaptionFiles(
+//               v.fields[`${LanguageNames[language]} 자막 파일`] as Attachment[]
+//             ),
+//     }
+//   })
+// }
 
 export const ISO639 = [
   'aa',
