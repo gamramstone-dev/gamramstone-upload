@@ -25,7 +25,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const result = (await (
       await fetch(
-        `${process.env.API_ENDPOINT}/v0/videos?channel=${channel.channelId}&tabs=${tabs}`
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v0/videos?channel=${channel.channelId}&tabs=${tabs}`
       )
     ).json()) as APIResponse<VideoWithCaption[]>
 

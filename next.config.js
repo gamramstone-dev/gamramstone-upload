@@ -25,11 +25,12 @@ const baseHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
+    apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT,
     hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true',
     gitHash: process.env.VERCEL_GIT_COMMIT_SHA,
     gitBranch: process.env.VERCEL_GIT_COMMIT_REF,
     gitMessage: process.env.VERCEL_GIT_COMMIT_MESSAGE,
-    gitUser: process.env.VERCEL_GIT_COMMIT_AUTHOR_NAME
+    gitUser: process.env.VERCEL_GIT_COMMIT_AUTHOR_NAME,
   },
   images: {
     domains: [
@@ -64,8 +65,8 @@ const nextConfig = {
           },
           {
             key: 'Vary',
-            value: 'Cookie, Accept-Encoding, Origin'
-          }
+            value: 'Cookie, Accept-Encoding, Origin',
+          },
         ],
       },
     ]
