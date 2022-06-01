@@ -52,6 +52,8 @@ export interface AirtableLanguageField {
 export interface VideoWorks {
   id: string
   dataIndex: number
+  originTitle: string,
+  originDescription: string,
   lang: OnWorkingLanguageCode
   title: string
   description: string

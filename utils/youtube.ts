@@ -128,6 +128,11 @@ const getYouTubeVideoSnippetLocalizations = async (
   return [result.items[0].snippet, result.items[0].localizations]
 }
 
+/**
+ * Google에 요청을 보내 토큰이 올바른지 확인합니다.
+ * @param token 검증할 토큰 값
+ * @returns 
+ */
 export const validateAccessToken = async (token: string) => {
   const result = await fetch(
     `https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`

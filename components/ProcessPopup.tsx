@@ -100,17 +100,17 @@ const usePreviousValue = (num: number) => {
 
 export const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
   return datas
-    .map((data, dataIndex) => {
-      const id = getYouTubeId(data.url)
-
-      return data.captions
+    .map((videoData, dataIndex) => {
+      return videoData.captions
         .map(v => {
           if (v.status !== 'waiting') {
             return null
           }
 
           return {
-            id,
+            id: videoData.id,
+            originTitle: videoData.title,
+            originDescription: videoData.description,
             dataIndex: dataIndex,
             lang: v.language,
             title: v.title,
@@ -198,8 +198,8 @@ export const ProcessPopup = ({
       let results: boolean[] = []
 
       for (let i = 0; i < queue.length; i++) {
-        const data = await (await queue[i]()).json()
-        results.push(data.status === 'success')
+        const result = await (await queue[i]()).json()
+        results.push(result.status === 'success')
       }
 
       const succeed = results.every(v => v === true)
@@ -272,6 +272,7 @@ export const ProcessPopup = ({
       }
     }
 
+    // YouTube에 자막을 적용하는 실제 과정입니다. 외부 서버로는 접근하지 않습니다.
     applyCaptions(
       token,
       tasks[taskIndex].lang,
@@ -332,7 +333,7 @@ export const ProcessPopup = ({
           (v, i) =>
             i < 5 && (
               <div key={`${v.url}-thumbnail`} className={styles.thumbnail}>
-                <YouTubeThumbnail id={getYouTubeId(v.url)}></YouTubeThumbnail>
+                <YouTubeThumbnail id={v.id}></YouTubeThumbnail>
               </div>
             )
         )}
@@ -366,9 +367,7 @@ export const ProcessPopup = ({
         ></span>
       </div>
       <div className={styles.workingThumbnail}>
-        <YouTubeThumbnail
-          id={getYouTubeId(data[tasks[taskIndex].dataIndex].url)}
-        ></YouTubeThumbnail>
+        <YouTubeThumbnail id={tasks[taskIndex].id}></YouTubeThumbnail>
       </div>
 
       {pause ? (
@@ -394,7 +393,7 @@ export const ProcessPopup = ({
       ) : (
         <>
           <h1 className={styles.title}>
-            {data[tasks[taskIndex].dataIndex].title}
+            {tasks[taskIndex].title}
             <br />
             {LanguageNames[tasks[taskIndex].lang]} 자막 업로드 중...
           </h1>
@@ -537,8 +536,8 @@ export const ProcessPopup = ({
       </div>
 
       <div className={styles.warn}>
-        처음 로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을 잠시
-        가려주세요.
+        처음 로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을
+        잠시 가려주세요.
       </div>
     </PopupTab>
   )
