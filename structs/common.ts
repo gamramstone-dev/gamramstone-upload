@@ -5,7 +5,7 @@
 //   Records,
 // } from 'airtable'
 
-import { groupBy } from "../utils/commmon"
+import { groupBy } from '../utils/commmon'
 
 export interface CaptionFile {
   filename: string
@@ -470,7 +470,6 @@ export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
   wip: '번역 진행 중',
 }
 
-
 /**
  * failed에 있지 않은 영상들을 'lang'으로 묶어 반환합니다. (works-failed)
  *
@@ -490,7 +489,7 @@ export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
  * @param works
  * @param failed
  */
- export const extractFinishedVideosByLanguage = (
+export const extractFinishedVideosByLanguage = (
   works: VideoWorks[],
   failed: VideoWorks[]
 ) => {

@@ -343,14 +343,14 @@ export const CaptionCard = ({
                     {
                       <div className={styles.row}>
                         <h3 className={styles.title}>자막 파일</h3>
-                        <div className={styles.value}>
+                        <div className={styles.value} key={`tab-files-${tabIndex}`}>
                           {languages[tabIndex].captions &&
                           languages[tabIndex].captions.length ? (
-                            languages[tabIndex].captions.map(v => (
+                            languages[tabIndex].captions.map((v, i) => (
                               <Button
                                 icon='download-line'
                                 title='오른쪽 클릭 시 자막을 미리봅니다.'
-                                key={`file-${v.filename}`}
+                                key={`file-${v.filename}-idx-${i}`}
                                 onClick={() => download(v.url, v.filename)}
                                 onContext={() =>
                                   preview(
