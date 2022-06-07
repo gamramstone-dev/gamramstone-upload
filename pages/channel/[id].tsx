@@ -197,7 +197,7 @@ const EmptyTexts: Record<ChannelID, ReactNode[]> = {
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
   const { data, error, mutate } = useSWR<VideoWithCaption[]>(
-    `/api/lists?channel=${id}&tabs=${Tabs[tabIndex]}`,
+    `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchData
   )
 
