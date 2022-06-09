@@ -1,5 +1,10 @@
 @import '../constants.scss';
 
+.container {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 5000px;
+}
+
 .tabHeader {
   display: flex;
   justify-content: space-between;
