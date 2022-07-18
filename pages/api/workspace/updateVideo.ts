@@ -51,7 +51,7 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     throw new Error('400: invalid language code')
   }
 
-  if (typeof videos === 'object') {
+  if (typeof videos !== 'string') {
     throw new Error('400: invalid videos')
   }
 
