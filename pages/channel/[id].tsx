@@ -30,6 +30,7 @@ import getConfig from 'next/config'
 import { isUploadable } from '../../utils/client/requests'
 import CaptionPreview from '../../components/CaptionPreview'
 import ProgressBar from '../../components/ProgressBar'
+import { Trans, useTranslation } from 'react-i18next'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -39,6 +40,8 @@ interface ChannelCardProps {
 }
 
 const ChannelCard = ({ channel, stat }: ChannelCardProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.channelCard}>
       <div className={styles.contents}>
@@ -55,16 +58,22 @@ const ChannelCard = ({ channel, stat }: ChannelCardProps) => {
               progress={stat.uploaded / (stat.uploaded + stat.waiting)}
             ></ProgressBar>
             <div className={styles.text}>
-              <p>{stat.uploaded}개 트랙 업로드 완료</p>
-              <p>{stat.waiting}개 트랙 업로드 대기 중</p>
+              <p>
+                {t('tracks.uploaded', {
+                  counts: stat.uploaded,
+                })}
+              </p>
+              <p>
+                {t('tracks.waiting', {
+                  counts: stat.waiting,
+                })}
+              </p>
             </div>
           </div>
         )) || (
           <div className={styles.progress}>
             <ProgressBar barStyle='primary' progress={0}></ProgressBar>
-            <div className={styles.text}>
-              <p>로딩 중이에요... 꽉 잡아요!</p>
-            </div>
+            <div className={styles.text}>{t('tracks.loading')}</div>
           </div>
         )}
       </div>
@@ -135,6 +144,7 @@ const Tabs: WorkStatus[] = ['waiting', 'done', 'wip']
 
 const RandomImages = ({ id }: { id: ChannelID }) => {
   const randomValue = Math.random()
+  const { t } = useTranslation()
 
   const [ratio, setRatio] = useState(1)
 
@@ -157,7 +167,7 @@ const RandomImages = ({ id }: { id: ChannelID }) => {
       </div>
       <h3>
         {EmptyTexts[id][Math.floor(randomValue * EmptyTexts[id].length)] ||
-          '대기 중인 영상이 없어요!'}
+          t('empty_videos')}
       </h3>
     </>
   )
@@ -200,6 +210,8 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
     `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchData
   )
+
+  const { t, i18n } = useTranslation()
 
   const { data: statData, error: statError } = useSWR<ChannelStat>(
     `/api/stats?id=${id}`,
@@ -271,10 +283,14 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>{Channels[id].name} - 감람스톤</title>
+        <title>
+          {Channels[id].name} - {t('gamramstone')}
+        </title>
         <meta
           name='description'
-          content={`이세돌, 왁타버스 번역 프로젝트 - ${Channels[id].name} 채널의 번역 페이지입니다.`}
+          content={t('channel_seo', {
+            channel: Channels[id].name,
+          })}
         />
       </Head>
       <AnimatePresence>
@@ -298,10 +314,14 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents, pageStyles.overflowX)}>
           <div className={styles.tabHeader}>
-            <TabGroup activeIndex={tabIndex} setActiveIndex={setTabIndex}>
-              <TabButton key='waiting'>업로드 대기 중</TabButton>
-              <TabButton key='done'>업로드 완료</TabButton>
-              <TabButton key='ongoing'>번역 진행 중</TabButton>
+            <TabGroup
+              key={i18n.language}
+              activeIndex={tabIndex}
+              setActiveIndex={setTabIndex}
+            >
+              <TabButton key='waiting'>{t('tabs.waiting')}</TabButton>
+              <TabButton key='done'>{t('tabs.done')}</TabButton>
+              <TabButton key='ongoing'>{t('tabs.ongoing')}</TabButton>
             </TabGroup>
             <div className={styles.actions}>
               {// TODO: 적용 업데이트 완료시 false 삭제
@@ -339,7 +359,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
                         : toast('업로드 대기 중인 영상이 없어요.')
                     }
                   >
-                    전체 자동 적용
+                    {t('apply_all')}
                   </Button>
                 )}
             </div>
@@ -347,7 +367,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
           {error instanceof Error ? (
-            <div className={styles.error}>오류 : {error.message}</div>
+            <div className={styles.error}>{t('error')} : {error.message}</div>
           ) : !data ? (
             <div className={styles.spinner}>
               <LoadSpinner></LoadSpinner>

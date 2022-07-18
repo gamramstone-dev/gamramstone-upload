@@ -18,17 +18,18 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import Footer from '../components/Footer'
 import Link from 'next/link'
-import { UserStateNames } from '../structs/user'
 import { Button } from '../components/Button'
+import { useTranslation } from 'react-i18next'
 
 const Account: NextPage = () => {
   const router = useRouter()
   const { data: session } = useSession({
     required: true,
     onUnauthenticated: () => {
-      router.push('/')
+      // router.push('/')
     },
   })
+  const { t } = useTranslation()
 
   const [settings, setSettings] = useRecoilState(globalSettings)
 
@@ -63,7 +64,7 @@ const Account: NextPage = () => {
       return
     }
 
-    const loading = toast.loading('계정 삭제 중...')
+    const loading = toast.loading(t('removing_account'))
 
     const result = await fetch('/api/user/unregister', {
       method: 'POST',
@@ -76,19 +77,21 @@ const Account: NextPage = () => {
     } else if (result.status === 'error' && result.message) {
       toast.error(result.message)
     } else {
-      toast.error('계정 삭제 실패, gamramstone@wesub.io로 문의하세요.')
+      toast.error(t('failed_to_remove_account'))
     }
-  }, [session])
+  }, [t, session])
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>계정 관리 - 감람스톤</title>
+        <title>
+          {t('manage_account')} - {t('gamramstone')}
+        </title>
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents, styles.heading)}>
           <div className={styles.inner}>
-            <span>계정 관리</span>
+            <span>{t('manage_account')}</span>
           </div>
         </div>
 
@@ -110,8 +113,8 @@ const Account: NextPage = () => {
           ))}
           <SettingCard
             setting={{
-              title: '로그아웃',
-              description: '사이트에서 로그아웃합니다.',
+              title: t('sign_out'),
+              description: t('sign_out_description'),
               type: 'button',
             }}
             onChange={() => signOut()}
@@ -120,7 +123,7 @@ const Account: NextPage = () => {
           session?.userState === 'admin' ? (
             <SettingCard
               setting={{
-                title: '연동하기',
+                title: t('link_account'),
                 description:
                   (session && session.permissionGranted) || false ? (
                     <>
@@ -161,12 +164,17 @@ const Account: NextPage = () => {
           )}
           <SettingCard
             setting={{
-              title: '계정 삭제',
+              title: t('remove_account'),
               description: (
                 <>
-                  사이트에서 계정을 삭제합니다.<br></br>
+                  {t('remove_account_description')}
+                  <br></br>
                   {session ? (
-                    <>현재 {UserStateNames[session.userState]} 계정입니다.</>
+                    <>
+                      {t('remove_account_currently', {
+                        userState: session.userState,
+                      })}
+                    </>
                   ) : (
                     undefined
                   )}
@@ -182,7 +190,7 @@ const Account: NextPage = () => {
         </div>
         <div className={classes(pageStyles.contents, styles.accountData)}>
           <p className={styles.mute}>
-            마지막 로그인 :{' '}
+            {t('last_login')} :{' '}
             {session &&
               session.lastLogin &&
               new Date(session.lastLogin as string).toLocaleString()}
@@ -192,7 +200,7 @@ const Account: NextPage = () => {
         {session?.userState === 'admin' ? (
           <div className={classes(pageStyles.contents)}>
             <Button onClick={() => router.push('/admin')}>
-              사이트 관리하러 가기
+              {t('go_site_management')}
             </Button>
           </div>
         ) : (

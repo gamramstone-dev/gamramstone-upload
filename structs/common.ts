@@ -424,6 +424,8 @@ export const ISO639 = [
   'za',
   'zh',
   'zu',
+  'en-US',
+  'en-GB',
 ] as const
 
 export type LanguageCode = typeof ISO639[number]
@@ -614,6 +616,8 @@ export const LanguageNames: Record<OnWorkingLanguageCode, string> = {
   za: '주앙어',
   zh: '중국어',
   zu: '줄주어',
+  'en-US': '영어 (미국)',
+  'en-GB': '영어 (영국)',
 }
 
 export const isValidLanguageName = (

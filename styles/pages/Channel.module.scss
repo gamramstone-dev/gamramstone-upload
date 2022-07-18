@@ -37,7 +37,7 @@
     white-space: nowrap;
     font-size: 1.75em;
     font-weight: bold;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     margin: auto;
 
     @media screen and (max-width: $tablet) {
@@ -143,7 +143,7 @@
     margin: auto;
     margin-top: 16px;
     font-weight: bold;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     font-size: 1.25em;
   }
 }

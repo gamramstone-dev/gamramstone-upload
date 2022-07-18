@@ -19,6 +19,7 @@ import { LoadSpinner } from './Loading'
 import { YouTubeThumbnail } from './VideoCard'
 
 import confetties from '../utils/client/confetties'
+import { useTranslation } from 'react-i18next'
 
 const backgroundVariants: Variants = {
   initial: {
@@ -139,6 +140,7 @@ export const ProcessPopup = ({
   onUpload,
 }: ProcessPopupProps) => {
   const [closing, setClosing] = useState(false)
+  const { t } = useTranslation()
 
   useBodyLock(!closing && true)
 
@@ -343,10 +345,10 @@ export const ProcessPopup = ({
       </h1>
       <div className={styles.actions}>
         <Button theme='secondary' icon='close' onClick={localCloseHandler}>
-          닫기
+          {t('close')}
         </Button>
         <Button theme='primary' onClick={() => setStep(1)}>
-          개같이 시작
+          {t('run_like_dog')}
         </Button>
       </div>
     </PopupTab>
@@ -377,7 +379,7 @@ export const ProcessPopup = ({
           </h1>
           <div className={styles.actions}>
             <Button theme='secondary' onClick={localCloseHandler}>
-              취소
+              {t('cancel')}
             </Button>
             <Button
               theme='primary'
@@ -386,7 +388,7 @@ export const ProcessPopup = ({
                 setPause(false)
               }}
             >
-              계속
+              {t('continue')}
             </Button>
           </div>
         </>
@@ -438,14 +440,14 @@ export const ProcessPopup = ({
 
       <div className={styles.actions}>
         <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
-          닫기
+          {t('close')}
         </Button>
         <Button
           theme='primary'
           icon='logout-box-line'
           onClick={() => signOut()}
         >
-          로그아웃
+          {t('sign_out')}
         </Button>
       </div>
     </PopupTab>
@@ -476,14 +478,14 @@ export const ProcessPopup = ({
 
       <div className={styles.actions}>
         <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
-          닫기
+          {t('close')}
         </Button>
         <Button
           theme='primary'
           icon='restart-line'
           onClick={() => retryErrors()}
         >
-          다시 시도
+          {t('retry')}
         </Button>
       </div>
     </PopupTab>
@@ -496,7 +498,7 @@ export const ProcessPopup = ({
       custom={step - previousStep}
     >
       <div className={styles.center}>
-        <h1 className={styles.title}>업로드하려면 YouTube 연동이 필요해요.</h1>
+        <h1 className={styles.title}>{t('popup.link_title')}</h1>
 
         <p className={styles.description}>
           계속하기 전에, 감람스톤에서 어떤 정보를 사용하고 처리하는지{' '}
@@ -509,7 +511,7 @@ export const ProcessPopup = ({
 
       <div className={styles.actions}>
         <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
-          닫기
+          {t('close')}
         </Button>
         <Button
           theme='primary'
@@ -531,14 +533,10 @@ export const ProcessPopup = ({
             )
           }
         >
-          연동하기
+          {t('popup.link')}
         </Button>
       </div>
-
-      <div className={styles.warn}>
-        처음 로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을
-        잠시 가려주세요.
-      </div>
+      <div className={styles.warn}>{t('popup.bottom_warning')}</div>
     </PopupTab>
   )
 

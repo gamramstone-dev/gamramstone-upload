@@ -1,10 +1,12 @@
 import getConfig from 'next/config'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 import pageStyles from '../styles/page.module.scss'
 import { classes } from '../utils/string'
 
 export const Footer = () => {
   const { publicRuntimeConfig } = getConfig()
+  const { i18n } = useTranslation()
 
   return (
     <div className={pageStyles.footer}>
@@ -17,6 +19,11 @@ export const Footer = () => {
           available on{' '}
           <Link href='https://github.com/So-chiru/gamramstone'>here</Link>.
           <br></br>
+          <br></br>
+          <div className={pageStyles.languages}>
+            <a onClick={() => i18n.changeLanguage('en')}>English</a>
+            <a onClick={() => i18n.changeLanguage('ko')}>한국어</a>
+          </div>
           <br></br>
           Email: gamramstone<span className={pageStyles.hidden}>no_spam</span>
           @wesub.io

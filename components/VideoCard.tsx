@@ -32,6 +32,7 @@ import {
   captionPreviewDetailsAtom,
   openCaptionPreviewAtom,
 } from '../structs/captionPreview'
+import { useTranslation } from 'react-i18next'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -62,6 +63,8 @@ interface VideoCardProps {
 }
 
 export const VideoCard = ({ video, onClick, onTagClick }: VideoCardProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className={styles.videoCard} onClick={() => onClick && onClick()}>
       <div className={styles.thumbnail}>
@@ -85,9 +88,11 @@ export const VideoCard = ({ video, onClick, onTagClick }: VideoCardProps) => {
                 key={`${video.id}-${v.language}`}
                 data-status={v.status}
               >
-                <span className={styles.name}>{LanguageNames[v.language]}</span>
+                <span className={styles.name}>
+                  {t(`languages.${v.language}`)}
+                </span>
                 <span className={styles.value}>
-                  {WorkStatusNames[v.status]}
+                  {t(`workStatus.${v.status}`)}
                 </span>
               </p>
             ))}
@@ -131,45 +136,60 @@ export const CaptionCard = ({
 }: CaptionCardProps) => {
   const [tabIndex, setTabIndex] = useState<number>(defaultTabIndex || 0)
 
+  const { t } = useTranslation()
+
   useEffect(() => {
     setTabIndex(defaultTabIndex)
   }, [defaultTabIndex])
 
   const { data: session } = useSession()
 
-  const copy = useCallback((text: string, label: string) => {
-    if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
-      navigator.clipboard.writeText(text)
+  const copy = useCallback(
+    (text: string, label: string) => {
+      if ('clipboard' in navigator && 'writeText' in navigator.clipboard) {
+        navigator.clipboard.writeText(text)
 
-      toast.success(`${label}을 클립보드에 복사했어요.`, ToastOption)
+        toast.success(`${label}을 클립보드에 복사했어요.`, ToastOption)
 
-      return
-    }
+        return
+      }
 
-    toast.error(
-      '이 브라우저는 복사를 지원하지 않아요. 크롬에서 실행해주세요.',
-      ErrorToastOption
-    )
-  }, [])
+      toast.error(t('unsupported_browser'), ErrorToastOption)
+    },
+    [t]
+  )
 
-  const download = useCallback((url: string, label: string) => {
-    const id = toast.loading(`${label} 다운로드 중...`, ToastOption)
+  const download = useCallback(
+    (url: string, label: string) => {
+      const id = toast.loading(
+        t('download_ongoingg', {
+          filename: label,
+        }),
+        ToastOption
+      )
 
-    return fetch(url)
-      .then(res => res.blob())
-      .then(response => {
-        toast.remove(id)
-        toast.success(`${label} 다운로드 완료!`, ToastOption)
+      return fetch(url)
+        .then(res => res.blob())
+        .then(response => {
+          toast.remove(id)
+          toast.success(
+            t('download_done', {
+              filename: label,
+            }),
+            ToastOption
+          )
 
-        const url = window.URL.createObjectURL(response)
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', label)
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      })
-  }, [])
+          const url = window.URL.createObjectURL(response)
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', label)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        })
+    },
+    [t]
+  )
 
   const setOpenPreview = useSetRecoilState(openCaptionPreviewAtom)
   const setPreviewDetails = useSetRecoilState(captionPreviewDetailsAtom)
@@ -280,7 +300,7 @@ export const CaptionCard = ({
                       v.status !== 'done'
                     }
                   >
-                    {LanguageNames[v.language]}
+                    {t(`languages.${v.language}`)}
                   </TabButton>
                 ))}
               </TabGroup>
@@ -289,12 +309,12 @@ export const CaptionCard = ({
                 session?.userState !== 'admin' &&
                 languages[tabIndex].status === 'wip' ? (
                   <div className={styles.details}>
-                    현재 자막 제작 중입니다...
+                    {t('translation_in_progress')}
                   </div>
                 ) : (
                   <div className={styles.details}>
                     <div className={styles.row}>
-                      <h3 className={styles.title}>작업</h3>
+                      <h3 className={styles.title}>{t('cards.tasks')}</h3>
                       <div className={styles.value}>
                         <a
                           href={`https://studio.youtube.com/video/${getYouTubeId(
@@ -303,7 +323,9 @@ export const CaptionCard = ({
                           target='_blank'
                           rel='noreferrer'
                         >
-                          <Button icon='link'>자막 수동 적용</Button>
+                          <Button icon='link'>
+                            {t('cards.subtitle_manual_apply')}
+                          </Button>
                         </a>
                         {(!publicRuntimeConfig.hideApplyButton ||
                           session?.userState === 'admin') && (
@@ -328,28 +350,35 @@ export const CaptionCard = ({
                               )
                             }
                           >
-                            자막 자동 적용
+                            {t('cards.subtitle_automatic_apply')}
                           </Button>
                         )}
                         <a href={video.url} target='_blank' rel='noreferrer'>
-                          <Button icon='youtube-fill'>YouTube 열기</Button>
+                          <Button icon='youtube-fill'>
+                            {t('cards.open_in_youtube')}
+                          </Button>
                         </a>
                       </div>
                     </div>
                     <div className={styles.row}>
-                      <h3 className={styles.title}>상태</h3>
-                      <p>{WorkStatusNames[languages[tabIndex].status]}</p>
+                      <h3 className={styles.title}>{t('cards.status')}</h3>
+                      <p>{t(`workStatus.${languages[tabIndex].status}`)}</p>
                     </div>
                     {
                       <div className={styles.row}>
-                        <h3 className={styles.title}>자막 파일</h3>
-                        <div className={styles.value} key={`tab-files-${tabIndex}`}>
+                        <h3 className={styles.title}>
+                          {t('cards.subtitle_files')}
+                        </h3>
+                        <div
+                          className={styles.value}
+                          key={`tab-files-${tabIndex}`}
+                        >
                           {languages[tabIndex].captions &&
                           languages[tabIndex].captions.length ? (
                             languages[tabIndex].captions.map((v, i) => (
                               <Button
                                 icon='download-line'
-                                title='오른쪽 클릭 시 자막을 미리봅니다.'
+                                title={t('cards.right_click_to_preview')}
                                 key={`file-${v.filename}-idx-${i}`}
                                 onClick={() => download(v.url, v.filename)}
                                 onContext={() =>
@@ -364,26 +393,33 @@ export const CaptionCard = ({
                               </Button>
                             ))
                           ) : (
-                            <span className={styles.muted}>자막 파일 없음</span>
+                            <span className={styles.muted}>
+                              {t('cards.no_subtitles')}
+                            </span>
                           )}
                         </div>
                       </div>
                     }
                     <div className={styles.row}>
-                      <h3 className={styles.title}>제목</h3>
+                      <h3 className={styles.title}>{t('cards.title')}</h3>
                       <p
                         className={styles.copyable}
-                        onClick={() => copy(languages[tabIndex].title, '제목')}
+                        onClick={() =>
+                          copy(languages[tabIndex].title, t('cards.title'))
+                        }
                       >
                         {languages[tabIndex].title}
                       </p>
                     </div>
                     <div className={styles.row}>
-                      <h3 className={styles.title}>세부 정보</h3>
+                      <h3 className={styles.title}>{t('cards.description')}</h3>
                       <div
                         className={classes(styles.originText, styles.copyable)}
                         onClick={() =>
-                          copy(languages[tabIndex].description, '설명')
+                          copy(
+                            languages[tabIndex].description,
+                            t('cards.description')
+                          )
                         }
                       >
                         {languages[tabIndex].description
@@ -413,9 +449,7 @@ export const CaptionCard = ({
                   </div>
                 )
               ) : (
-                <div className={styles.details}>
-                  무슨 일인지 데이터가 없네요...
-                </div>
+                <div className={styles.details}>{t('cards.no_data')}</div>
               )}
             </motion.div>
           )}

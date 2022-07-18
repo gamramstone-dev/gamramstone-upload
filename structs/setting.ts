@@ -18,8 +18,8 @@ export const Settings: Record<
   darkMode: {
     id: 'darkMode',
     type: 'checkbox',
-    title: '어둠의 자식 모드',
-    description: '흰색으로부터 눈을 보호하세요.',
+    title: 'settings.darkmode',
+    description: 'settings.darkmode_description',
     default:
       typeof window !== 'undefined'
         ? window.matchMedia('(prefers-color-scheme: dark)').matches

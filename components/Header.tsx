@@ -6,9 +6,11 @@ import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import FadeInImage from './FadeInImage'
 import { LoadSpinner } from './Loading'
+import { useTranslation } from 'react-i18next'
 
 export const Header = () => {
   const router = useRouter()
+  const { t } = useTranslation()
   const { data: session, status } = useSession()
 
   return (
@@ -34,7 +36,7 @@ export const Header = () => {
                     width={48}
                     unoptimized
                     height={48}
-                    alt='프로필 이미지'
+                    alt={t('profile_image')}
                   />
                 )}
               </div>
@@ -43,9 +45,7 @@ export const Header = () => {
             <Button
               size='medium'
               onClick={() =>
-                confirm(
-                  'Google 계정으로 로그인합니다. 처음 로그인 시 이메일이 노출될 수 있으니 잠시 방송 화면을 가려주세요.'
-                ) &&
+                confirm(t('sign_in_warning')) &&
                 signIn(
                   'google',
                   undefined,
@@ -57,7 +57,7 @@ export const Header = () => {
                 )
               }
             >
-              로그인
+              {t('sign_in')}
             </Button>
           )}
         </div>

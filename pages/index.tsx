@@ -9,6 +9,7 @@ import { Channel, ChannelID, Channels } from '../structs/channels'
 import Link from 'next/link'
 import FadeInImage from '../components/FadeInImage'
 import Footer from '../components/Footer'
+import { useTranslation } from 'react-i18next'
 
 interface ChannelCardProps {
   channel: Channel
@@ -36,18 +37,20 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
 }
 
 const Main: NextPage = () => {
+  const {t} = useTranslation()
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>감람스톤</title>
+        <title>{t('gamramstone')}</title>
       </Head>
       <div className={pageStyles.page}>
         <div className={classes(pageStyles.contents, styles.heading)}>
           <div className={styles.inner}>
-            <span>이세돌 - 왁타버스 번역 프로젝트</span>
+            <span>{t('project_title')}</span>
             <div className={styles.logo}>
               <Logo size={32} stroke={3}></Logo>
-              <span>감람스톤</span>
+              <span>{t('gamramstone')}</span>
             </div>
           </div>
         </div>

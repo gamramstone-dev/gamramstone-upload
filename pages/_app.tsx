@@ -14,6 +14,7 @@ import { useEffect } from 'react'
 import Script from 'next/script'
 import Head from 'next/head'
 
+import './i18n'
 import 'remixicon/fonts/remixicon.css'
 
 const variants = {

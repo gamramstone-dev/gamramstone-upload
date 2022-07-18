@@ -14,6 +14,8 @@ import { useBodyLock } from '../hooks/styles'
 import captionParser, { CaptionLine } from '../utils/captionParser'
 import { LoadSpinner } from './Loading'
 import { LanguageNames, OnWorkingLanguageCode } from '../structs/common'
+import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 const backgroundVariants: Variants = {
   initial: {
@@ -123,6 +125,7 @@ const useCaptionData = (filename: string, url: string) => {
 export const CaptionPreview = () => {
   const preview = useRecoilValue(captionPreviewSelector)
   const openState = useSetRecoilState(openCaptionPreviewAtom)
+  const { t } = useTranslation()
 
   const [closing, setClosing] = useState(false)
   const [player, setPlayer] = useState<any>(null)
@@ -218,7 +221,7 @@ export const CaptionPreview = () => {
               <div className={styles.frame}>
                 <div className={styles.caption} ref={captionRef}>
                   <h1 className={styles.title}>
-                    {player ? player.playerInfo.videoData.title : '로드 중...'}
+                    {player ? player.playerInfo.videoData.title : t('loading')}
                     {preview.details.lang
                       ? ` [${
                           LanguageNames[
@@ -227,16 +230,14 @@ export const CaptionPreview = () => {
                         }]`
                       : ''}
                   </h1>
-                  <p className={styles.error}>
-                    ytt 형식의 자막은 미리볼 수 없어요.
-                  </p>
+                  <p className={styles.error}>{t('cannot_preview_ytt')}</p>
                 </div>
               </div>
             ) : (
               <div className={styles.frame}>
                 <div className={styles.caption} ref={captionRef}>
                   <h1 className={styles.title}>
-                    {player ? player.playerInfo.videoData.title : '로드 중...'}
+                    {player ? player.playerInfo.videoData.title : t('loading')}
                     {preview.details.lang
                       ? ` [${
                           LanguageNames[
@@ -248,7 +249,9 @@ export const CaptionPreview = () => {
                   {isLoading ? (
                     <LoadSpinner></LoadSpinner>
                   ) : error ? (
-                    <p className={styles.error}>오류 : {error}</p>
+                    <p className={styles.error}>
+                      {t('error')} : {error}
+                    </p>
                   ) : (
                     <div className={styles.lines}>
                       {caption &&

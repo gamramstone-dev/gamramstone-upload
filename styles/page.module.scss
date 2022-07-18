@@ -72,9 +72,18 @@ html[data-dark-mode='true'] {
   bottom: 0;
   width: 100%;
   background: #f5f5f5;
-  min-height: 350px;
+  min-height: 400px;
   display: flex;
   margin-top: 20vh;
+
+  .languages {
+    display: flex;
+    gap: 16px;
+
+    a {
+      cursor: pointer;
+    }
+  }
 
   @media screen and (max-width: $tablet) {
     font-size: 0.95em;

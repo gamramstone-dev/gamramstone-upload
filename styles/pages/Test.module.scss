@@ -8,7 +8,7 @@
   flex-direction: column;
 
   font-weight: bold;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   font-size: 1.75em;
 
   @media screen and (max-width: $tablet) {
@@ -206,7 +206,7 @@ html[data-dark-mode='true'] {
   .name {
     display: flex;
     font-weight: bold;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     text-align: center;
     margin-top: 32px;
 
@@ -224,7 +224,7 @@ html[data-dark-mode='true'] {
   h1,
   h2,
   h3 {
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     word-break: break-word;
   }
 
