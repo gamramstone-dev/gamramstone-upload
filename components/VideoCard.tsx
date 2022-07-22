@@ -162,7 +162,7 @@ export const CaptionCard = ({
   const download = useCallback(
     (url: string, label: string) => {
       const id = toast.loading(
-        t('download_ongoingg', {
+        t('download_ongoing', {
           filename: label,
         }),
         ToastOption
