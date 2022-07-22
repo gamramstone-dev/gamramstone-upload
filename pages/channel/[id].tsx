@@ -8,7 +8,6 @@ import styles from '../../styles/pages/Channel.module.scss'
 import { classes, getYouTubeId } from '../../utils/string'
 import { TabButton, TabGroup } from '../../components/Tabs'
 import { ReactNode, useCallback, useEffect, useState } from 'react'
-import { APIResponse } from '../../structs/api'
 import {
   ChannelStat,
   LanguageCode,
@@ -30,7 +29,9 @@ import getConfig from 'next/config'
 import { isUploadable } from '../../utils/client/requests'
 import CaptionPreview from '../../components/CaptionPreview'
 import ProgressBar from '../../components/ProgressBar'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import ErrorComponent from '../../components/Error'
+import { APIResponse } from '../../structs/api'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -127,10 +128,47 @@ const useColor = (id: string) => {
 
 const fetchData = async <T extends unknown>(url: string): Promise<T> =>
   fetch(url)
-    .then(res => res.json())
+    .then(async res => {
+      let data: unknown
+      let parsable = true
+
+      try {
+        data = await res.json()
+      } catch (e) {
+        parsable = false
+      }
+
+      if (parsable) {
+        return data as APIResponse<T>
+      }
+
+      if (res.status === 502) {
+        throw new Error('502 Bad Gateway, 잠시 후에 다시 시도해주세요...')
+      }
+
+      if (res.status === 503 || res.status === 504) {
+        throw new Error('504 Gateway Timeout, 침도스를 멈춰주세요 ㅠㅠ')
+      }
+
+      if (res.status === 500) {
+        throw new Error(
+          '500 Internal Server Error, 잠시 깨부하는 동안 기다려주세요...'
+        )
+      }
+
+      if (!res.ok) {
+        throw new Error(
+          `${res.status > 500 ? '서버' : '요청'} 오류, 서버가 ${res.status} ${
+            res.statusText
+          } 을(를) 반환하였습니다.`
+        )
+      }
+
+      return data as APIResponse<T>
+    })
     .then(v => {
       if (v.status === 'error') {
-        throw new Error(v.message)
+        throw new Error(`오류: ${v.message}`)
       }
 
       return v.data as T
@@ -207,7 +245,7 @@ const EmptyTexts: Record<ChannelID, ReactNode[]> = {
 const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
   const [tabIndex, setTabIndex] = useState<number>(0)
   const { data, error, mutate } = useSWR<VideoWithCaption[]>(
-    `/api/lists?id=${id}&tabs=${Tabs[tabIndex]}`,
+    `/api/listss?id=${id}&tabs=${Tabs[tabIndex]}`,
     fetchData
   )
 
@@ -367,7 +405,7 @@ const ChannelPage: NextPage<ChannelPageProps> = ({ id }) => {
         </div>
         <div className={classes(pageStyles.contents, styles.lists)}>
           {error instanceof Error ? (
-            <div className={styles.error}>{t('error')} : {error.message}</div>
+            <ErrorComponent error={error} retry={mutate}></ErrorComponent>
           ) : !data ? (
             <div className={styles.spinner}>
               <LoadSpinner></LoadSpinner>
