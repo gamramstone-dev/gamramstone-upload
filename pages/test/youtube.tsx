@@ -56,7 +56,7 @@ const YouTubeTestPage: NextPage = props => {
 
   const getExampleCaptionFile = () => {
     return fetch(
-      'https://dl.airtable.com/.attachments/569855d0f3c8f60da63f2b55a2914a65/e62a26d7/--Shorts.srt'
+      'https://gamramstone-api.wesub.io/v1/file/d0b70199-8544-40eb-970c-a8609771eeb6'
     ).then(v => v.blob())
   }
 
@@ -141,10 +141,10 @@ const YouTubeTestPage: NextPage = props => {
                   description: customDescription,
                   captions: [
                     {
-                      filename: '영어-But_You_Want_More_-_Original_Song.ytt',
+                      filename: '전못진 테스트 파일.ytt',
                       size: 376064,
                       url:
-                        'https://dl.airtable.com/.attachments/8838dde1539bbcf74c6abb838e0e97d1/563c5a20/-But_You_Want_More_-_Original_Song.ytt',
+                        'https://gamramstone-api.wesub.io/v1/file/d0b70199-8544-40eb-970c-a8609771eeb6',
                       type: 'text/plain',
                     },
                   ],

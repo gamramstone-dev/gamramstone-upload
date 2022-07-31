@@ -83,6 +83,14 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
         discord.sendFancy(process.env[`DISCORD_EN_HOOK`]!, chunk)
       )
     )
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v1/admin/uploaded`, {
+      method: 'POST',
+      body: JSON.stringify({
+        lang,
+        videos: youtubeIds,
+      }),
+    })
   }
 
   return true
