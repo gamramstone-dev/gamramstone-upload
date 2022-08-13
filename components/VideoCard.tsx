@@ -358,6 +358,17 @@ export const CaptionCard = ({
                             {t('cards.open_in_youtube')}
                           </Button>
                         </a>
+                        <a
+                          href={`https://workspace.wesub.io/video/${getYouTubeId(
+                            video.url
+                          )}/translations?lang=${languages[tabIndex].language}`}
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          <Button icon='tools-fill'>
+                            {t('cards.open_in_workspace')}
+                          </Button>
+                        </a>
                       </div>
                     </div>
                     <div className={styles.row}>

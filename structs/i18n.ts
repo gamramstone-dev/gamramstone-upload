@@ -234,6 +234,7 @@ const resources = {
         subtitle_manual_apply: 'Apply manually',
         subtitle_automatic_apply: 'Apply automatically',
         open_in_youtube: 'Open in YouTube',
+        open_in_workspace: 'Open in Workspace',
         status: 'Status',
         subtitle_files: 'Subtitle files',
         right_click_to_preview:
@@ -526,6 +527,7 @@ const resources = {
         subtitle_manual_apply: '자막 수동 적용',
         subtitle_automatic_apply: '자막 자동 적용',
         open_in_youtube: 'Youtube에서 열기',
+        open_in_workspace: 'Workspace에서 열기',
         status: '상태',
         subtitle_files: '자막 파일',
         right_click_to_preview: '오른쪽 클릭하여 미리볼 수 있어요.',

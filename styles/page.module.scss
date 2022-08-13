@@ -32,6 +32,18 @@
   margin-right: auto;
 }
 
+.announcements {
+  margin-bottom: 32px;
+  padding: 8px 32px;
+  background-color: rgba(20, 126, 107, 0.3);
+  letter-spacing: -0.5px;
+  border-radius: 8px;
+
+  a {
+    color: #00aeff;
+  }
+}
+
 .largeContents {
   max-width: #{$page + 300px};
   width: 100%;

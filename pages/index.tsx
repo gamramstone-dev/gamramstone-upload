@@ -37,7 +37,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
 }
 
 const Main: NextPage = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <div className={styles.container}>
@@ -53,6 +53,14 @@ const Main: NextPage = () => {
               <span>{t('gamramstone')}</span>
             </div>
           </div>
+        </div>
+        <div className={classes(pageStyles.contents, pageStyles.announcements)}>
+          <p>
+            이제 감람스톤을 통해 누구나 자막 작업에 기여할 수 있어요.{' '}
+            <Link href='https://cafe.naver.com/steamindiegame/7244087'>
+              더 알아보기
+            </Link>
+          </p>
         </div>
         <div className={classes(pageStyles.contents, styles.channels)}>
           {(Object.keys(Channels) as ChannelID[]).map(channel => (
