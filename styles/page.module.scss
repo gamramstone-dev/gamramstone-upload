@@ -35,12 +35,20 @@
 .announcements {
   margin-bottom: 32px;
   padding: 8px 32px;
-  background-color: rgba(20, 126, 107, 0.3);
+  background-color: rgba(208, 244, 249, 0.5);
   letter-spacing: -0.5px;
   border-radius: 8px;
 
   a {
-    color: #00aeff;
+    color: #0084ff;
+  }
+
+  html[data-dark-mode='true'] & {
+    background-color: rgba(20, 126, 107, 0.3);
+
+    a {
+      color: #00aeff;
+    }
   }
 }
 
