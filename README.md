@@ -25,7 +25,6 @@ yarn install
 ```
 yarn dev # 개발 서버 실행 (http://localhost:3000)
 yarn build # 프로젝트 빌드
-yarn format # 코드 스타일 포매팅
 ```
 
 ## Contributions
