@@ -9,13 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
       - name: install dependencies
         run: |
           yarn install
       - name: build
         run: |
           yarn build
-      - uses: amondnet/vercel-action@v25.1.0
+
+      - name: deploy staging
+        id: vercel-action-staging
+        uses: amondnet/vercel-action@v25.1.0
         if: github.event_name == 'pull_request_target'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -25,7 +38,9 @@ jobs:
           alias-domains: |
             staging.gamramstone.wesub.io
             pr-{{PR_NUMBER}}.gamramstone.wesub.io
-      - uses: amondnet/vercel-action@v25.1.0
+      - name: deploy production
+        id: vercel-action-production
+        uses: amondnet/vercel-action@v25.1.0
         if: github.event_name == 'push'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
