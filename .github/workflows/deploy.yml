@@ -1,0 +1,32 @@
+name: deploy website
+on:
+  push:
+    branches:
+      - main
+  pull_request_target:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build
+        run: |
+          yarn build
+      - uses: amondnet/vercel-action@v25.1.0
+        if: github.event_name == 'pull_request_target'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }} 
+          vercel-project-id: ${{ secrets.PROJ_ID }}
+          alias-domains: |
+            staging.gamramstone.wesub.io
+            pr-{{PR_NUMBER}}.gamramstone.wesub.io
+      - uses: amondnet/vercel-action@v25.1.0
+        if: github.event_name == 'push'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }} 
+          vercel-project-id: ${{ secrets.PROJ_ID }}
+          vercel-args: '--prod'
