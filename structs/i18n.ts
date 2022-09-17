@@ -10,7 +10,7 @@ const resources = {
       tracks: {
         uploaded: '{{counts, number}} Tracks uploaded',
         waiting: '{{counts, number}} Tracks waiting for upload',
-        loading: 'Loading... Hang tight!',
+        loading: 'Loading... Hang tight!'
       },
       error: 'Error',
       loading: 'Loading...',
@@ -22,7 +22,7 @@ const resources = {
       tabs: {
         waiting: 'Waiting',
         done: 'Uploaded',
-        ongoing: 'Translating',
+        ongoing: 'Translating'
       },
       empty_videos: 'No waiting videos!',
       channel_seo:
@@ -226,7 +226,7 @@ const resources = {
         zh: 'Chinese',
         zu: '줄주어',
         'en-US': 'English (USA)',
-        'en-GB': 'English (UK)',
+        'en-GB': 'English (UK)'
       },
 
       cards: {
@@ -242,12 +242,12 @@ const resources = {
         no_subtitles: 'No subtitles',
         title: 'Title',
         description: 'Description',
-        no_data: 'No data',
+        no_data: 'No data'
       },
 
       settings: {
         darkmode: 'Dark mode',
-        darkmode_description: 'Enable dark mode',
+        darkmode_description: 'Enable dark mode'
       },
 
       userStates: {
@@ -255,14 +255,14 @@ const resources = {
         banned: 'Banned',
         creator: 'YouTube Creator',
         guest: 'Guest',
-        translator: 'Translator',
+        translator: 'Translator'
       },
 
       workStatus: {
         done: 'Upload Done',
         none: 'Not Translating',
         waiting: 'Waiting Upload',
-        wip: 'On Translation',
+        wip: 'On Translation'
       },
 
       manage_account: 'Account management',
@@ -293,8 +293,17 @@ const resources = {
         link: 'Link',
         link_title:
           'To upload subtitles, you need to link with the YouTube account.',
+
+        sign_in_title: 'How would you like to sign in?',
+        sign_in_title_elevated: 'How would you like to connect with?',
+
+        sign_in_description:
+          '다중 계정을 사용하시는 왁굳 님은 오른쪽을, 이세돌 분들은 왼쪽을 골라주세요.'
       },
-    },
+
+      auto_select: 'Account auto-select',
+      manual_select: 'Account manual-select',
+    }
   },
   ko: {
     translation: {
@@ -303,7 +312,7 @@ const resources = {
       tracks: {
         uploaded: '{{counts, number}}개 트랙 업로드 완료',
         waiting: '{{counts, number}}개 트랙 업로드 대기 중',
-        loading: '로딩 중이에요... 꽉 잡아요!',
+        loading: '로딩 중이에요... 꽉 잡아요!'
       },
       error: '오류',
       loading: '로딩 중...',
@@ -315,7 +324,7 @@ const resources = {
       tabs: {
         waiting: '업로드 대기',
         done: '업로드 완료',
-        ongoing: '번역 진행 중',
+        ongoing: '번역 진행 중'
       },
       empty_videos: '대기 중인 영상이 없어요!',
       channel_seo:
@@ -519,7 +528,7 @@ const resources = {
         zh: '중국어',
         zu: '줄주어',
         'en-US': '영어 (미국)',
-        'en-GB': '영어 (영국)',
+        'en-GB': '영어 (영국)'
       },
 
       cards: {
@@ -534,12 +543,12 @@ const resources = {
         no_subtitles: '자막 파일 없음',
         title: '제목',
         description: '세부 정보',
-        no_data: '무슨 일인지 데이터가 없네요...',
+        no_data: '무슨 일인지 데이터가 없네요...'
       },
 
       settings: {
         darkmode: '어둠의 자식 모드',
-        darkmode_description: '어둠의 자식 모드를 활성화 합니다.',
+        darkmode_description: '어둠의 자식 모드를 활성화 합니다.'
       },
 
       userStates: {
@@ -547,14 +556,14 @@ const resources = {
         banned: '차단',
         creator: 'YouTube 크리에이터',
         guest: '방문자',
-        translator: '번역가',
+        translator: '번역가'
       },
 
       workStatus: {
         done: '업로드 완료',
         none: '자막 작업 안함',
         waiting: '업로드 대기',
-        wip: '번역 진행 중',
+        wip: '번역 진행 중'
       },
 
       manage_account: '계정 관리',
@@ -581,12 +590,21 @@ const resources = {
 
       popup: {
         bottom_warning:
-          '처음 로그인 시 이메일이 노출될 수 있어요. 버튼을 누르기 전에 방송 화면을 잠시 가려주세요.',
+          '구글 로그인 과정에서 이메일이 보일 수 있어요. 로그인 중에는 잠시 방송 화면을 가려주세요.',
         link: '연동하기',
         link_title: '업로드하려면 YouTube 연동이 필요해요.',
+
+        sign_in_title: '어떻게 로그인하시겠어요?',
+        sign_in_title_elevated: '어떻게 연동하시겠어요?',
+
+        sign_in_description:
+          '다중 계정을 사용하시는 왁굳 님은 오른쪽을, 이세돌 분들은 왼쪽을 골라주세요.'
       },
-    },
-  },
+
+      auto_select: '계정 자동 선택',
+      manual_select: '계정 수동 선택'
+    }
+  }
 }
 
 i18n
@@ -600,8 +618,8 @@ i18n
     // // if you're using a language detector, do not define the lng option
 
     interpolation: {
-      escapeValue: false,
-    },
+      escapeValue: false
+    }
   })
 
 export default i18n

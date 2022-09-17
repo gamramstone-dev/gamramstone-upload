@@ -15,6 +15,10 @@
   display: flex;
 }
 
+.signInWrapper {
+  z-index: 1000;
+}
+
 .background {
   position: absolute;
   left: 0;
@@ -215,6 +219,9 @@ html[data-dark-mode='true'] {
 
   & > div:first-child {
     margin-left: auto;
+  }
+
+  & > div {
     margin-right: 16px;
   }
 

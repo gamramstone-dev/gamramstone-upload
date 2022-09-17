@@ -8,7 +8,7 @@ import {
   LanguageCode,
   LanguageNames,
   VideoWithCaption,
-  VideoWorks,
+  VideoWorks
 } from '../structs/common'
 import styles from '../styles/components/ProcessPopup.module.scss'
 import { applyCaptions, updateVideoState } from '../utils/client/requests'
@@ -20,53 +20,54 @@ import { YouTubeThumbnail } from './VideoCard'
 
 import confetties from '../utils/client/confetties'
 import { useTranslation } from 'react-i18next'
+import { useSignInAsk } from './SignInAsk'
 
 const backgroundVariants: Variants = {
   initial: {
     opacity: 0,
-    pointerEvents: 'none',
+    pointerEvents: 'none'
   },
   visible: {
     opacity: 1,
-    pointerEvents: 'auto',
-  },
+    pointerEvents: 'auto'
+  }
 }
 
 const popupVariants: Variants = {
   initial: {
     opacity: 0,
-    translateY: 25,
+    translateY: 25
   },
   visible: {
     opacity: 1,
-    translateY: 0,
-  },
+    translateY: 0
+  }
 }
 
 const tabVariants: Variants = {
   initial: (direction: number) => ({
     opacity: 0,
-    translateX: direction > 0 ? 600 : -600,
+    translateX: direction > 0 ? 600 : -600
   }),
   exit: (direction: number) => ({
     opacity: 0,
-    translateX: direction < 0 ? 600 : -600,
+    translateX: direction < 0 ? 600 : -600
   }),
   animate: {
     opacity: 1,
-    translateX: 0,
-  },
+    translateX: 0
+  }
 }
 
 const tabTransition = {
   translateX: { type: 'spring', stiffness: 300, damping: 30 },
-  opacity: { duration: 0.2 },
+  opacity: { duration: 0.2 }
 }
 
 export const PopupTab = ({
   className,
   children,
-  custom,
+  custom
 }: {
   className: string
   children?: ReactNode
@@ -116,7 +117,7 @@ export const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
             lang: v.language,
             title: v.title,
             description: v.description,
-            captions: v.captions,
+            captions: v.captions
           }
         })
         .filter(v => v !== null) as VideoWorks[]
@@ -137,7 +138,7 @@ export const ProcessPopup = ({
   close,
   token,
   noPermission,
-  onUpload,
+  onUpload
 }: ProcessPopupProps) => {
   const [closing, setClosing] = useState(false)
   const { t } = useTranslation()
@@ -156,6 +157,8 @@ export const ProcessPopup = ({
   const [pause, setPause] = useState<boolean>(false)
 
   const errorStreaks = useRef(0)
+
+  const { setOpen, setElevated } = useSignInAsk()
 
   const localCloseHandler = useCallback(() => {
     if (!close) {
@@ -344,7 +347,7 @@ export const ProcessPopup = ({
         {data && data.length}개의 영상에 자동으로 자막을 달까요?
       </h1>
       <div className={styles.actions}>
-        <Button theme='secondary' icon='close' onClick={localCloseHandler}>
+        <Button theme='secondary' icon='close-line' onClick={localCloseHandler}>
           {t('close')}
         </Button>
         <Button theme='primary' onClick={() => setStep(1)}>
@@ -364,7 +367,7 @@ export const ProcessPopup = ({
         <span
           className={styles.bar}
           style={{
-            width: `${(taskIndex / tasks.length) * 100}%`,
+            width: `${(taskIndex / tasks.length) * 100}%`
           }}
         ></span>
       </div>
@@ -516,22 +519,10 @@ export const ProcessPopup = ({
         <Button
           theme='primary'
           icon='login-box-line'
-          onClick={() =>
-            signIn(
-              'google',
-              undefined,
-              window.location.href.indexOf('?wak') > -1
-                ? {
-                    scope:
-                      'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
-                    prompt: 'select_account',
-                  }
-                : {
-                    scope:
-                      'openid profile https://www.googleapis.com/auth/youtube.force-ssl',
-                  }
-            )
-          }
+          onClick={() => {
+            setElevated(true)
+            setOpen(true)
+          }}
         >
           {t('popup.link')}
         </Button>
@@ -551,7 +542,7 @@ export const ProcessPopup = ({
         transition={{
           type: 'spring',
           stiffness: 100,
-          damping: 10,
+          damping: 10
         }}
         onClick={ev => {
           ev.stopPropagation()
@@ -566,7 +557,7 @@ export const ProcessPopup = ({
         variants={popupVariants}
         transition={{
           type: 'spring',
-          duration: 0.45,
+          duration: 0.45
         }}
       >
         <AnimatePresence custom={step - previousStep}>

@@ -16,11 +16,12 @@ import Head from 'next/head'
 
 import '../structs/i18n'
 import 'remixicon/fonts/remixicon.css'
+import { SignInAskModalWrapper } from '../components/SignInAsk'
 
 const variants = {
   hidden: { opacity: 0 },
   enter: { opacity: 1 },
-  exit: { opacity: 0 },
+  exit: { opacity: 0 }
 }
 
 const useDarkMode = () => {
@@ -57,7 +58,7 @@ const ContextUser = () => {
 function MyApp ({
   Component,
   pageProps: { session, ...pageProps },
-  router,
+  router
 }: AppProps) {
   return (
     <SessionProvider session={session}>
@@ -82,27 +83,28 @@ function MyApp ({
               padding: '12px 28px',
               boxShadow: 'unset',
               background: 'var(--color-primary-container, #fff)',
-              color: 'var(--color-on-primary-container, #000)',
+              color: 'var(--color-on-primary-container, #000)'
             },
             success: {
               iconTheme: {
                 primary: 'var(--color-on-primary-container, green)',
-                secondary: 'var(--color-primary-container, white)',
-              },
+                secondary: 'var(--color-primary-container, white)'
+              }
             },
             error: {
               iconTheme: {
                 primary: 'var(--color-error, red)',
-                secondary: 'var(--color-on-error, white)',
+                secondary: 'var(--color-on-error, white)'
               },
               style: {
                 background: 'var(--color-error-container, #fff)',
-                color: 'var(--color-on-error-container, #000)',
-              },
-            },
+                color: 'var(--color-on-error-container, #000)'
+              }
+            }
           }}
         ></Toaster>
         <ContextUser></ContextUser>
+        <SignInAskModalWrapper></SignInAskModalWrapper>
         <motion.div
           key={router.route}
           variants={variants}

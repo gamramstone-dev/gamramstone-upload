@@ -2,16 +2,19 @@ import Link from 'next/link'
 import styles from '../styles/components/Header.module.scss'
 import { Button } from './Button'
 
-import { useSession, signIn } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import FadeInImage from './FadeInImage'
 import { LoadSpinner } from './Loading'
 import { useTranslation } from 'react-i18next'
+import { useSignInAsk } from './SignInAsk'
 
 export const Header = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { data: session, status } = useSession()
+
+  const { setOpen } = useSignInAsk()
 
   return (
     <header className={styles.header}>
@@ -42,21 +45,7 @@ export const Header = () => {
               </div>
             </div>
           ) : (
-            <Button
-              size='medium'
-              onClick={() =>
-                confirm(t('sign_in_warning')) &&
-                signIn(
-                  'google',
-                  undefined,
-                  window.location.href.indexOf('?wak') > -1
-                    ? {
-                        prompt: 'select_account',
-                      }
-                    : undefined
-                )
-              }
-            >
+            <Button size='medium' onClick={() => setOpen(true)}>
               {t('sign_in')}
             </Button>
           )}
