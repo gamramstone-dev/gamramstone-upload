@@ -30,7 +30,6 @@ function MyApp ({ pageProps, router }: AppProps) {
       <motion.div
         key={router.route}
         variants={variants}
-        className={'page-wrapper'}
         initial='hidden'
         animate='enter'
         exit='exit'
