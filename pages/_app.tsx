@@ -5,54 +5,20 @@ import { AppProps } from 'next/app'
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
 
 import { motion } from 'framer-motion'
-import Header from '../components/Header'
 import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
-import ConsoleWarning from '../components/ConsoleWarning'
-import { darkModeAtom, globalSettings } from '../structs/setting'
+
 import { useEffect } from 'react'
 import Script from 'next/script'
 import Head from 'next/head'
 
 import '../structs/i18n'
 import 'remixicon/fonts/remixicon.css'
-import { SignInAskModalWrapper } from '../components/SignInAsk'
 
 const variants = {
   hidden: { opacity: 0 },
   enter: { opacity: 1 },
   exit: { opacity: 0 }
-}
-
-const useDarkMode = () => {
-  const darkMode = useRecoilValue(darkModeAtom)
-
-  useEffect(() => {
-    document.documentElement.dataset.darkMode = darkMode ? 'true' : 'false'
-  }, [darkMode])
-}
-
-const useSettingSync = () => {
-  const [settings, setSettings] = useRecoilState(globalSettings)
-
-  useEffect(() => {
-    const getSettings = async () => {
-      const result = await fetch('/api/settings').then(v => v.json())
-
-      if (result.status === 'success') {
-        setSettings(result.data)
-      }
-    }
-
-    getSettings()
-  }, [setSettings])
-}
-
-const ContextUser = () => {
-  useDarkMode()
-  useSettingSync()
-
-  return <></>
 }
 
 function MyApp ({
@@ -73,8 +39,6 @@ function MyApp ({
           src='https://static.cloudflareinsights.com/beacon.min.js'
           data-cf-beacon='{"token": "f924609c5236459d85d8d025c8abb7b3"}'
         ></Script>
-        <ConsoleWarning></ConsoleWarning>
-        <Header></Header>
         <Toaster
           position='top-center'
           toastOptions={{
@@ -103,8 +67,6 @@ function MyApp ({
             }
           }}
         ></Toaster>
-        <ContextUser></ContextUser>
-        <SignInAskModalWrapper></SignInAskModalWrapper>
         <motion.div
           key={router.route}
           variants={variants}
