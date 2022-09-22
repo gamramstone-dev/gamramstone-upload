@@ -630,15 +630,17 @@ export type WorkStatusNameTypes =
   | '업로드 완료'
   | '자막 작업 안함'
   | '업로드 대기'
+  | '재업로드 대기'
   | '번역 진행 중'
   | '전체'
 
-export type WorkStatus = 'none' | 'wip' | 'waiting' | 'done'
+export type WorkStatus = 'none' | 'wip' | 'waiting' | 'reupload' | 'done'
 
 export const WorkStatusNames: Record<WorkStatus, WorkStatusNameTypes> = {
   done: '업로드 완료',
   none: '자막 작업 안함',
   waiting: '업로드 대기',
+  reupload: '재업로드 대기',
   wip: '번역 진행 중',
 }
 

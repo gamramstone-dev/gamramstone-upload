@@ -32,6 +32,10 @@ html[data-dark-mode='true'] {
       background-color: rgb(10, 63, 31);
     }
 
+    &[data-status='reupload'] {
+      background-color: rgb(63, 31, 10);
+    }
+
     &[data-status='done'] {
       background-color: rgb(10, 40, 75);
       opacity: 0.3;
@@ -125,6 +129,11 @@ html[data-dark-mode='true'] {
 
     &[data-status='waiting'] {
       background-color: #139947;
+      color: $dark-text-color;
+    }
+
+    &[data-status='reupload'] {
+      background-color: #994b13;
       color: $dark-text-color;
     }
 

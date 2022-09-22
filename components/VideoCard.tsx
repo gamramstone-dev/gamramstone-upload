@@ -297,6 +297,7 @@ export const CaptionCard = ({
                       session?.userState !== 'translator' &&
                       session?.userState !== 'admin' &&
                       v.status !== 'waiting' &&
+                      v.status !== 'reupload' &&
                       v.status !== 'done'
                     }
                   >

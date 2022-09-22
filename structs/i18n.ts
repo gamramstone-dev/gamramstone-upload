@@ -262,6 +262,7 @@ const resources = {
         done: 'Upload Done',
         none: 'Not Translating',
         waiting: 'Waiting Upload',
+        reupload: 'Waiting Reupload',
         wip: 'On Translation'
       },
 
@@ -563,6 +564,7 @@ const resources = {
         done: '업로드 완료',
         none: '자막 작업 안함',
         waiting: '업로드 대기',
+        reupload: '재업로드 대기',
         wip: '번역 진행 중'
       },
 

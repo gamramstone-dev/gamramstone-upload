@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import {
-  ChannelID,
-  Channels,
-} from '../../structs/channels'
+import { ChannelID, Channels } from '../../structs/channels'
 import { apify, APIResponse } from '../../structs/api'
 import { ChannelStat, VideoWithCaption } from '../../structs/common'
 import { cachify } from '../../utils/server/cache'
@@ -39,14 +36,17 @@ const func = async (req: NextApiRequest, res: NextApiResponse) => {
     const waitingTracks = result.data.reduce(
       (dp, dc) =>
         dp +
-        dc.captions.reduce((p, c) => p + (c.status === 'waiting' ? 1 : 0), 0),
+        dc.captions.reduce(
+          (p, c) =>
+            p + (c.status === 'waiting' || c.status === 'reupload' ? 1 : 0),
+          0
+        ),
       0
     )
 
     const appliedTracks = result.data.reduce(
       (dp, dc) =>
-        dp +
-        dc.captions.reduce((p, c) => p + (c.status === 'done' ? 1 : 0), 0),
+        dp + dc.captions.reduce((p, c) => p + (c.status === 'done' ? 1 : 0), 0),
       0
     )
 

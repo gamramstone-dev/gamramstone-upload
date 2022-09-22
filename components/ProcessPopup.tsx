@@ -105,7 +105,7 @@ export const getVideoWorks = (datas: VideoWithCaption[]): VideoWorks[] => {
     .map((videoData, dataIndex) => {
       return videoData.captions
         .map(v => {
-          if (v.status !== 'waiting') {
+          if (v.status !== 'waiting' && v.status !== 'reupload') {
             return null
           }
 
