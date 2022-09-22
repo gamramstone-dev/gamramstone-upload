@@ -1,4 +1,3 @@
-import '../styles/globals.scss'
 import 'normalize.css'
 
 import { AppProps } from 'next/app'
@@ -9,15 +8,14 @@ import Script from 'next/script'
 import Head from 'next/head'
 
 import 'remixicon/fonts/remixicon.css'
-import { Component } from 'react'
 
 const variants = {
   hidden: { opacity: 0 },
   enter: { opacity: 1 },
-  exit: { opacity: 0 }
+  exit: { opacity: 0 },
 }
 
-function MyApp ({ pageProps, router }: AppProps) {
+function MyApp ({ Component, pageProps, router }: AppProps) {
   return (
     <>
       <Head>

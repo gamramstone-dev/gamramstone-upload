@@ -24,6 +24,7 @@ const baseHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
   publicRuntimeConfig: {
     apiEndpoint: process.env.NEXT_PUBLIC_API_ENDPOINT,
     hideApplyButton: process.env.NEXT_PUBLIC_HIDE_APPLY === 'true',
