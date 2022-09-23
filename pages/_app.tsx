@@ -10,6 +10,8 @@ import Head from 'next/head'
 import 'remixicon/fonts/remixicon.css'
 
 import { globalStyles } from '../structs/styles'
+import Navigation from '../components/sets/Navigation'
+import { SessionProvider } from 'next-auth/react'
 
 const variants = {
   hidden: { opacity: 0 },
@@ -28,22 +30,28 @@ function MyApp ({ Component, pageProps, router }: AppProps) {
   globalStyles()
 
   return (
-    <SSRProvider>
-      <Head>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-      </Head>
-      <Analytics></Analytics>
-      <motion.div
-        key={router.route}
-        variants={variants}
-        initial='hidden'
-        animate='enter'
-        exit='exit'
-        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-      >
-        <Component {...pageProps} />
-      </motion.div>
-    </SSRProvider>
+    <SessionProvider>
+      <SSRProvider>
+        <Head>
+          <meta
+            name='viewport'
+            content='width=device-width, initial-scale=1.0'
+          />
+        </Head>
+        <Analytics></Analytics>
+        <Navigation></Navigation>
+        <motion.div
+          key={router.route}
+          variants={variants}
+          initial='hidden'
+          animate='enter'
+          exit='exit'
+          transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
+      </SSRProvider>
+    </SessionProvider>
   )
 }
 
