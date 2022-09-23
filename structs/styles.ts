@@ -1,0 +1,27 @@
+import { createStitches } from '@stitches/react'
+
+export const {
+  styled,
+  css,
+  getCssText,
+  createTheme,
+  globalCss,
+} = createStitches({
+  media: {
+    mobile: '(max-width: 640px)',
+    tablet: '(max-width: 1024px)',
+  },
+
+  theme: {
+    colors: {
+      primary: '#217ED3',
+      primary70: 'rgba(33, 126, 211, 0.7)',
+    },
+  },
+})
+
+export const globalStyles = globalCss({
+  'html, body': {
+    fontFamily: `-apple-system, BlinkMacSystemFont, Pretendard, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif`,
+  },
+})
