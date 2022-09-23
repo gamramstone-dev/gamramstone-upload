@@ -15,7 +15,7 @@ export const {
 
   theme: {
     colors: {
-      primary: '#217ED3',
+      primary: '#0b9eee',
       primary70: 'rgba(33, 126, 211, 0.7)',
     },
   },

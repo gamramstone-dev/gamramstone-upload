@@ -41,17 +41,17 @@ const ButtonElement = styled('button', {
     size: {
       small: {
         fontSize: '0.9em',
-        padding: '10px 20px',
+        padding: '8px 20px',
       },
 
       medium: {
         fontSize: '1em',
-        padding: '12px 24px',
+        padding: '10px 24px',
       },
 
       large: {
         fontSize: '1.1em',
-        padding: '14px 28px',
+        padding: '12px 28px',
       },
     },
 

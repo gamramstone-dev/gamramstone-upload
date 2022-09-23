@@ -69,10 +69,10 @@ const UserAction = () => {
   }
 
   if (!session) {
-    return <Button icon='login-box-line'>로그인</Button>
+    return <Button size='small' icon='login-box-line'>로그인</Button>
   }
 
-  return <Button icon='logout-box-line'>로그아웃</Button>
+  return <Button size='small' icon='logout-box-line'>로그아웃</Button>
 }
 
 export const Navigation = () => {
