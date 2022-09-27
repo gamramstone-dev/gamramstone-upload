@@ -12,6 +12,7 @@
     "@types/canvas-confetti": "^1.4.3",
     "@types/uuid": "^8.3.4",
     "canvas-confetti": "^1.5.1",
+    "chroma-js": "^2.4.2",
     "framer-motion": "7.3.6",
     "i18next": "^21.9.2",
     "i18next-browser-languagedetector": "^6.1.5",
@@ -29,6 +30,7 @@
     "zustand": "^4.1.1"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.1.4",
     "@types/node": "18.7.18",
     "@types/react": "^18.0.20",
     "eslint": "8.23.1",

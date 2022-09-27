@@ -4,6 +4,8 @@ export interface Channel {
   id: string
   name: string
   thumbnail: string
+  background?: string
+  color?: string
 }
 
 /**
