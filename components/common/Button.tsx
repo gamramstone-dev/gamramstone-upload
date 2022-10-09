@@ -1,104 +1,155 @@
 import { VariantProps } from '@stitches/react'
+import { useReducedMotion } from 'framer-motion'
 import { ReactNode, useRef } from 'react'
-import { useButton } from 'react-aria'
-import { styled } from '../../structs/styles'
+
+import { AriaButtonProps, useButton } from 'react-aria'
+import { CSS, styled } from '../../structs/styles'
 
 const ButtonElement = styled('button', {
-  borderRadius: '8px',
+  position: 'relative',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 8,
+
+  background: 'var(--button-background, #000)',
+  color: 'var(--button-color, #fff)',
   outline: 'none',
   border: 'none',
-  letterSpacing: '-0.5px',
 
-  transition: '0.23s opacity cubic-bezier(0.19, 1, 0.22, 1)',
+  '&::after': {
+    content: '""',
+    opacity: 0,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: 'inherit',
+    boxShadow: '0 0 0 2px var(--button-background, #000)',
+
+    transition: 'opacity 0.12s cubic-bezier(0.19, 0, 0.22, 1)',
+  },
+
   cursor: 'pointer',
-  display: 'flex',
-  gap: '8px',
+  transition:
+    'background 0.12s cubic-bezier(0.19, 0, 0.22, 1), opacity 0.12s cubic-bezier(0.19, 0, 0.22, 1), box-shadow 0.12s cubic-bezier(0.19, 0, 0.22, 1)',
 
   '&:hover': {
-    opacity: 0.9,
+    background: 'var(--button-background-hover, #222)',
   },
 
   '&:focus': {
-    outline: 'none',
+    outline: 0,
+    background: 'var(--button-background-hover, #222)',
 
-    opacity: 0.9,
-    boxShadow: '0px 0px 2px white inset',
+    '&::after': {
+      opacity: 0.3,
+    },
   },
 
-  '& > *': {
-    margin: 'auto',
+  '&:focus-visible': {
+    outline: 'none !important',
+    // boxShadow: '0 0 0 2px var(--button-color, #000) inset',
   },
 
   variants: {
     pressed: {
       true: {
-        opacity: '0.8 !important',
+        background: 'var(--button-background-active, #555) !important',
       },
-
-      false: {},
     },
-
+    disabled: {
+      true: {
+        cursor: 'not-allowed',
+        background: 'var(--button-background-disabled, #777) !important',
+        opacity: 0.5,
+      },
+    },
+    reduceMotion: {
+      true: {
+        transition: 'none',
+      },
+    },
     size: {
       small: {
-        fontSize: '0.9em',
-        padding: '8px 20px',
+        fontSize: '0.8em',
+        padding: '6px 8px',
+        borderRadius: 4,
       },
-
       medium: {
-        fontSize: '1em',
-        padding: '10px 24px',
+        fontSize: '0.9em',
+        padding: '10px 16px',
+        borderRadius: 8,
       },
-
       large: {
-        fontSize: '1.1em',
-        padding: '12px 28px',
+        fontSize: '1em',
+        padding: '14px 24px',
+        borderRadius: 12,
+      },
+      fill: {
+        fontSize: '0.9em',
+        width: '100%',
+        padding: '10px 16px',
       },
     },
-
     theme: {
       primary: {
-        backgroundColor: '$primary',
-        color: '#fff',
+        '--button-color': '#fff',
+        '--button-background': '$primary',
+        '--button-background-hover': '$primary',
+        '--button-background-active': '$primary',
+        '--button-background-disabled': '$primary',
+      },
+      secondary: {
+        '--button-color': '#000',
+        '--button-background': '#f5f5f5',
+        '--button-background-hover': '#e0e0e0',
+        '--button-background-active': '#cecece',
+        '--button-background-disabled': '#b0b0b0',
+      },
+      transparent: {
+        '--button-color': '#000',
+        '--button-background': 'transparent',
+        '--button-background-hover': 'rgba(0, 0, 0, 0.05)',
+        '--button-background-active': 'rgba(0, 0, 0, 0.1)',
+        '--button-background-disabled': 'rgba(0, 0, 0, 0.2)',
       },
     },
   },
 })
 
-interface ButtonProps {
+export type ButtonSize = VariantProps<typeof ButtonElement>['size']
+export type ButtonTheme = VariantProps<typeof ButtonElement>['theme']
+
+export type ButtonProps = AriaButtonProps & {
   children: ReactNode
-  icon?: string
-
-  size?: VariantProps<typeof ButtonElement>['size']
-  theme?: VariantProps<typeof ButtonElement>['theme']
-
-  onClick?: () => void
+  size?: ButtonSize
+  theme?: ButtonTheme
+  css?: CSS
 }
 
 export const Button = ({
   children,
-  icon,
-  size = 'medium',
   theme = 'primary',
-  onClick,
+  size = 'medium',
+  ...props
 }: ButtonProps) => {
-  const ref = useRef<HTMLButtonElement>(null)
-
-  const { buttonProps, isPressed } = useButton(
-    {
-      onPress: onClick,
-    },
-    ref
-  )
+  let ref = useRef<HTMLButtonElement>(null)
+  let { buttonProps, isPressed } = useButton(props, ref)
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <ButtonElement
-      ref={ref}
       {...buttonProps}
+      css={props.css}
       theme={theme}
       size={size}
+      ref={ref}
       pressed={isPressed}
+      disabled={props.isDisabled}
+      reduceMotion={shouldReduceMotion ?? false}
     >
-      {typeof icon === 'string' && <i className={`ri-${icon}`}></i>}
       {children}
     </ButtonElement>
   )
