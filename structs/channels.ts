@@ -63,7 +63,7 @@ export const Channels: Record<ChannelID, Channel> = {
     image:
       'https://yt3.ggpht.com/v3a75a7gUHU6E-gaJww_k5gkFYI8jthCtAR9ELMaRemymZhIyQLiIIRu4cWOt289DFH1UNkFMA=s900-c-k-c0x00ffffff-no-rj',
     color: '#F6E4E5',
-    name: '주르르 JURURU Ch',
+    name: '주르르 JURURU',
   },
   gosegu: {
     id: 'gosegu',
@@ -77,7 +77,7 @@ export const Channels: Record<ChannelID, Channel> = {
     id: 'viichan',
     channelId: 'UCs6EwgxKLY9GG4QNUrP5hoQ',
     image:
-      'https://yt3.ggpht.com/mgeSP-KxZvBEtEVYYGyWeiTJ7C1ap1ZwGYM2Dfew7tYh6maJV0CJYf_OIASeUKVJmFMVcZE-BQ=s900-c-k-c0x00ffffff-no-rj',
+      'https://yt3.ggpht.com/OWP5IUNUf0ja8UZfD7qJJ8Qyw5Gr2zXwfavKM96L2x6XQVgDxwOdWp-JmAzeCDecL2yTpoyN=s600-c-k-c0x00ffffff-no-rj',
     color: '#EEF1E4',
     name: '비챤 VIichan',
   },
