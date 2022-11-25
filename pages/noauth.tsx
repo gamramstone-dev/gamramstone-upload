@@ -13,6 +13,8 @@ const ErrorMessages: Record<string, string> = {
   AccessDenied: '접근이 거부되었습니다.',
   NoYouTubePermission:
     '크리에이터 권한 없이는 YouTube 권한을 받을 수 없습니다.',
+    YouTubePermissionError:
+    '크리에이터 권한 검증 중에 오류가 발생하였습니다.',
   Banned: '차단되었습니다.',
   FailedToCreateUser: '계정을 생성할 수 없습니다. 관리자에게 문의하세요.',
 }

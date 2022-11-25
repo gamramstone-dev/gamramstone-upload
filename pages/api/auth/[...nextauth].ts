@@ -72,7 +72,7 @@ export default NextAuth({
             e
           )
 
-          return '/noauth?error=NoYouTubePermission'
+          return '/noauth?error=YouTubePermissionError'
         }
 
         await updateUser(user.id, {
@@ -148,7 +148,7 @@ export default NextAuth({
         } catch (e) {
           console.error(e)
 
-          return '/noauth?error=NoYouTubePermission'
+          return '/noauth?error=YouTubePermissionError'
         }
 
         userFields.state = 'creator'
