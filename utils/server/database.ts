@@ -75,6 +75,8 @@ export const createUser = async (
     [uuid]: id,
   })
 
+  console.log(`[auth] created user ${id} with uuid: ${uuid}`)
+
   return data
 }
 
@@ -129,6 +131,8 @@ export const updateUser = async (id: string, data: Partial<DatabaseUser>) => {
     ...user,
     ...data,
   })
+
+  console.log(`[auth] updated user ${id}, data: ${JSON.stringify(data)}`)
 }
 
 /**
@@ -143,10 +147,7 @@ export const updateUserSettings = async (id: string, settings: string) =>
   })
 
 export const sha256 = (data: string) =>
-  crypto
-    .createHash('sha256')
-    .update(data)
-    .digest('hex')
+  crypto.createHash('sha256').update(data).digest('hex')
 
 export const setVideosCache = async (id: string, data: string) =>
   setCache(`videos:${sha256(id)}`, data, 60 * 40)

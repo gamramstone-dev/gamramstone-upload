@@ -26,7 +26,7 @@ export default NextAuth({
   },
   callbacks: {
     async signIn ({ user, account }) {
-      console.log(`${user.name} (${user.id}) tried to sign in!`)
+      console.log(`[auth] ${user.name} (${user.id}) tried to sign in!`)
 
       /**
        * 로그인 기능이 준비되지 않는 경우 환경 변수 설정을 통해 모든 로그인을 시도를 막을 수 있습니다.
@@ -50,9 +50,15 @@ export default NextAuth({
         typeof account.access_token === 'string'
       ) {
         try {
+          console.log(
+            `[auth] validating YouTubeScope access... requested by user ${user.id}`
+          )
+
           const id = await getMyYouTubeChannelID(account.access_token)
 
-          console.log(`YouTubeScope access happen with channel ${id}`)
+          console.log(
+            `[auth] YouTubeScope access happen with channel ${id}, requested by user ${user.id}`
+          )
 
           const hasRegisteredID =
             Object.values(Channels).filter(v => v.channelId === id).length > 0
@@ -61,7 +67,10 @@ export default NextAuth({
             return '/noauth?error=NoYouTubePermission'
           }
         } catch (e) {
-          console.error(e)
+          console.error(
+            `[auth] error occurred while validating youtube channel for user: ${user.id},`,
+            e
+          )
 
           return '/noauth?error=NoYouTubePermission'
         }
@@ -80,6 +89,10 @@ export default NextAuth({
         hasYouTubeScope &&
         (!savedUser || !hasCreatorPermission(savedUser.state))
       ) {
+        console.error(
+          `[auth] user ${user.id} doesn't have creator permission, but has YouTube scope.`
+        )
+
         return '/noauth?error=NoYouTubePermission'
       }
 
@@ -115,10 +128,16 @@ export default NextAuth({
         !hasCreatorPermission(savedUser.state) &&
         typeof account.access_token === 'string'
       ) {
+        console.log(
+          `[auth] validating YouTubeScope access... requested by user ${savedUser.uuid}`
+        )
+
         try {
           const id = await getMyYouTubeChannelID(account.access_token)
 
-          console.log(`YouTubeScope access happen with channel ${id}`)
+          console.log(
+            `[auth] YouTubeScope access happen with channel ${id}, requested by user ${savedUser.uuid}`
+          )
 
           const hasRegisteredID =
             Object.values(Channels).filter(v => v.channelId === id).length > 0
