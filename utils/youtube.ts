@@ -50,7 +50,7 @@ export interface YouTubeCaption {
 /**
  * 내 유튜브 채널의 ID를 가져옵니다.
  * @param token Google API 접근 토큰
- * @returns 
+ * @returns
  */
 export const getMyYouTubeChannelID = async (token: string) => {
   const result = await fetch(
@@ -62,12 +62,20 @@ export const getMyYouTubeChannelID = async (token: string) => {
     }
   ).then(v => v.json())
 
-  if (result.error) {
+  if (!result) {
+    console.log(`[auth] failed to get my youtube channel id`)
+
     throw new Error('유튜브 채널을 가져올 수 없습니다.')
   }
 
-  if (result.items.length === 0) {
-    throw new Error('유튜브 채널을 찾을 수 없습니다.')
+  if (result.error) {
+    console.log(`[auth] failed to get youtube channel id:`, result)
+
+    throw new Error('유튜브 채널을 가져올 수 없습니다.')
+  }
+
+  if (!result.items || result.items.length === 0) {
+    throw new Error('유튜브 채널을 찾을 수 없습니다. 올바른 계정으로 로그인하셨나요?')
   }
 
   return result.items[0].id
@@ -131,7 +139,7 @@ const getYouTubeVideoSnippetLocalizations = async (
 /**
  * Google에 요청을 보내 토큰이 올바른지 확인합니다.
  * @param token 검증할 토큰 값
- * @returns 
+ * @returns
  */
 export const validateAccessToken = async (token: string) => {
   const result = await fetch(
@@ -139,9 +147,7 @@ export const validateAccessToken = async (token: string) => {
   ).then(v => v.json())
 
   if (result.error_description) {
-    throw new Error(
-      `토큰이 만료됐어요. 로그아웃 후 다시 로그인해주세요.`
-    )
+    throw new Error(`토큰이 만료됐어요. 로그아웃 후 다시 로그인해주세요.`)
   }
 
   return true
