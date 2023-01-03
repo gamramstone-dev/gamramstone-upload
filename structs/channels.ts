@@ -61,7 +61,7 @@ export const Channels: Record<ChannelID, Channel> = {
     id: 'jururu',
     channelId: 'UCTifMx1ONpElK5x6B4ng8eg',
     image:
-      'https://yt3.ggpht.com/v3a75a7gUHU6E-gaJww_k5gkFYI8jthCtAR9ELMaRemymZhIyQLiIIRu4cWOt289DFH1UNkFMA=s900-c-k-c0x00ffffff-no-rj',
+      'https://yt3.ggpht.com/HisJyKJr9xgnT0yMA06vAu9Hz0NjOe1lTgdEoSk34KqWzDoiU9o7mEnah5Bd3eOy5u7zPuIt=s176-c-k-c0x00ffffff-no-rj',
     color: '#F6E4E5',
     name: '주르르 JURURU',
   },
