@@ -4,6 +4,11 @@
 
 이세계 아이돌 - 우왁굳 채널 번역 프로젝트, 감람스톤의 공식 홈페이지 리포지터리입니다.
 
+> **Warning**
+> 
+> 2023년 3월 25일부로, 이 리포지토리는 감람스톤 내부의 모노리포로 이관하여 관리합니다.
+
+
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 ## Introduction
